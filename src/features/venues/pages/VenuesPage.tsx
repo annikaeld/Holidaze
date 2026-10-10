@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVenues } from "@/features/venues/services/venuesApi";
+import { VenueCard } from "@/features/venues/components/VenueCard";
 
 export function VenuesPage() {
   const {
@@ -39,15 +40,17 @@ export function VenuesPage() {
   const pagination = response.meta;
 
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-4 py-6">
       <h1>Venues</h1>
       <p>
         Page {pagination.currentPage} of {pagination.pageCount} (
         {pagination.totalCount} venues)
       </p>
-      {venues.map((venue) => (
-        <p key={venue.id}>{venue.name}</p>
-      ))}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {venues.map((venue) => (
+          <VenueCard key={venue.id} venue={venue} />
+        ))}
+      </div>
     </div>
   );
 }
