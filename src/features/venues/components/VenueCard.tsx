@@ -10,12 +10,12 @@ interface VenueCardProps {
 
 export function VenueCard({ venue }: VenueCardProps) {
   return (
-    <article className="group relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-shadow duration-200 hover:shadow-lg">
+    <article className="group relative overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-shadow duration-200 hover:shadow-lg">
       <Link to={`/venues/${venue.id}`}>
         <div className="relative">
           <VenueImage media={venue.media} name={venue.name} />
           {venue.rating > 0 && (
-            <div className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-gray-900 shadow-sm">
+            <div className="absolute right-3 top-3 rounded-full bg-card px-3 py-1 text-card-foreground shadow-sm">
               <VenueRating rating={venue.rating} />
             </div>
           )}

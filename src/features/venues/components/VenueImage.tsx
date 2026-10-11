@@ -17,7 +17,7 @@ export function VenueImage({ media, name }: VenueImageProps) {
       onError={() => setImageError(true)}
     />
   ) : (
-    <div className="flex aspect-4/3 items-center justify-center bg-gray-100 text-gray-500">
+    <div className="flex aspect-4/3 items-center justify-center bg-placeholder text-placeholder-foreground">
       No image available
     </div>
   );
