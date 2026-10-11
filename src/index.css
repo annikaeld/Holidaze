@@ -11,6 +11,7 @@
     --placeholder: #f3f4f6;
     --placeholder-foreground: #6b7280;
     --border: #e5e7eb;
+    --hero: #e5e7eb;
 }
 
 .dark {
@@ -22,6 +23,7 @@
     --placeholder: #374151;
     --placeholder-foreground: #d1d5db;
     --border: #404040;
+    --hero: #374151;
 }
 
 @theme inline {
@@ -33,4 +35,5 @@
     --color-placeholder: var(--placeholder);
     --color-placeholder-foreground: var(--placeholder-foreground);
     --color-border: var(--border);
+    --color-hero: var(--hero);
 }

@@ -14,6 +14,22 @@ export async function getVenues(): Promise<ApiResponse<Venue[]>> {
   return result;
 }
 
+export async function searchVenues(
+  query: string,
+): Promise<ApiResponse<Venue[]>> {
+  const response = await fetch(
+    `${API_URL}/search?q=${encodeURIComponent(query)}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not search venues");
+  }
+
+  const result: ApiResponse<Venue[]> = await response.json();
+
+  return result;
+}
+
 export async function getVenue(id: string): Promise<Venue> {
   const response = await fetch(`${API_URL}/${id}`);
 

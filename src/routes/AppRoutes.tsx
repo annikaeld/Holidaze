@@ -1,10 +1,15 @@
 import { Route, Routes } from "react-router";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { VenuesPage } from "@/features/venues/pages/VenuesPage";
+import { HomePage } from "@/features/venues/pages/HomePage";
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route index element={<VenuesPage />} />
+      <Route element={<AppLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="venues" element={<VenuesPage />} />
+      </Route>
     </Routes>
   );
 }

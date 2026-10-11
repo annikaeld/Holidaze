@@ -1,15 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { getVenues } from "@/features/venues/services/venuesApi";
+import { getVenues, searchVenues } from "@/features/venues/services/venuesApi";
 import { VenueCard } from "@/features/venues/components/VenueCard";
+import { useSearchParams } from "react-router";
 
 export function VenuesPage() {
+  const [searchParams] = useSearchParams();
+  const destination = searchParams.get("destination") ?? "";
+
   const {
     data: response,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["venues"],
-    queryFn: getVenues,
+    queryKey: ["venues", destination],
+    queryFn: () => (destination ? searchVenues(destination) : getVenues()),
   });
 
   if (isLoading) {
@@ -32,6 +36,14 @@ export function VenuesPage() {
     return (
       <section className="min-h-screen p-8">
         <p>No venues found</p>
+      </section>
+    );
+  }
+
+  if (response.data.length === 0) {
+    return (
+      <section className="min-h-screen p-8">
+        <p>No venues found for "{destination}"</p>
       </section>
     );
   }
