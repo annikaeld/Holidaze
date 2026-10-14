@@ -25,8 +25,8 @@ export function VenueSearchForm() {
           className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
         />
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div className="relative min-w-0">
+      <div className="grid grid-cols-2 relative gap-3">
+        <div className="min-w-0">
           <button
             type="button"
             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
@@ -59,43 +59,6 @@ export function VenueSearchForm() {
             name="checkOut"
             value={dateRange?.to?.toLocaleDateString("en-CA") ?? ""}
           />
-          {isCalendarOpen && (
-            <div className="absolute left-0 top-full z-50 mt-2 rounded-xl border border-border bg-card p-2 sm:p-4 shadow-lg max-w-[calc(100vw-2rem)]">
-              <DayPicker
-                id="date-calendar"
-                mode="range"
-                selected={dateRange}
-                onSelect={setDateRange}
-                disabled={{ before: new Date() }}
-                style={
-                  {
-                    "--rdp-day-width": "36px",
-                    "--rdp-day-height": "40px",
-                    "--rdp-day_button-width": "36px",
-                    "--rdp-day_button-height": "40px",
-                  } as React.CSSProperties
-                }
-              />
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => setDateRange(undefined)}
-                  className="rounded-lg px-3 py-2 cursor-pointer text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
-                >
-                  Clear
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsCalendarOpen(false)}
-                  disabled={!dateRange?.from || !dateRange?.to}
-                  aria-label="Confirm dates"
-                  className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <Check size={20} aria-hidden="true" />
-                </button>
-              </div>
-            </div>
-          )}
         </div>
         <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring">
           <label
@@ -113,6 +76,36 @@ export function VenueSearchForm() {
             className="w-full min-w-0 bg-transparent text-foreground outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
         </div>
+        {isCalendarOpen && (
+          <div className="absolute left-0 top-full z-50 mt-2 rounded-xl border border-border bg-card p-2 sm:p-4 shadow-lg max-w-[calc(100vw-2rem)]">
+            <DayPicker
+              id="date-calendar"
+              mode="range"
+              selected={dateRange}
+              onSelect={setDateRange}
+              disabled={{ before: new Date() }}
+              className="holidaze-calendar"
+            />
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => setDateRange(undefined)}
+                className="rounded-lg px-3 py-2 cursor-pointer text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsCalendarOpen(false)}
+                disabled={!dateRange?.from || !dateRange?.to}
+                aria-label="Confirm dates"
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Check size={20} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       <div>
         <button type="submit">Search</button>
