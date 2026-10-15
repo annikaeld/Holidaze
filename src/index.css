@@ -12,6 +12,7 @@
     --placeholder-foreground: #6b7280;
     --border: #e5e7eb;
     --hero: #e5e7eb;
+    --field-active: #f3f4f6;
 }
 
 .dark {
@@ -24,6 +25,7 @@
     --placeholder-foreground: #d1d5db;
     --border: #404040;
     --hero: #374151;
+    --field-active: #374151;
 }
 
 @theme inline {
@@ -36,7 +38,32 @@
     --color-placeholder-foreground: var(--placeholder-foreground);
     --color-border: var(--border);
     --color-hero: var(--hero);
+    --color-field-active: var(--field-active);
 }
+
+@layer components {
+    .btn-primary {
+        @apply w-full min-w-32 self-center cursor-pointer rounded-full px-4 py-3 font-medium transition-colors;
+        @apply bg-foreground text-surface;
+        @apply hover:opacity-85;
+        @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground;
+    }
+
+    .btn-counter {
+        @apply flex size-9 cursor-pointer items-center justify-center rounded-full;
+        @apply border border-border bg-card text-foreground;
+        @apply hover:bg-field-active;
+        @apply disabled:cursor-not-allowed disabled:opacity-40;
+    }
+
+    .btn-confirm {
+        @apply flex size-10 cursor-pointer items-center justify-center rounded-full;
+        @apply bg-foreground text-surface;
+        @apply disabled:cursor-not-allowed disabled:opacity-40;
+    }
+}
+
+
 
 #date-calendar.holidaze-calendar {
     --rdp-day-width: 36px;

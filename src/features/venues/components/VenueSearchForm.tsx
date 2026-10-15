@@ -1,5 +1,5 @@
 import { DayPicker } from "react-day-picker";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Check } from "lucide-react";
@@ -7,10 +7,45 @@ import { Check } from "lucide-react";
 export function VenueSearchForm() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [guests, setGuests] = useState(1);
+  const [isGuestsOpen, setIsGuestsOpen] = useState(false);
+  const searchFormRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchFormRef.current &&
+        !searchFormRef.current.contains(event.target as Node)
+      ) {
+        setIsCalendarOpen(false);
+        setIsGuestsOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsCalendarOpen(false);
+        setIsGuestsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   return (
-    <form action="/venues" method="get" className="flex w-full flex-col gap-3">
-      <div className="flex flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring">
+    <form
+      ref={searchFormRef}
+      action="/venues"
+      method="get"
+      className="flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:rounded-xl lg:bg-card lg:p-2"
+    >
+      <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
         <label
           htmlFor="destination"
           className="text-xs font-semibold text-muted-foreground"
@@ -22,17 +57,24 @@ export function VenueSearchForm() {
           id="destination"
           name="destination"
           placeholder="Where do you want to go?"
+          onFocus={() => {
+            setIsCalendarOpen(false);
+            setIsGuestsOpen(false);
+          }}
           className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
         />
       </div>
-      <div className="grid grid-cols-2 relative gap-3">
+      <div className="relative grid min-w-0 grid-cols-2 gap-3 lg:flex-2">
         <div className="min-w-0">
           <button
             type="button"
-            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+            onClick={() => {
+              setIsCalendarOpen(!isCalendarOpen);
+              setIsGuestsOpen(false);
+            }}
             aria-expanded={isCalendarOpen}
             aria-controls="date-calendar"
-            className="flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring lg:border-0 lg:bg-transparent lg:rounded-lg lg:focus-visible:bg-field-active lg:aria-expanded:bg-field-active"
           >
             <span className="text-xs font-semibold text-muted-foreground">
               When?
@@ -60,21 +102,66 @@ export function VenueSearchForm() {
             value={dateRange?.to?.toLocaleDateString("en-CA") ?? ""}
           />
         </div>
-        <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring">
+        <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
           <label
             htmlFor="guests"
             className="text-xs font-semibold text-muted-foreground"
           >
             Guests
           </label>
-          <input
-            type="number"
+          <button
+            type="button"
             id="guests"
-            name="guests"
-            min={1}
-            defaultValue={1}
-            className="w-full min-w-0 bg-transparent text-foreground outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-          />
+            onClick={() => {
+              setIsGuestsOpen(!isGuestsOpen);
+              setIsCalendarOpen(false);
+            }}
+            aria-expanded={isGuestsOpen}
+            aria-controls="guests-popover"
+            className="w-full min-w-0 bg-transparent text-left text-foreground"
+          >
+            {guests} {guests === 1 ? "guest" : "guests"}
+          </button>
+          <input type="hidden" name="guests" value={guests} />
+          {isGuestsOpen && (
+            <div
+              id="guests-popover"
+              className="absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
+            >
+              <div className="flex items-center gap-4 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setGuests((count) => Math.max(1, count - 1))}
+                  disabled={guests <= 1}
+                  aria-label="Remove one guest"
+                  className="btn-counter"
+                >
+                  −
+                </button>
+
+                <span aria-live="polite">{guests}</span>
+
+                <button
+                  type="button"
+                  onClick={() => setGuests((count) => count + 1)}
+                  aria-label="Add one guest"
+                  className="btn-counter"
+                >
+                  +
+                </button>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsGuestsOpen(false)}
+                  aria-label="Confirm guests"
+                  className="btn-confirm"
+                >
+                  <Check size={20} aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         {isCalendarOpen && (
           <div className="absolute left-0 top-full z-50 mt-2 rounded-xl border border-border bg-card p-2 sm:p-4 shadow-lg max-w-[calc(100vw-2rem)]">
@@ -99,7 +186,7 @@ export function VenueSearchForm() {
                 onClick={() => setIsCalendarOpen(false)}
                 disabled={!dateRange?.from || !dateRange?.to}
                 aria-label="Confirm dates"
-                className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-confirm"
               >
                 <Check size={20} aria-hidden="true" />
               </button>
@@ -107,8 +194,10 @@ export function VenueSearchForm() {
           </div>
         )}
       </div>
-      <div>
-        <button type="submit">Search</button>
+      <div className="lg:flex lg:items-center lg:pl-3">
+        <button type="submit" className="btn-primary">
+          Search
+        </button>
       </div>
     </form>
   );
