@@ -3,7 +3,7 @@ import type { ApiResponse, Venue } from "../types/venue";
 const API_URL = "https://v2.api.noroff.dev/holidaze/venues";
 
 export async function getVenues(): Promise<ApiResponse<Venue[]>> {
-  const response = await fetch(API_URL);
+  const response = await fetch(`${API_URL}?_bookings=true`);
 
   if (!response.ok) {
     throw new Error("Could not fetch Venues");
@@ -18,7 +18,7 @@ export async function searchVenues(
   query: string,
 ): Promise<ApiResponse<Venue[]>> {
   const response = await fetch(
-    `${API_URL}/search?q=${encodeURIComponent(query)}`,
+    `${API_URL}/search?q=${encodeURIComponent(query)}&_bookings=true`,
   );
 
   if (!response.ok) {
@@ -45,6 +45,11 @@ export async function getVenue(id: string): Promise<Venue> {
   }
 
   const result: ApiResponse<Venue> = await response.json();
+
+  console.log(
+    "Booked venue still visible?",
+    venues.some((venue) => venue.id === "a0a8da1f-4ed2-464d-b7c5-56f7c2105d18"),
+  );
 
   return result.data;
 }

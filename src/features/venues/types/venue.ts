@@ -10,6 +10,14 @@ export type Venue = {
   meta: VenueMeta;
   location: VenueLocation;
   media: VenueMedia[];
+  bookings?: VenueBooking[];
+};
+
+export type VenueBooking = {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
 };
 
 export type VenueMeta = {
