@@ -2,7 +2,7 @@ import { DayPicker } from "react-day-picker";
 import { useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 export function VenueSearchForm() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -10,6 +10,7 @@ export function VenueSearchForm() {
   const [guests, setGuests] = useState(1);
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const searchFormRef = useRef<HTMLFormElement>(null);
+  const [destination, setDestination] = useState("");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -45,7 +46,7 @@ export function VenueSearchForm() {
       method="get"
       className="flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:rounded-xl lg:bg-card lg:p-2"
     >
-      <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
+      <div className="relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
         <label
           htmlFor="destination"
           className="text-xs font-semibold text-muted-foreground"
@@ -57,12 +58,24 @@ export function VenueSearchForm() {
           id="destination"
           name="destination"
           placeholder="Where do you want to go?"
+          value={destination}
+          onChange={(event) => setDestination(event.target.value)}
           onFocus={() => {
             setIsCalendarOpen(false);
             setIsGuestsOpen(false);
           }}
           className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
         />
+        {destination && (
+          <button
+            type="button"
+            onClick={() => setDestination("")}
+            aria-label="Clear destination"
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
       <div className="relative grid min-w-0 grid-cols-2 gap-3 lg:flex-2">
         <div className="min-w-0">
@@ -128,7 +141,7 @@ export function VenueSearchForm() {
               id="guests-popover"
               className="absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
             >
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex items-center justify-between gap-4">
                 <button
                   type="button"
                   onClick={() => setGuests((count) => Math.max(1, count - 1))}
@@ -149,8 +162,6 @@ export function VenueSearchForm() {
                 >
                   +
                 </button>
-              </div>
-              <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => setIsGuestsOpen(false)}

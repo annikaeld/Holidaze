@@ -46,10 +46,5 @@ export async function getVenue(id: string): Promise<Venue> {
 
   const result: ApiResponse<Venue> = await response.json();
 
-  console.log(
-    "Booked venue still visible?",
-    venues.some((venue) => venue.id === "a0a8da1f-4ed2-464d-b7c5-56f7c2105d18"),
-  );
-
   return result.data;
 }
