@@ -4,6 +4,16 @@ import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Check, X } from "lucide-react";
 
+const SHORT_READABLE_DATE_LOCALE = "en-GB";
+
+function formatDateForUrl(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 export function VenueSearchForm() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -94,25 +104,31 @@ export function VenueSearchForm() {
             </span>
             <span className="text-foreground">
               {dateRange?.from && dateRange?.to
-                ? `${dateRange.from.toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                  })} – ${dateRange.to.toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                  })}`
+                ? `${dateRange.from.toLocaleDateString(
+                    SHORT_READABLE_DATE_LOCALE,
+                    {
+                      day: "numeric",
+                      month: "short",
+                    },
+                  )} – ${dateRange.to.toLocaleDateString(
+                    SHORT_READABLE_DATE_LOCALE,
+                    {
+                      day: "numeric",
+                      month: "short",
+                    },
+                  )}`
                 : "Add dates"}
             </span>
           </button>
           <input
             type="hidden"
             name="checkIn"
-            value={dateRange?.from?.toLocaleDateString("en-CA") ?? ""}
+            value={dateRange?.from ? formatDateForUrl(dateRange.from) : ""}
           />
           <input
             type="hidden"
             name="checkOut"
-            value={dateRange?.to?.toLocaleDateString("en-CA") ?? ""}
+            value={dateRange?.to ? formatDateForUrl(dateRange.to) : ""}
           />
         </div>
         <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
