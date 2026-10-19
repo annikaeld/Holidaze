@@ -15,6 +15,13 @@ interface VenueGalleryProps {
 
 export function VenueGallery({ media, name }: VenueGalleryProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  if (media.length === 0) {
+    return (
+      <div className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-16/9">
+        No image available
+      </div>
+    );
+  }
   return (
     <>
       <div className="md:hidden">
@@ -32,7 +39,11 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
         </Swiper>
       </div>
       <div className="relative hidden md:block">
-        <div className="grid aspect-16/9 grid-cols-[2fr_1fr] gap-2">
+        <div
+          className={`grid aspect-16/9 gap-2 ${
+            media.length === 1 ? "grid-cols-1" : "grid-cols-[2fr_1fr]"
+          }`}
+        >
           <div>{media[0] && <GalleryImage image={media[0]} name={name} />}</div>
 
           <div className="grid grid-rows-2 gap-2">
@@ -46,7 +57,7 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
           </div>
         </div>
 
-        {media.length > 3 && (
+        {media.length > 1 && (
           <button
             type="button"
             onClick={() => dialogRef.current?.showModal()}
@@ -98,6 +109,7 @@ function GalleryImage({ image, name }: { image: VenueMedia; name: string }) {
     <img
       src={image.url}
       alt={image.alt || name}
+      loading="lazy"
       className="aspect-4/3 w-full object-cover md:aspect-auto md:h-full"
       onError={() => setImageError(true)}
     />

@@ -14,6 +14,7 @@ export function VenueImage({ media, name }: VenueImageProps) {
       className="aspect-4/3 w-full object-cover"
       src={image.url}
       alt={image.alt || name}
+      decoding="async"
       onError={() => setImageError(true)}
     />
   ) : (

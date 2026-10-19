@@ -29,6 +29,7 @@ export function VenuesPage() {
   } = useQuery({
     queryKey: ["venues", destination],
     queryFn: () => (destination ? searchVenues(destination) : getVenues()),
+    staleTime: 5 * 60 * 1000,
   });
 
   if (isLoading) {
