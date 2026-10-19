@@ -5,6 +5,8 @@ import "swiper/css/navigation";
 import { Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 import { useRef, useState } from "react";
+import { Keyboard } from "swiper/modules";
+import { A11y } from "swiper/modules";
 
 import type { VenueMedia } from "../types/venue";
 
@@ -67,7 +69,15 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
           </button>
         )}
       </div>
-      <dialog ref={dialogRef} className="venue-gallery-dialog">
+      <dialog
+        ref={dialogRef}
+        className="venue-gallery-dialog"
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            dialogRef.current?.close();
+          }
+        }}
+      >
         <button
           type="button"
           className="btn-gallery-close"
@@ -79,13 +89,18 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
 
         <Swiper
           className="venue-gallery"
-          modules={[Navigation, Pagination]}
+          modules={[Navigation, Pagination, Keyboard, A11y]}
           navigation={media.length > 1}
           pagination={media.length > 1 ? { type: "fraction" } : false}
+          keyboard={{
+            enabled: true,
+          }}
         >
           {media.map((image, index) => (
             <SwiperSlide key={`${image.url}-${index}`}>
-              <GalleryImage image={image} name={name} />
+              <div className="flex h-full items-center justify-center">
+                <GalleryImage image={image} name={name} variant="modal" />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -94,7 +109,15 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
   );
 }
 
-function GalleryImage({ image, name }: { image: VenueMedia; name: string }) {
+function GalleryImage({
+  image,
+  name,
+  variant = "default",
+}: {
+  image: VenueMedia;
+  name: string;
+  variant?: "default" | "modal";
+}) {
   const [imageError, setImageError] = useState(false);
 
   if (!image.url || imageError) {
@@ -110,7 +133,11 @@ function GalleryImage({ image, name }: { image: VenueMedia; name: string }) {
       src={image.url}
       alt={image.alt || name}
       loading="lazy"
-      className="aspect-4/3 w-full object-cover md:aspect-auto md:h-full"
+      className={
+        variant === "modal"
+          ? "max-h-[75vh] max-w-full object-contain"
+          : "aspect-4/3 w-full object-cover md:aspect-auto md:h-full"
+      }
       onError={() => setImageError(true)}
     />
   );

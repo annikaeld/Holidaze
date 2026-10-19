@@ -109,12 +109,34 @@ input[type="search"]::-webkit-search-cancel-button {
     inset: 0;
     margin: auto;
     width: min(90vw, 1100px);
+    height: 90vh;
     max-height: 90vh;
-    overflow: auto;
+    overflow: hidden;
     border-radius: 12px;
     background: var(--surface);
     color: var(--foreground);
     padding: 16px;
+}
+
+.venue-gallery-dialog[open] {
+    display: flex;
+    flex-direction: column;
+}
+
+.venue-gallery-dialog .venue-gallery {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+}
+
+.venue-gallery-dialog .swiper-slide {
+    height: 100%;
+}
+
+.venue-gallery-dialog .swiper-slide img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .venue-gallery-dialog::backdrop {
