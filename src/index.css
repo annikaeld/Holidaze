@@ -67,6 +67,68 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }
 
+/* Venue gallery */
+.venue-gallery {
+    --swiper-navigation-color: var(--foreground);
+    --swiper-pagination-color: var(--foreground);
+}
+
+.venue-gallery .swiper-button-prev,
+.venue-gallery .swiper-button-next {
+    background: var(--surface);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.venue-gallery .swiper-button-prev svg,
+.venue-gallery .swiper-button-next svg {
+    width: 18px;
+    height: 18px;
+}
+
+.venue-gallery .swiper-pagination-fraction {
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--foreground);
+}
+
+.btn-gallery-open {
+    @apply absolute right-4 bottom-4 cursor-pointer rounded-full px-4 py-2 font-medium shadow-md;
+    @apply bg-card text-card-foreground;
+    @apply hover:opacity-85;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground;
+}
+
+.venue-gallery-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(90vw, 1100px);
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--foreground);
+    padding: 16px;
+}
+
+.venue-gallery-dialog::backdrop {
+    background: rgb(0 0 0 / 75%);
+}
+
+.btn-gallery-close {
+    display: block;
+    margin-left: auto;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--foreground);
+}
 
 #date-calendar.holidaze-calendar {
     --rdp-day-width: 36px;
