@@ -131,6 +131,36 @@ export function VenueSearchForm() {
             value={dateRange?.to ? formatDateForUrl(dateRange.to) : ""}
           />
         </div>
+        {isCalendarOpen && (
+          <div className="absolute left-0 top-full z-50 mt-2 rounded-xl border border-border bg-card p-2 sm:p-4 shadow-lg max-w-[calc(100vw-2rem)]">
+            <DayPicker
+              id="date-calendar"
+              mode="range"
+              selected={dateRange}
+              onSelect={setDateRange}
+              disabled={{ before: new Date() }}
+              className="holidaze-calendar"
+            />
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => setDateRange(undefined)}
+                className="rounded-lg px-3 py-2 cursor-pointer text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsCalendarOpen(false)}
+                disabled={!dateRange?.from || !dateRange?.to}
+                aria-label="Confirm dates"
+                className="btn-confirm"
+              >
+                <Check size={20} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        )}
         <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
           <label
             htmlFor="guests"
@@ -190,36 +220,6 @@ export function VenueSearchForm() {
             </div>
           )}
         </div>
-        {isCalendarOpen && (
-          <div className="absolute left-0 top-full z-50 mt-2 rounded-xl border border-border bg-card p-2 sm:p-4 shadow-lg max-w-[calc(100vw-2rem)]">
-            <DayPicker
-              id="date-calendar"
-              mode="range"
-              selected={dateRange}
-              onSelect={setDateRange}
-              disabled={{ before: new Date() }}
-              className="holidaze-calendar"
-            />
-            <div className="mt-4 flex items-center justify-between gap-3">
-              <button
-                type="button"
-                onClick={() => setDateRange(undefined)}
-                className="rounded-lg px-3 py-2 cursor-pointer text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
-              >
-                Clear
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsCalendarOpen(false)}
-                disabled={!dateRange?.from || !dateRange?.to}
-                aria-label="Confirm dates"
-                className="btn-confirm"
-              >
-                <Check size={20} aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
       <div className="lg:flex lg:items-center lg:pl-3">
         <button type="submit" className="btn-primary">
