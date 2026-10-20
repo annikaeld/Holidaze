@@ -19,7 +19,7 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   if (media.length === 0) {
     return (
-      <div className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-16/9">
+      <div className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-video">
         No image available
       </div>
     );
@@ -42,7 +42,7 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
       </div>
       <div className="relative hidden md:block">
         <div
-          className={`grid aspect-16/9 gap-2 ${
+          className={`grid aspect-video gap-2 ${
             media.length === 1 ? "grid-cols-1" : "grid-cols-[2fr_1fr]"
           }`}
         >

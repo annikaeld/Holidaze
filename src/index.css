@@ -41,6 +41,24 @@
     --color-field-active: var(--field-active);
 }
 
+@layer base {
+    h1 {
+        @apply text-3xl font-bold;
+    }
+
+    h2 {
+        @apply text-2xl font-semibold;
+    }
+
+    h3 {
+        @apply text-xl font-semibold;
+    }
+
+    p {
+        @apply text-base leading-relaxed;
+    }
+}
+
 @layer components {
     .btn-primary {
         @apply w-full min-w-32 self-center cursor-pointer rounded-full px-4 py-3 font-medium transition-colors;
