@@ -79,6 +79,10 @@
         @apply bg-foreground text-surface;
         @apply disabled:cursor-not-allowed disabled:opacity-40;
     }
+
+    .btn-description-toggle {
+        @apply mt-3 cursor-pointer font-semibold underline underline-offset-4;
+    }
 }
 
 input[type="search"]::-webkit-search-cancel-button {

@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { getVenue } from "@/features/venues/services/venuesApi";
 import { useQuery } from "@tanstack/react-query";
 import { VenueGallery } from "@/features/venues/components/VenueGallery";
-import { formatVenueDescription } from "@/features/venues/utils/formatVenueDescription";
+import { VenueDescription } from "@/features/venues/components/VenueDescription";
 import { Wifi, CarFront, Coffee, PawPrint } from "lucide-react";
 
 export function VenueDetailsPage() {
@@ -27,14 +27,12 @@ export function VenueDetailsPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl">
+    <main className="mx-auto w-full max-w-3xl px-4">
       <h1 className="mb-6">{venue.name}</h1>
       <VenueGallery media={venue.media} name={venue.name} />
       <section className="mx-auto mt-6 w-full max-w-3xl">
         <h2>About this place</h2>
-        <p className="whitespace-pre-line">
-          {formatVenueDescription(venue.description)}
-        </p>
+        <VenueDescription description={venue.description} />
       </section>
       {(venue.meta.wifi ||
         venue.meta.parking ||

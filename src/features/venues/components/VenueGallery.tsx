@@ -46,9 +46,11 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
             media.length === 1 ? "grid-cols-1" : "grid-cols-[2fr_1fr]"
           }`}
         >
-          <div>{media[0] && <GalleryImage image={media[0]} name={name} />}</div>
+          <div className="min-h-0 overflow-hidden">
+            {media[0] && <GalleryImage image={media[0]} name={name} />}
+          </div>
 
-          <div className="grid grid-rows-2 gap-2">
+          <div className="grid min-h-0 grid-rows-2 gap-2 overflow-hidden">
             {media.slice(1, 3).map((image, index) => (
               <GalleryImage
                 key={`${image.url}-${index}`}
