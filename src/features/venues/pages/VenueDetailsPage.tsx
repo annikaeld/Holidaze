@@ -1,4 +1,3 @@
-import { useParams } from "react-router";
 import { getVenue } from "@/features/venues/services/venuesApi";
 import { useQuery } from "@tanstack/react-query";
 import { VenueGallery } from "@/features/venues/components/VenueGallery";
@@ -6,8 +5,12 @@ import { VenueDescription } from "@/features/venues/components/VenueDescription"
 import { Wifi, CarFront, Coffee, PawPrint } from "lucide-react";
 import { VenueMap } from "@/features/venues/components/VenueMap";
 import { BookingCard } from "@/features/venues/components/BookingCard";
+import { useParams, useSearchParams } from "react-router";
 
 export function VenueDetailsPage() {
+  const [searchParams] = useSearchParams();
+  const checkIn = searchParams.get("checkIn") ?? undefined;
+  const checkOut = searchParams.get("checkOut") ?? undefined;
   const { id } = useParams<{ id: string }>();
   const {
     data: venue,
@@ -42,7 +45,7 @@ export function VenueDetailsPage() {
             venue.meta.parking ||
             venue.meta.breakfast ||
             venue.meta.pets) && (
-            <section className="mx-auto mt-8 w-full max-w-3xl">
+            <section className="mt-8">
               <h2 className="mb-4">What this place offers</h2>
 
               <ul className="grid grid-cols-2 gap-4">
@@ -110,9 +113,26 @@ export function VenueDetailsPage() {
         </div>
 
         <div className="hidden self-start lg:sticky lg:top-6 lg:block">
-          <BookingCard price={venue.price} />
+          <BookingCard
+            price={venue.price}
+            checkIn={checkIn}
+            checkOut={checkOut}
+            bookings={venue.bookings ?? []}
+          />
         </div>
       </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card p-4 shadow-lg lg:hidden">
+        <BookingCard
+          price={venue.price}
+          checkIn={checkIn}
+          checkOut={checkOut}
+          bookings={venue.bookings ?? []}
+          variant="mobile"
+        />
+      </div>
+
+      <div className="h-24 lg:hidden" aria-hidden="true" />
     </main>
   );
 }

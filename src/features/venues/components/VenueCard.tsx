@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import { VenueImage } from "./VenueImage";
 import type { Venue } from "../types/venue.ts";
@@ -9,9 +9,15 @@ interface VenueCardProps {
 }
 
 export function VenueCard({ venue }: VenueCardProps) {
+  const [searchParams] = useSearchParams();
   return (
     <article className="group relative overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-shadow duration-200 hover:shadow-lg">
-      <Link to={`/venues/${venue.id}`}>
+      <Link
+        to={{
+          pathname: `/venues/${venue.id}`,
+          search: searchParams.toString(),
+        }}
+      >
         <div className="relative">
           <VenueImage media={venue.media} name={venue.name} />
           {venue.rating > 0 && (

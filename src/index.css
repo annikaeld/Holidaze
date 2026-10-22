@@ -178,15 +178,19 @@ input[type="search"]::-webkit-search-cancel-button {
     color: var(--foreground);
 }
 
-#date-calendar.holidaze-calendar {
+:root .holidaze-calendar {
     --rdp-day-width: 36px;
     --rdp-day-height: 40px;
     --rdp-day_button-width: 36px;
     --rdp-day_button-height: 40px;
 }
 
+.holidaze-calendar .rdp-disabled {
+    text-decoration: line-through;
+}
+
 @media (min-width: 375px) {
-    #date-calendar.holidaze-calendar {
+    :root .holidaze-calendar {
         --rdp-day-width: 42px;
         --rdp-day-height: 44px;
         --rdp-day_button-width: 42px;
