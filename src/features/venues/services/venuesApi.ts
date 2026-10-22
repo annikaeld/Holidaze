@@ -31,7 +31,7 @@ export async function searchVenues(
 }
 
 export async function getVenue(id: string): Promise<Venue> {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}?_owner=true`);
 
   if (response.status === 400) {
     throw new Error("Invalid venue ID");

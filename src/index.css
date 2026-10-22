@@ -83,6 +83,10 @@
     .btn-description-toggle {
         @apply mt-3 cursor-pointer font-semibold underline underline-offset-4;
     }
+
+    .booking-card {
+        @apply rounded-xl border border-border bg-card p-6 text-card-foreground shadow-md;
+    }
 }
 
 input[type="search"]::-webkit-search-cancel-button {

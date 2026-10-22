@@ -11,6 +11,15 @@ export type Venue = {
   location: VenueLocation;
   media: VenueMedia[];
   bookings?: VenueBooking[];
+  owner?: VenueOwner;
+};
+
+export type VenueOwner = {
+  name: string;
+  email: string;
+  bio: string;
+  avatar: VenueMedia;
+  banner: VenueMedia;
 };
 
 export type VenueBooking = {
@@ -28,13 +37,13 @@ export type VenueMeta = {
 };
 
 export type VenueLocation = {
-  address: string;
-  city: string;
-  zip: string;
-  country: string;
-  continent: string;
-  lat: number;
-  lng: number;
+  address: string | null;
+  city: string | null;
+  zip: string | null;
+  country: string | null;
+  continent: string | null;
+  lat: number | null;
+  lng: number | null;
 };
 
 export type VenueMedia = {
