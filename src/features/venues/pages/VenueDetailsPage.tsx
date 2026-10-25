@@ -2,10 +2,11 @@ import { getVenue } from "@/features/venues/services/venuesApi";
 import { useQuery } from "@tanstack/react-query";
 import { VenueGallery } from "@/features/venues/components/VenueGallery";
 import { VenueDescription } from "@/features/venues/components/VenueDescription";
-import { Wifi, CarFront, Coffee, PawPrint } from "lucide-react";
+import { Wifi, CarFront, Coffee, PawPrint, Users } from "lucide-react";
 import { VenueMap } from "@/features/venues/components/VenueMap";
 import { BookingCard } from "@/features/venues/components/BookingCard";
 import { useParams, useSearchParams } from "react-router";
+import { VenueRating } from "@/features/venues/components/VenueRating";
 
 export function VenueDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -33,8 +34,15 @@ export function VenueDetailsPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4">
-      <h1 className="mb-6">{venue.name}</h1>
+      <h1 className="mb-2">{venue.name}</h1>
       <VenueGallery media={venue.media} name={venue.name} />
+      <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+        {venue.rating > 0 && <VenueRating rating={venue.rating} />}
+        <span className="flex items-center gap-1">
+          <Users aria-hidden="true" className="h-4 w-4" />
+          Up to {venue.maxGuests} guests
+        </span>
+      </div>
       <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
         <div className="min-w-0">
           <section>
@@ -107,11 +115,12 @@ export function VenueDetailsPage() {
             </p>
 
             {venue.location.lat != null && venue.location.lng != null && (
-              <VenueMap lat={venue.location.lat} lng={venue.location.lng} />
+              <div className="relative z-0">
+                <VenueMap lat={venue.location.lat} lng={venue.location.lng} />
+              </div>
             )}
           </section>
         </div>
-
         <div className="hidden self-start lg:sticky lg:top-6 lg:block">
           <BookingCard
             price={venue.price}
