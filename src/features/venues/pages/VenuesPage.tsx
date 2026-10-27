@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getVenues, searchVenues } from "@/features/venues/services/venuesApi";
 import { VenueCard } from "@/features/venues/components/VenueCard";
 import { useSearchParams } from "react-router";
+import { Pagination } from "@/features/venues/components/Pagination";
 
 function datesOverlap(
   checkIn: string,
@@ -16,19 +17,21 @@ function datesOverlap(
 }
 
 export function VenuesPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const destination = searchParams.get("destination") ?? "";
   const guests = Number(searchParams.get("guests") ?? 1);
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
 
   const {
     data: response,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["venues", destination],
-    queryFn: () => (destination ? searchVenues(destination) : getVenues()),
+    queryKey: ["venues", destination, page],
+    queryFn: () =>
+      destination ? searchVenues(destination, page) : getVenues(page),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -96,6 +99,16 @@ export function VenuesPage() {
           <VenueCard key={venue.id} venue={venue} />
         ))}
       </div>
+      <Pagination
+        currentPage={page}
+        pageCount={pagination.pageCount}
+        onPageChange={(newPage) => {
+          setSearchParams((params) => {
+            params.set("page", String(newPage));
+            return params;
+          });
+        }}
+      />
     </div>
   );
 }

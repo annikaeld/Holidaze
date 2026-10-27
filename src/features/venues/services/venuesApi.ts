@@ -2,8 +2,8 @@ import type { ApiResponse, Venue } from "../types/venue";
 
 const API_URL = "https://v2.api.noroff.dev/holidaze/venues";
 
-export async function getVenues(): Promise<ApiResponse<Venue[]>> {
-  const response = await fetch(`${API_URL}?_bookings=true`);
+export async function getVenues(page = 1): Promise<ApiResponse<Venue[]>> {
+  const response = await fetch(`${API_URL}?page=${page}&_bookings=true`);
 
   if (!response.ok) {
     throw new Error("Could not fetch Venues");
@@ -16,9 +16,10 @@ export async function getVenues(): Promise<ApiResponse<Venue[]>> {
 
 export async function searchVenues(
   query: string,
+  page = 1,
 ): Promise<ApiResponse<Venue[]>> {
   const response = await fetch(
-    `${API_URL}/search?q=${encodeURIComponent(query)}&_bookings=true`,
+    `${API_URL}/search?q=${encodeURIComponent(query)}&page=${page}&_bookings=true`,
   );
 
   if (!response.ok) {
