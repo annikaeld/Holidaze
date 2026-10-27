@@ -87,6 +87,10 @@
     .booking-card {
         @apply rounded-xl border border-border bg-card p-6 text-card-foreground shadow-md;
     }
+
+    .search-surface {
+        @apply lg:rounded-xl lg:border lg:border-border lg:bg-card lg:shadow-md;
+    }
 }
 
 input[type="search"]::-webkit-search-cancel-button {

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Check, X } from "lucide-react";
+import { useSearchParams } from "react-router";
 
 const SHORT_READABLE_DATE_LOCALE = "en-GB";
 
@@ -15,12 +16,27 @@ function formatDateForUrl(date: Date): string {
 }
 
 export function VenueSearchForm() {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [searchParams] = useSearchParams();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    const checkIn = searchParams.get("checkIn");
+    const checkOut = searchParams.get("checkOut");
+
+    if (!checkIn || !checkOut) return undefined;
+
+    return {
+      from: new Date(`${checkIn}T12:00:00`),
+      to: new Date(`${checkOut}T12:00:00`),
+    };
+  });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [guests, setGuests] = useState(1);
+  const [guests, setGuests] = useState(
+    Math.max(1, Number(searchParams.get("guests")) || 1),
+  );
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const searchFormRef = useRef<HTMLFormElement>(null);
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState(
+    searchParams.get("destination") ?? "",
+  );
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -54,7 +70,7 @@ export function VenueSearchForm() {
       ref={searchFormRef}
       action="/venues"
       method="get"
-      className="flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:rounded-xl lg:bg-card lg:p-2"
+      className="flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:p-2 search-surface"
     >
       <div className="relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
         <label

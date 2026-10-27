@@ -49,3 +49,20 @@ export async function getVenue(id: string): Promise<Venue> {
 
   return result.data;
 }
+
+export async function getAllVenues(query = ""): Promise<Venue[]> {
+  const firstPage = query ? await searchVenues(query, 1) : await getVenues(1);
+
+  const pageCount = firstPage.meta.pageCount;
+
+  const remainingPages = await Promise.all(
+    Array.from({ length: pageCount - 1 }, (_, index) =>
+      query ? searchVenues(query, index + 2) : getVenues(index + 2),
+    ),
+  );
+
+  return [
+    ...firstPage.data,
+    ...remainingPages.flatMap((response) => response.data),
+  ];
+}
