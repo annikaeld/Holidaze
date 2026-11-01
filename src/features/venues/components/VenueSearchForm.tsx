@@ -15,7 +15,11 @@ function formatDateForUrl(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-export function VenueSearchForm() {
+type VenueSearchFormProps = {
+  variant?: "default" | "filters";
+};
+
+export function VenueSearchForm({ variant = "default" }: VenueSearchFormProps) {
   const [searchParams] = useSearchParams();
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const checkIn = searchParams.get("checkIn");
@@ -67,11 +71,28 @@ export function VenueSearchForm() {
 
   return (
     <form
+      id={variant === "filters" ? "venue-filter-search" : undefined}
       ref={searchFormRef}
       action="/venues"
       method="get"
-      className="flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:p-2 search-surface"
+      className={
+        variant === "filters"
+          ? "flex w-full flex-col gap-3"
+          : "flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:p-2 search-surface"
+      }
     >
+      {variant === "filters" &&
+        ["wifi", "parking", "breakfast", "pets", "minPrice", "maxPrice"].map(
+          (name) =>
+            searchParams.has(name) && (
+              <input
+                key={name}
+                type="hidden"
+                name={name}
+                value={searchParams.get(name) ?? ""}
+              />
+            ),
+        )}
       <div className="relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
         <label
           htmlFor="destination"
@@ -103,7 +124,13 @@ export function VenueSearchForm() {
           </button>
         )}
       </div>
-      <div className="relative grid min-w-0 grid-cols-2 gap-3 lg:flex-2">
+      <div
+        className={
+          variant === "filters"
+            ? "relative grid min-w-0 grid-cols-1 gap-3"
+            : "relative grid min-w-0 grid-cols-2 gap-3 lg:flex-2"
+        }
+      >
         <div className="min-w-0">
           <button
             type="button"
@@ -219,11 +246,13 @@ export function VenueSearchForm() {
           )}
         </div>
       </div>
-      <div className="lg:flex lg:items-center lg:pl-3">
-        <button type="submit" className="btn-primary">
-          Search
-        </button>
-      </div>
+      {variant !== "filters" && (
+        <div className="lg:flex lg:items-center lg:pl-3">
+          <button type="submit" className="btn-primary">
+            Search
+          </button>
+        </div>
+      )}
     </form>
   );
 }

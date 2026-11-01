@@ -5,6 +5,8 @@ import { useSearchParams } from "react-router";
 import { Pagination } from "@/features/venues/components/Pagination";
 import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
+import { useEffect, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 
 function datesOverlap(
   checkIn: string,
@@ -20,6 +22,17 @@ function datesOverlap(
 
 export function VenuesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  useEffect(() => {
+    if (!filtersOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [filtersOpen]);
   const destination = searchParams.get("destination") ?? "";
   const guests = Number(searchParams.get("guests") ?? 1);
   const checkIn = searchParams.get("checkIn");
@@ -58,15 +71,7 @@ export function VenuesPage() {
     );
   }
 
-  if (!venuesData || venuesData.length === 0) {
-    return (
-      <section className="min-h-screen p-8">
-        <p>No venues found.</p>
-      </section>
-    );
-  }
-
-  const venues = venuesData.filter((venue) => {
+  const venues = (venuesData ?? []).filter((venue) => {
     if (venue.maxGuests < guests) return false;
 
     if (wifi && !venue.meta?.wifi) return false;
@@ -94,47 +99,91 @@ export function VenuesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      <h1>Venues</h1>
-      <div className="my-6">
-        <VenueSearchForm key={searchParams.toString()} />
+      <div className="flex items-center justify-between">
+        <h1>Venues</h1>
+
+        <button
+          type="button"
+          onClick={() => setFiltersOpen(true)}
+          aria-label="Open filters"
+          className="cursor-pointer rounded-lg border border-border bg-card p-3"
+        >
+          <SlidersHorizontal size={20} aria-hidden="true" />
+        </button>
       </div>
-      <VenueFilters
-        selected={["wifi", "parking", "breakfast", "pets"].filter(
-          (amenity) => searchParams.get(amenity) === "true",
-        )}
-        onChange={(amenity, checked) => {
-          setSearchParams((params) => {
-            if (checked) {
-              params.set(amenity, "true");
-            } else {
-              params.delete(amenity);
-            }
+      {filtersOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Filters"
+            className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-card p-6 shadow-xl"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Filters</h2>
 
-            params.delete("page");
-            return params;
-          });
-        }}
-        minPrice={searchParams.get("minPrice") ?? ""}
-        maxPrice={searchParams.get("maxPrice") ?? ""}
-        onPriceChange={(min, max) => {
-          setSearchParams((params) => {
-            if (min === "") {
-              params.delete("minPrice");
-            } else {
-              params.set("minPrice", min);
-            }
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(false)}
+                className="cursor-pointer text-2xl"
+                aria-label="Close filters"
+              >
+                &times;
+              </button>
+            </div>
 
-            if (max === "") {
-              params.delete("maxPrice");
-            } else {
-              params.set("maxPrice", max);
-            }
+            <div className="overflow-y-auto">
+              <VenueSearchForm variant="filters" />
+              <VenueFilters
+                selected={["wifi", "parking", "breakfast", "pets"].filter(
+                  (amenity) => searchParams.get(amenity) === "true",
+                )}
+                onChange={(amenity, checked) => {
+                  setSearchParams((params) => {
+                    if (checked) {
+                      params.set(amenity, "true");
+                    } else {
+                      params.delete(amenity);
+                    }
 
-            params.delete("page");
-            return params;
-          });
-        }}
-      />
+                    params.delete("page");
+                    return params;
+                  });
+                }}
+                minPrice={searchParams.get("minPrice") ?? ""}
+                maxPrice={searchParams.get("maxPrice") ?? ""}
+                onPriceChange={(min, max) => {
+                  setSearchParams((params) => {
+                    if (min === "") {
+                      params.delete("minPrice");
+                    } else {
+                      params.set("minPrice", min);
+                    }
+
+                    if (max === "") {
+                      params.delete("maxPrice");
+                    } else {
+                      params.set("maxPrice", max);
+                    }
+
+                    params.delete("page");
+                    return params;
+                  });
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              form="venue-filter-search"
+              className="mt-6 cursor-pointer rounded-lg bg-field-active p-3"
+            >
+              Show venues
+            </button>
+          </div>
+        </div>
+      )}
+
       <p>
         {venues.length === 0
           ? "0 venues found"

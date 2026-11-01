@@ -28,27 +28,8 @@ export function VenueFilters({
   });
 
   return (
-    <div id="amenities-filters">
+    <div id="venue-filters">
       <fieldset>
-        <legend className="mb-3 font-semibold">Amenities</legend>
-
-        <div className="flex flex-col gap-3">
-          {amenities.map(({ value, label }) => (
-            <label
-              key={value}
-              className="flex cursor-pointer items-center gap-2"
-            >
-              <input
-                type="checkbox"
-                checked={selected.includes(value)}
-                onChange={(event) => onChange(value, event.target.checked)}
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <fieldset className="mt-6">
         <legend className="mb-3 font-semibold">Price per night</legend>
 
         <div className="flex gap-3">
@@ -91,6 +72,25 @@ export function VenueFilters({
               className="w-full rounded-lg border border-border bg-card p-2"
             />
           </label>
+        </div>
+      </fieldset>
+      <fieldset className="mt-6">
+        <legend className="mb-3 font-semibold">Amenities</legend>
+
+        <div className="flex flex-col gap-3">
+          {amenities.map(({ value, label }) => (
+            <label
+              key={value}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(value)}
+                onChange={(event) => onChange(value, event.target.checked)}
+              />
+              {label}
+            </label>
+          ))}
         </div>
       </fieldset>
     </div>
