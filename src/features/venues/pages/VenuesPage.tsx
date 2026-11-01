@@ -23,6 +23,9 @@ function datesOverlap(
 export function VenuesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [draftParams, setDraftParams] = useState(
+    () => new URLSearchParams(searchParams),
+  );
   useEffect(() => {
     if (!filtersOpen) return;
 
@@ -104,7 +107,10 @@ export function VenuesPage() {
 
         <button
           type="button"
-          onClick={() => setFiltersOpen(true)}
+          onClick={() => {
+            setDraftParams(new URLSearchParams(searchParams));
+            setFiltersOpen(true);
+          }}
           aria-label="Open filters"
           className="cursor-pointer rounded-lg border border-border bg-card p-3"
         >
@@ -132,14 +138,33 @@ export function VenuesPage() {
               </button>
             </div>
 
-            <div className="overflow-y-auto">
-              <VenueSearchForm variant="filters" />
+            <div className="min-h-0 min-w-0 overflow-y-auto px-2 py-2">
+              <VenueSearchForm
+                variant="filters"
+                draftParams={draftParams}
+                onDraftChange={(name, value) => {
+                  setDraftParams((previous) => {
+                    const params = new URLSearchParams(previous);
+
+                    if (value) {
+                      params.set(name, value);
+                    } else {
+                      params.delete(name);
+                    }
+
+                    params.delete("page");
+                    return params;
+                  });
+                }}
+              />
               <VenueFilters
                 selected={["wifi", "parking", "breakfast", "pets"].filter(
-                  (amenity) => searchParams.get(amenity) === "true",
+                  (amenity) => draftParams.get(amenity) === "true",
                 )}
                 onChange={(amenity, checked) => {
-                  setSearchParams((params) => {
+                  setDraftParams((previous) => {
+                    const params = new URLSearchParams(previous);
+
                     if (checked) {
                       params.set(amenity, "true");
                     } else {
@@ -150,10 +175,12 @@ export function VenuesPage() {
                     return params;
                   });
                 }}
-                minPrice={searchParams.get("minPrice") ?? ""}
-                maxPrice={searchParams.get("maxPrice") ?? ""}
+                minPrice={draftParams.get("minPrice") ?? ""}
+                maxPrice={draftParams.get("maxPrice") ?? ""}
                 onPriceChange={(min, max) => {
-                  setSearchParams((params) => {
+                  setDraftParams((previous) => {
+                    const params = new URLSearchParams(previous);
+
                     if (min === "") {
                       params.delete("minPrice");
                     } else {
@@ -174,8 +201,11 @@ export function VenuesPage() {
             </div>
 
             <button
-              type="submit"
-              form="venue-filter-search"
+              type="button"
+              onClick={() => {
+                setSearchParams(new URLSearchParams(draftParams));
+                setFiltersOpen(false);
+              }}
               className="mt-6 cursor-pointer rounded-lg bg-field-active p-3"
             >
               Show venues

@@ -201,3 +201,24 @@ input[type="search"]::-webkit-search-cancel-button {
         --rdp-day_button-height: 44px;
     }
 }
+
+@media (max-width: 374px) {
+    #venue-filter-search .holidaze-calendar {
+        --rdp-day-width: 30px;
+        --rdp-day_button-width: 30px;
+    }
+}
+
+@media (min-width: 375px) and (max-width: 639px) {
+    #venue-filter-search .holidaze-calendar {
+        --rdp-day-width: 40px;
+        --rdp-day_button-width: 40px;
+    }
+}
+
+@media (min-width: 640px) {
+    #venue-filter-search .calendar-content {
+        width: fit-content;
+        margin-inline: auto;
+    }
+}

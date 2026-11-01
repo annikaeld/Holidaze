@@ -20,7 +20,7 @@ export function DateRangeCalendar({
   onConfirm,
 }: DateRangeCalendarProps) {
   return (
-    <>
+    <div className="calendar-content">
       <DayPicker
         id={id}
         autoFocus
@@ -57,6 +57,6 @@ export function DateRangeCalendar({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 }
