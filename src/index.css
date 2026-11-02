@@ -1,8 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Lustria&family=Source+Sans+3:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+    --heading: #653451;
     --surface: #F3E7EA;
     --foreground: #1A0F2E;
     --card: #FFFAF6;
@@ -16,9 +18,10 @@
 }
 
 .dark {
+    --heading: #FFF6F5;
     --surface: #1A0F2E;
     --foreground: #f5f5f5;
-    --card: #3B1B4F;
+    --card: #30263D;
     --card-foreground: #FFF6F5;
     --muted-foreground: #B8A6C6;
     --placeholder: #241D30;
@@ -29,6 +32,7 @@
 }
 
 @theme inline {
+    --color-heading: var(--heading);
     --color-surface: var(--surface);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -42,20 +46,26 @@
 }
 
 @layer base {
+    body {
+        @apply bg-surface text-foreground;
+        font-family: "Source Sans 3", sans-serif;
+    }
+
     h1 {
-        @apply text-3xl font-bold;
+        @apply text-[32px] font-normal text-heading;
+        font-family: "Lustria", serif;
     }
 
     h2 {
-        @apply text-2xl font-semibold;
+        @apply text-[25px] font-semibold text-foreground;
     }
 
     h3 {
-        @apply text-xl font-semibold;
+        @apply text-[20px] font-semibold text-foreground;
     }
 
     p {
-        @apply text-base leading-relaxed;
+        @apply text-[18px] font-medium leading-relaxed text-foreground;
     }
 }
 
