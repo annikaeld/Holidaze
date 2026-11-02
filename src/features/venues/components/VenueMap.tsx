@@ -4,8 +4,8 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 interface VenueMapProps {
-  lat: number;
-  lng: number;
+  lat: number | null;
+  lng: number | null;
 }
 
 const venueIcon = L.icon({
@@ -18,6 +18,15 @@ const venueIcon = L.icon({
 });
 
 export function VenueMap({ lat, lng }: VenueMapProps) {
+  if (
+    lat === null ||
+    lng === null ||
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng) ||
+    (lat === 0 && lng === 0)
+  ) {
+    return null;
+  }
   const position: [number, number] = [lat, lng];
 
   return (

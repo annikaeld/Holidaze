@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { regions } from "../utils/venueRegions";
 
 type VenueFiltersProps = {
   selected: string[];
   onChange: (amenity: string, checked: boolean) => void;
+  selectedRegions: string[];
+  onRegionChange: (region: string, checked: boolean) => void;
   minPrice: string;
   maxPrice: string;
   onPriceChange: (minPrice: string, maxPrice: string) => void;
@@ -18,6 +21,8 @@ const amenities = [
 export function VenueFilters({
   selected,
   onChange,
+  selectedRegions,
+  onRegionChange,
   minPrice,
   maxPrice,
   onPriceChange,
@@ -29,6 +34,24 @@ export function VenueFilters({
 
   return (
     <div id="venue-filters">
+      <fieldset>
+        <legend className="mb-3 font-semibold">Regions</legend>
+        <div className="grid grid-cols-2 gap-3">
+          {regions.map((region) => (
+            <label key={region.value} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                value={region.value}
+                checked={selectedRegions.includes(region.value)}
+                onChange={(event) =>
+                  onRegionChange(region.value, event.target.checked)
+                }
+              />
+              <span>{region.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <fieldset>
         <legend className="mb-3 font-semibold">Price per night</legend>
 

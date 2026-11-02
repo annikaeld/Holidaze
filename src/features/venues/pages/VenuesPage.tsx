@@ -7,6 +7,10 @@ import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
 import { useEffect, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
+import {
+  getVenueRegion,
+  isNordicCountry,
+} from "@/features/venues/utils/venueRegions";
 
 function datesOverlap(
   checkIn: string,
@@ -45,6 +49,7 @@ export function VenuesPage() {
   const parking = searchParams.get("parking") === "true";
   const breakfast = searchParams.get("breakfast") === "true";
   const pets = searchParams.get("pets") === "true";
+  const selectedRegions = searchParams.getAll("region");
   const minPrice = Number(searchParams.get("minPrice") ?? 0);
   const maxPrice = Number(searchParams.get("maxPrice") ?? Infinity);
 
@@ -75,15 +80,27 @@ export function VenuesPage() {
   }
 
   const venues = (venuesData ?? []).filter((venue) => {
-    if (venue.maxGuests < guests) return false;
+    if (selectedRegions.length > 0) {
+      const country = venue.location?.country ?? null;
+      const continent = venue.location?.continent ?? null;
 
+      const region = getVenueRegion(country, continent);
+
+      const matchesRegion = selectedRegions.some(
+        (selected) =>
+          selected === region ||
+          (selected === "nordic" && isNordicCountry(country)),
+      );
+
+      if (!matchesRegion) return false;
+    }
+    if (venue.maxGuests < guests) return false;
     if (wifi && !venue.meta?.wifi) return false;
     if (parking && !venue.meta?.parking) return false;
     if (breakfast && !venue.meta?.breakfast) return false;
     if (pets && !venue.meta?.pets) return false;
     if (venue.price < minPrice) return false;
     if (venue.price > maxPrice) return false;
-
     if (!checkIn || !checkOut) return true;
 
     return !venue.bookings?.some((booking) =>
@@ -158,6 +175,21 @@ export function VenuesPage() {
                 }}
               />
               <VenueFilters
+                selectedRegions={draftParams.getAll("region")}
+                onRegionChange={(region, checked) => {
+                  setDraftParams((previous) => {
+                    const params = new URLSearchParams(previous);
+
+                    if (checked) {
+                      params.append("region", region);
+                    } else {
+                      params.delete("region", region);
+                    }
+
+                    params.delete("page");
+                    return params;
+                  });
+                }}
                 selected={["wifi", "parking", "breakfast", "pets"].filter(
                   (amenity) => draftParams.get(amenity) === "true",
                 )}

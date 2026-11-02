@@ -111,7 +111,9 @@ export function VenueDetailsPage() {
             <p className="mb-4">
               {[venue.location.city, venue.location.country]
                 .filter(Boolean)
-                .join(", ") || "Location not available"}
+                .join(", ") ||
+                venue.location.continent ||
+                "Location not available"}
             </p>
 
             {venue.location.lat != null && venue.location.lng != null && (
