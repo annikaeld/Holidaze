@@ -5,30 +5,34 @@
 
 :root {
     --heading: #653451;
-    --surface: #F3E7EA;
+    --surface: #F8F2F3;
     --foreground: #1A0F2E;
     --card: #FFFAF6;
     --card-foreground: #1A0F2E;
     --muted-foreground: #746477;
     --placeholder: #EDE7EF;
     --placeholder-foreground: #746477;
+    --card-border: #E8DDE2;
     --border: #8A788D;
     --hero: #E9DCE6;
     --field-active: #FFFAF6;
+    --shadow-color: #1A0F2E1F;
 }
 
 .dark {
     --heading: #FFF6F5;
-    --surface: #1A0F2E;
+    --surface: #130D1F;
     --foreground: #f5f5f5;
-    --card: #30263D;
+    --card: #282232;
     --card-foreground: #FFF6F5;
     --muted-foreground: #B8A6C6;
     --placeholder: #241D30;
     --placeholder-foreground: #B8A6C6;
-    --border: #8D7E9B;
+    --card-border: #382E40;
+    --border: #51465F;
     --hero: #28173D;
     --field-active: #30283D;
+    --shadow-color: #76518A80;
 }
 
 @theme inline {
@@ -40,9 +44,11 @@
     --color-muted-foreground: var(--muted-foreground);
     --color-placeholder: var(--placeholder);
     --color-placeholder-foreground: var(--placeholder-foreground);
+    --color-card-border: var(--card-border);
     --color-border: var(--border);
     --color-hero: var(--hero);
     --color-field-active: var(--field-active);
+    --color-shadow: var(--shadow-color);
 }
 
 @layer base {
