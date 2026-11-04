@@ -50,6 +50,7 @@ export function VenuesPage() {
   const breakfast = searchParams.get("breakfast") === "true";
   const pets = searchParams.get("pets") === "true";
   const selectedRegions = searchParams.getAll("region");
+  const sort = searchParams.get("sort") ?? "newest";
   const minPrice = Number(searchParams.get("minPrice") ?? 0);
   const maxPrice = Number(searchParams.get("maxPrice") ?? Infinity);
 
@@ -108,39 +109,87 @@ export function VenuesPage() {
     );
   });
 
+  const sortedVenues = [...venues].sort((a, b) => {
+    switch (sort) {
+      case "price-asc":
+        return a.price - b.price;
+
+      case "price-desc":
+        return b.price - a.price;
+
+      case "rating-asc":
+        return a.rating - b.rating;
+
+      case "rating-desc":
+        return b.rating - a.rating;
+
+      default:
+        return new Date(b.created).getTime() - new Date(a.created).getTime();
+    }
+  });
+
   const pageSize = 12;
   const pageCount = Math.ceil(venues.length / pageSize);
   const currentPage = Math.min(page, Math.max(1, pageCount));
 
-  const paginatedVenues = venues.slice(
+  const paginatedVenues = sortedVenues.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1>Venues</h1>
 
-        <button
-          type="button"
-          onClick={() => {
-            setDraftParams(new URLSearchParams(searchParams));
-            setFiltersOpen(true);
-          }}
-          aria-label="Open filters"
-          className="cursor-pointer rounded-lg border border-border bg-card p-3"
-        >
-          <SlidersHorizontal size={20} aria-hidden="true" />
-        </button>
+        <div className="flex items-center gap-3">
+          <select
+            aria-label="Sort venues"
+            value={sort}
+            onChange={(event) => {
+              const value = event.target.value;
+
+              setSearchParams((previous) => {
+                const params = new URLSearchParams(previous);
+
+                if (value === "newest") {
+                  params.delete("sort");
+                } else {
+                  params.set("sort", value);
+                }
+
+                params.delete("page");
+                return params;
+              });
+            }}
+            className="min-w-0 cursor-pointer rounded-lg border border-border bg-card px-3 py-3 text-sm text-card-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+          >
+            <option value="newest">Newest first</option>
+            <option value="price-asc">Price: Low to high</option>
+            <option value="price-desc">Price: High to low</option>
+            <option value="rating-desc">Rating: High to low</option>
+            <option value="rating-asc">Rating: Low to high</option>
+          </select>
+          <button
+            type="button"
+            onClick={() => {
+              setDraftParams(new URLSearchParams(searchParams));
+              setFiltersOpen(true);
+            }}
+            aria-label="Open filters"
+            className="cursor-pointer rounded-lg border border-border bg-card p-3"
+          >
+            <SlidersHorizontal size={20} aria-hidden="true" />
+          </button>
+        </div>
       </div>
       {filtersOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4">
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Filters"
-            className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-card p-6 shadow-xl"
+            className="filter-modal flex max-h-[90dvh] w-full flex-col rounded-t-2xl bg-card p-6 shadow-xl sm:max-h-[90vh] sm:max-w-lg sm:rounded-xl"
           >
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Filters</h2>
@@ -238,7 +287,7 @@ export function VenuesPage() {
                 setSearchParams(new URLSearchParams(draftParams));
                 setFiltersOpen(false);
               }}
-              className="mt-6 cursor-pointer rounded-lg bg-field-active p-3"
+              className="btn-primary mt-6 shrink-0"
             >
               Show venues
             </button>

@@ -67,7 +67,7 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
             onClick={() => dialogRef.current?.showModal()}
             className="btn-gallery-open"
           >
-            Vis alle bilder ({media.length})
+            View all photos ({media.length})
           </button>
         )}
       </div>

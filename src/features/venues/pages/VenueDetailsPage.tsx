@@ -7,8 +7,11 @@ import { VenueMap } from "@/features/venues/components/VenueMap";
 import { BookingCard } from "@/features/venues/components/BookingCard";
 import { useParams, useSearchParams } from "react-router";
 import { VenueRating } from "@/features/venues/components/VenueRating";
+import { UserRound } from "lucide-react";
+import { useState } from "react";
 
 export function VenueDetailsPage() {
+  const [avatarError, setAvatarError] = useState(false);
   const [searchParams] = useSearchParams();
   const checkIn = searchParams.get("checkIn") ?? undefined;
   const checkOut = searchParams.get("checkOut") ?? undefined;
@@ -92,13 +95,18 @@ export function VenueDetailsPage() {
               <h2 className="mb-4">Hosted by</h2>
 
               <div className="flex items-center gap-4">
-                {venue.owner.avatar?.url && (
+                {venue.owner.avatar?.url && !avatarError ? (
                   <img
                     src={venue.owner.avatar.url}
                     alt={venue.owner.avatar.alt || ""}
                     className="h-14 w-14 rounded-full object-cover"
                     loading="lazy"
+                    onError={() => setAvatarError(true)}
                   />
+                ) : (
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-placeholder">
+                    <UserRound className="h-7 w-7 text-placeholder-foreground" />
+                  </div>
                 )}
 
                 <p>{venue.owner.name}</p>

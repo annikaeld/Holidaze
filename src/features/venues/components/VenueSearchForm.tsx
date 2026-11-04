@@ -117,7 +117,7 @@ export function VenueSearchForm({
           type="search"
           id="destination"
           name="destination"
-          placeholder="Where do you want to go?"
+          placeholder="Search destinations or stays"
           value={destination}
           onChange={(event) => {
             const value = event.target.value;
