@@ -10,6 +10,9 @@ interface VenueCardProps {
 
 export function VenueCard({ venue }: VenueCardProps) {
   const [searchParams] = useSearchParams();
+  const formattedPrice = new Intl.NumberFormat("en-NO", {
+    maximumFractionDigits: 2,
+  }).format(venue.price);
   return (
     <article className="group relative overflow-hidden rounded-lg border-[0.5px] border-card-border bg-card text-card-foreground shadow-sm shadow-shadow transition-shadow duration-200 hover:shadow-lg">
       <Link
@@ -30,6 +33,13 @@ export function VenueCard({ venue }: VenueCardProps) {
           <h2 className="wrap-break-words text-lg font-semibold">
             {venue.name}
           </h2>
+
+          <p className="mt-2 text-base font-semibold text-card-foreground">
+            NOK {formattedPrice}
+            <span className="ml-1 text-sm font-normal text-muted-foreground">
+              / night
+            </span>
+          </p>
         </div>
       </Link>
     </article>
