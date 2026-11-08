@@ -5,9 +5,9 @@ import { VenueDescription } from "@/features/venues/components/VenueDescription"
 import { Wifi, CarFront, Coffee, PawPrint, Users } from "lucide-react";
 import { VenueMap } from "@/features/venues/components/VenueMap";
 import { BookingCard } from "@/features/venues/components/BookingCard";
-import { useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, Link } from "react-router";
 import { VenueRating } from "@/features/venues/components/VenueRating";
-import { UserRound } from "lucide-react";
+import { UserRound, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 export function VenueDetailsPage() {
@@ -37,6 +37,16 @@ export function VenueDetailsPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4">
+      <Link
+        to={{
+          pathname: "/venues",
+          search: searchParams.toString(),
+        }}
+        className="inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+      >
+        <ArrowLeft size={16} aria-hidden="true" />
+        Back to venues
+      </Link>
       <h1 className="mb-2">{venue.name}</h1>
       <VenueGallery media={venue.media} name={venue.name} />
       <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">

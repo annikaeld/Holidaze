@@ -166,7 +166,11 @@ export function VenueSearchForm({
             }}
             aria-expanded={isCalendarOpen}
             aria-controls="date-calendar"
-            className="flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring lg:border-0 lg:bg-transparent lg:rounded-lg lg:focus-visible:bg-field-active lg:aria-expanded:bg-field-active"
+            className={
+              variant === "filters"
+                ? "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring"
+                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring lg:border-0 lg:bg-transparent lg:rounded-lg lg:focus-visible:bg-field-active lg:aria-expanded:bg-field-active"
+            }
           >
             <span className="text-xs font-semibold text-muted-foreground">
               When?
@@ -238,7 +242,13 @@ export function VenueSearchForm({
             />
           </div>
         )}
-        <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg">
+        <div
+          className={
+            variant === "filters"
+              ? "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring"
+              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg"
+          }
+        >
           <label
             htmlFor="guests"
             className="text-xs font-semibold text-muted-foreground"
@@ -259,68 +269,68 @@ export function VenueSearchForm({
             {guests} {guests === 1 ? "guest" : "guests"}
           </button>
           <input type="hidden" name="guests" value={guests} />
-        </div>
-        {isGuestsOpen && (
-          <div
-            id="guests-popover"
-            className={
-              variant === "filters"
-                ? "col-span-full justify-self-start w-fit max-w-full rounded-xl border border-border bg-card p-4"
-                : "absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
-            }
-          >
+          {isGuestsOpen && (
             <div
+              id="guests-popover"
               className={
                 variant === "filters"
-                  ? "flex items-center justify-center gap-4"
-                  : "flex items-center justify-between gap-4"
+                  ? "mt-3 w-full border-t border-border pt-3"
+                  : "absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
               }
             >
-              <button
-                type="button"
-                onClick={() => {
-                  const updatedGuests = Math.max(1, guests - 1);
-                  setGuests(updatedGuests);
-
-                  if (variant === "filters") {
-                    onDraftChange?.("guests", String(updatedGuests));
-                  }
-                }}
-                disabled={guests <= 1}
-                aria-label="Remove one guest"
-                className="btn-counter"
+              <div
+                className={
+                  variant === "filters"
+                    ? "flex items-center justify-center gap-4"
+                    : "flex items-center justify-between gap-4"
+                }
               >
-                −
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updatedGuests = Math.max(1, guests - 1);
+                    setGuests(updatedGuests);
 
-              <span aria-live="polite">{guests}</span>
+                    if (variant === "filters") {
+                      onDraftChange?.("guests", String(updatedGuests));
+                    }
+                  }}
+                  disabled={guests <= 1}
+                  aria-label="Remove one guest"
+                  className="btn-counter"
+                >
+                  −
+                </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  const updatedGuests = guests + 1;
-                  setGuests(updatedGuests);
+                <span aria-live="polite">{guests}</span>
 
-                  if (variant === "filters") {
-                    onDraftChange?.("guests", String(updatedGuests));
-                  }
-                }}
-                aria-label="Add one guest"
-                className="btn-counter"
-              >
-                +
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsGuestsOpen(false)}
-                aria-label="Confirm guests"
-                className="btn-confirm"
-              >
-                <Check size={20} aria-hidden="true" />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updatedGuests = guests + 1;
+                    setGuests(updatedGuests);
+
+                    if (variant === "filters") {
+                      onDraftChange?.("guests", String(updatedGuests));
+                    }
+                  }}
+                  aria-label="Add one guest"
+                  className="btn-counter"
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsGuestsOpen(false)}
+                  aria-label="Confirm guests"
+                  className="btn-confirm"
+                >
+                  <Check size={20} aria-hidden="true" />
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {variant !== "filters" && (
         <div className="lg:flex lg:items-center lg:pl-3">

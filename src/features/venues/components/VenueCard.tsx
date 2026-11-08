@@ -20,6 +20,7 @@ export function VenueCard({ venue }: VenueCardProps) {
           pathname: `/venues/${venue.id}`,
           search: searchParams.toString(),
         }}
+        className="block rounded-lg focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus-ring"
       >
         <div className="relative">
           <VenueImage media={venue.media} name={venue.name} />

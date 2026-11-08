@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router";
 import { Pagination } from "@/features/venues/components/Pagination";
 import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import {
   getVenueRegion,
@@ -31,6 +31,8 @@ export function VenuesPage() {
   const [draftParams, setDraftParams] = useState(
     () => new URLSearchParams(searchParams),
   );
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
+  const filterDialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!filtersOpen) return;
 
@@ -39,6 +41,64 @@ export function VenuesPage() {
 
     return () => {
       document.body.style.overflow = previousOverflow;
+    };
+  }, [filtersOpen]);
+  useEffect(() => {
+    if (!filtersOpen) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setFiltersOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [filtersOpen]);
+  useEffect(() => {
+    if (!filtersOpen) return;
+
+    const dialog = filterDialogRef.current;
+    const filterButton = filterButtonRef.current;
+    if (!dialog) return;
+
+    const focusableSelector =
+      'button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])';
+
+    const getFocusableElements = () =>
+      Array.from(
+        dialog.querySelectorAll<HTMLElement>(focusableSelector),
+      ).filter((element) => element.getClientRects().length > 0);
+
+    const focusableElements = getFocusableElements();
+    focusableElements[0]?.focus();
+
+    function handleTab(event: KeyboardEvent) {
+      if (event.key !== "Tab") return;
+
+      const elements = getFocusableElements();
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleTab);
+
+    return () => {
+      document.removeEventListener("keydown", handleTab);
+      filterButton?.focus();
     };
   }, [filtersOpen]);
   const destination = searchParams.get("destination") ?? "";
@@ -124,7 +184,7 @@ export function VenuesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1>Venues</h1>
 
         <div className="flex items-center gap-3">
@@ -156,6 +216,7 @@ export function VenuesPage() {
             <option value="rating-asc">Rating: Low to high</option>
           </select>
           <button
+            ref={filterButtonRef}
             type="button"
             onClick={() => {
               setDraftParams(new URLSearchParams(searchParams));
@@ -166,12 +227,19 @@ export function VenuesPage() {
           >
             <SlidersHorizontal size={20} aria-hidden="true" />
           </button>
+
+          {!isLoading && !error && (
+            <span className="ml-auto whitespace-nowrap text-sm text-muted-foreground">
+              {venues.length.toLocaleString("en-US")} stays
+            </span>
+          )}
         </div>
       </div>
       {filtersOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4">
           <div
             role="dialog"
+            ref={filterDialogRef}
             aria-modal="true"
             aria-label="Filters"
             className="filter-modal flex max-h-[90dvh] w-full flex-col rounded-t-2xl bg-card p-6 shadow-xl sm:max-h-[90vh] sm:max-w-lg sm:rounded-xl"
@@ -208,62 +276,64 @@ export function VenuesPage() {
                   });
                 }}
               />
-              <VenueFilters
-                selectedRegions={draftParams.getAll("region")}
-                onRegionChange={(region, checked) => {
-                  setDraftParams((previous) => {
-                    const params = new URLSearchParams(previous);
+              <div className="mt-6">
+                <VenueFilters
+                  selectedRegions={draftParams.getAll("region")}
+                  onRegionChange={(region, checked) => {
+                    setDraftParams((previous) => {
+                      const params = new URLSearchParams(previous);
 
-                    if (checked) {
-                      params.append("region", region);
-                    } else {
-                      params.delete("region", region);
-                    }
+                      if (checked) {
+                        params.append("region", region);
+                      } else {
+                        params.delete("region", region);
+                      }
 
-                    params.delete("page");
-                    return params;
-                  });
-                }}
-                selected={["wifi", "parking", "breakfast", "pets"].filter(
-                  (amenity) => draftParams.get(amenity) === "true",
-                )}
-                onChange={(amenity, checked) => {
-                  setDraftParams((previous) => {
-                    const params = new URLSearchParams(previous);
+                      params.delete("page");
+                      return params;
+                    });
+                  }}
+                  selected={["wifi", "parking", "breakfast", "pets"].filter(
+                    (amenity) => draftParams.get(amenity) === "true",
+                  )}
+                  onChange={(amenity, checked) => {
+                    setDraftParams((previous) => {
+                      const params = new URLSearchParams(previous);
 
-                    if (checked) {
-                      params.set(amenity, "true");
-                    } else {
-                      params.delete(amenity);
-                    }
+                      if (checked) {
+                        params.set(amenity, "true");
+                      } else {
+                        params.delete(amenity);
+                      }
 
-                    params.delete("page");
-                    return params;
-                  });
-                }}
-                minPrice={draftParams.get("minPrice") ?? ""}
-                maxPrice={draftParams.get("maxPrice") ?? ""}
-                onPriceChange={(min, max) => {
-                  setDraftParams((previous) => {
-                    const params = new URLSearchParams(previous);
+                      params.delete("page");
+                      return params;
+                    });
+                  }}
+                  minPrice={draftParams.get("minPrice") ?? ""}
+                  maxPrice={draftParams.get("maxPrice") ?? ""}
+                  onPriceChange={(min, max) => {
+                    setDraftParams((previous) => {
+                      const params = new URLSearchParams(previous);
 
-                    if (min === "") {
-                      params.delete("minPrice");
-                    } else {
-                      params.set("minPrice", min);
-                    }
+                      if (min === "") {
+                        params.delete("minPrice");
+                      } else {
+                        params.set("minPrice", min);
+                      }
 
-                    if (max === "") {
-                      params.delete("maxPrice");
-                    } else {
-                      params.set("maxPrice", max);
-                    }
+                      if (max === "") {
+                        params.delete("maxPrice");
+                      } else {
+                        params.set("maxPrice", max);
+                      }
 
-                    params.delete("page");
-                    return params;
-                  });
-                }}
-              />
+                      params.delete("page");
+                      return params;
+                    });
+                  }}
+                />
+              </div>
             </div>
 
             <button
@@ -285,7 +355,10 @@ export function VenuesPage() {
           <p role="status" className="sr-only">
             Loading venues...
           </p>
-
+          <div
+            aria-hidden="true"
+            className="mb-4 h-5 w-20 animate-pulse rounded bg-placeholder"
+          />
           <div
             aria-hidden="true"
             className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
@@ -307,10 +380,6 @@ export function VenuesPage() {
         </div>
       ) : (
         <>
-          <p className="mb-4 text-sm text-muted-foreground">
-            {venues.length.toLocaleString("en-US")} stays
-          </p>
-
           {venues.length === 0 ? (
             <p>No venues match your filters. Try adjusting your search.</p>
           ) : (

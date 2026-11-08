@@ -33,7 +33,7 @@ export function VenueFilters({
   });
 
   return (
-    <div id="venue-filters">
+    <div id="venue-filters" className="flex flex-col gap-6">
       <fieldset>
         <legend className="mb-3 font-semibold">Regions</legend>
         <div className="grid grid-cols-2 gap-3">
@@ -97,10 +97,10 @@ export function VenueFilters({
           </label>
         </div>
       </fieldset>
-      <fieldset className="mt-6">
+      <fieldset>
         <legend className="mb-3 font-semibold">Amenities</legend>
 
-        <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {amenities.map(({ value, label }) => (
             <label
               key={value}
