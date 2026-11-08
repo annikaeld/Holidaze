@@ -30,7 +30,7 @@ export function VenueCard({ venue }: VenueCardProps) {
           )}
         </div>
         <div className="p-4">
-          <h2 className="wrap-break-words text-lg font-semibold">
+          <h2 className="line-clamp-2 min-h-14 wrap-break-words text-lg font-semibold">
             {venue.name}
           </h2>
 

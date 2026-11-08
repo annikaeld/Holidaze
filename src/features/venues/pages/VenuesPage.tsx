@@ -11,6 +11,7 @@ import {
   getVenueRegion,
   isNordicCountry,
 } from "@/features/venues/utils/venueRegions";
+import { VenueCardSkeleton } from "@/features/venues/components/VenueCardSkeleton";
 
 function datesOverlap(
   checkIn: string,
@@ -63,22 +64,6 @@ export function VenuesPage() {
     queryFn: () => getAllVenues(destination),
     staleTime: 5 * 60 * 1000,
   });
-
-  if (isLoading) {
-    return (
-      <section className="min-h-screen p-8">
-        <p>Loading venues...</p>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="min-h-screen p-8">
-        <p role="alert">{error.message}</p>
-      </section>
-    );
-  }
 
   const venues = (venuesData ?? []).filter((venue) => {
     if (selectedRegions.length > 0) {
@@ -295,30 +280,65 @@ export function VenuesPage() {
         </div>
       )}
 
-      <p>
-        {venues.length === 0
-          ? "0 venues found"
-          : `Page ${currentPage} of ${pageCount} (${venues.length} venues found)`}
-      </p>
-      {venues.length === 0 ? (
-        <p>No venues match your filters. Try adjusting your search.</p>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {paginatedVenues.map((venue) => (
-            <VenueCard key={venue.id} venue={venue} />
-          ))}
+      {isLoading ? (
+        <>
+          <p role="status" className="sr-only">
+            Loading venues...
+          </p>
+
+          <div
+            aria-hidden="true"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {Array.from({ length: 12 }, (_, index) => (
+              <VenueCardSkeleton key={index} />
+            ))}
+          </div>
+        </>
+      ) : error ? (
+        <div
+          role="alert"
+          className="mt-6 rounded-lg border border-border bg-card p-6 text-card-foreground"
+        >
+          <h2 className="text-lg font-semibold">Unable to load venues</h2>
+          <p className="mt-2 text-muted-foreground">
+            Something went wrong. Please try again later.
+          </p>
         </div>
+      ) : (
+        <>
+          <p className="mb-4 text-sm text-muted-foreground">
+            {venues.length.toLocaleString("en-US")} stays
+          </p>
+
+          {venues.length === 0 ? (
+            <p>No venues match your filters. Try adjusting your search.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {paginatedVenues.map((venue) => (
+                <VenueCard key={venue.id} venue={venue} />
+              ))}
+            </div>
+          )}
+        </>
       )}
-      <Pagination
-        currentPage={currentPage}
-        pageCount={pageCount}
-        onPageChange={(newPage) => {
-          setSearchParams((params) => {
-            params.set("page", String(newPage));
-            return params;
-          });
-        }}
-      />
+      {!isLoading && !error && venues.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          pageCount={pageCount}
+          onPageChange={(newPage) => {
+            setSearchParams((params) => {
+              params.set("page", String(newPage));
+              return params;
+            });
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

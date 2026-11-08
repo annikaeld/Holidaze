@@ -29,6 +29,7 @@ export function BookingCard({
   });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const dateButtonRef = useRef<HTMLButtonElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isCalendarOpen) return;
 
@@ -39,10 +40,23 @@ export function BookingCard({
       }
     }
 
+    function handleClickOutside(event: PointerEvent) {
+      const target = event.target as Node;
+
+      if (
+        !calendarRef.current?.contains(target) &&
+        !dateButtonRef.current?.contains(target)
+      ) {
+        setIsCalendarOpen(false);
+      }
+    }
+
     document.addEventListener("keydown", handleEscape);
+    document.addEventListener("pointerdown", handleClickOutside);
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("pointerdown", handleClickOutside);
     };
   }, [isCalendarOpen]);
   const nights =
@@ -65,6 +79,7 @@ export function BookingCard({
 
           <button
             type="button"
+            ref={dateButtonRef}
             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
             aria-expanded={isCalendarOpen}
             aria-controls="mobile-booking-calendar"
@@ -82,7 +97,10 @@ export function BookingCard({
           </button>
         </div>
         {isCalendarOpen && (
-          <div className="absolute bottom-full right-0 z-50 mb-2 rounded-xl border border-border bg-card p-2 shadow-lg">
+          <div
+            ref={calendarRef}
+            className="absolute bottom-full right-0 z-50 mb-2 rounded-xl border border-border bg-card p-2 shadow-lg"
+          >
             <DateRangeCalendar
               id="mobile-booking-calendar"
               selected={dateRange}
@@ -139,14 +157,20 @@ export function BookingCard({
         </span>
       </button>
       {isCalendarOpen && (
-        <div className="absolute top-full right-0 z-50 mt-2 rounded-xl border border-border bg-card p-2 shadow-lg">
+        <div
+          ref={calendarRef}
+          className="absolute top-full right-0 z-50 mt-2 rounded-xl border border-border bg-card p-2 shadow-lg"
+        >
           <DateRangeCalendar
             id="booking-calendar"
             selected={dateRange}
             onSelect={setDateRange}
             disabled={[{ before: new Date() }, ...bookedDates]}
             onClear={() => setDateRange(undefined)}
-            onConfirm={() => setIsCalendarOpen(false)}
+            onConfirm={() => {
+              setIsCalendarOpen(false);
+              dateButtonRef.current?.focus();
+            }}
           />
         </div>
       )}
