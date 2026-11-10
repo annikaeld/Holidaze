@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
-import { loginUser } from "../services/authApi";
+import { loginUser, getHolidazeProfile } from "../services/authApi";
 import { useAuth } from "../context/useAuth";
 import { Link, useNavigate, useSearchParams } from "react-router";
 
@@ -20,9 +20,21 @@ export function LoginPage() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: loginUser,
-    onSuccess: (response) => {
-      login(response.data);
+    mutationFn: async (data: LoginFormData) => {
+      const response = await loginUser(data);
+
+      const profile = await getHolidazeProfile(
+        response.data.name,
+        response.data.accessToken,
+      );
+
+      return {
+        ...response.data,
+        venueManager: profile.venueManager,
+      };
+    },
+    onSuccess: (user) => {
+      login(user);
 
       const destination =
         redirect?.startsWith("/") && !redirect.startsWith("//")

@@ -54,3 +54,28 @@ export async function loginUser(userData: LoginData): Promise<LoginResponse> {
 
   return response.json();
 }
+
+export async function getHolidazeProfile(
+  name: string,
+  accessToken: string,
+): Promise<{ venueManager: boolean }> {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE}/holidaze/profiles/${encodeURIComponent(name)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not retrieve user profile");
+  }
+
+  const result = await response.json();
+
+  return {
+    venueManager: result.data.venueManager,
+  };
+}
