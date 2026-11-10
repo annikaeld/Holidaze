@@ -6,6 +6,7 @@ import {
 } from "../schemas/registerSchema";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../services/authApi";
+import { Link } from "react-router";
 
 export function RegisterPage() {
   const {
@@ -14,6 +15,8 @@ export function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       venueManager: false,
     },
@@ -113,7 +116,14 @@ export function RegisterPage() {
 
         {registerMutation.isSuccess && (
           <p role="status" className="text-sm text-foreground">
-            Account created successfully! You can now log in.
+            Account created successfully! You can now{" "}
+            <Link
+              to="/login"
+              className="font-medium text-primary underline underline-offset-4 hover:no-underline"
+            >
+              log in
+            </Link>
+            .
           </p>
         )}
       </form>

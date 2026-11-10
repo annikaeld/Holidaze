@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
 import { loginUser } from "../services/authApi";
 import { useAuth } from "../context/useAuth";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -95,6 +95,15 @@ export function LoginPage() {
           </p>
         )}
       </form>
+      <p className="mt-6 text-center text-sm text-foreground">
+        Don't have an account?{" "}
+        <Link
+          to="/register"
+          className="font-medium text-primary underline underline-offset-4 hover:no-underline"
+        >
+          Create an account
+        </Link>
+      </p>
     </main>
   );
 }
