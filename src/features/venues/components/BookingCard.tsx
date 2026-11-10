@@ -6,6 +6,7 @@ import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { useNavigate, useSearchParams } from "react-router";
 import { format } from "date-fns";
 import { useAuth } from "@/features/auth/context/useAuth";
+import { GuestSelector } from "./GuestSelector";
 
 interface BookingCardProps {
   venueId: string;
@@ -48,6 +49,7 @@ export function BookingCard({
   const dateButtonRef = useRef<HTMLButtonElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const guestsRef = useRef<HTMLDivElement>(null);
+  const mobileGuestsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isCalendarOpen && !isGuestsOpen) return;
 
@@ -69,7 +71,11 @@ export function BookingCard({
         setIsCalendarOpen(false);
       }
 
-      if (isGuestsOpen && !guestsRef.current?.contains(target)) {
+      if (
+        isGuestsOpen &&
+        !guestsRef.current?.contains(target) &&
+        !mobileGuestsRef.current?.contains(target)
+      ) {
         setIsGuestsOpen(false);
       }
     }
@@ -117,91 +123,62 @@ export function BookingCard({
   if (variant === "mobile") {
     return (
       <aside className="relative flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-2">
           <p className="font-semibold whitespace-nowrap">
             NOK {(totalPrice ?? price).toLocaleString("en-GB")}
           </p>
-
-          <button
-            type="button"
-            ref={dateButtonRef}
-            onClick={() => {
-              setIsCalendarOpen(!isCalendarOpen);
-              setIsGuestsOpen(false);
-            }}
-            aria-expanded={isCalendarOpen}
-            aria-controls="mobile-booking-calendar"
-            className="cursor-pointer text-sm text-muted-foreground underline underline-offset-2"
-          >
-            {dateRange?.from && dateRange?.to
-              ? `${dateRange.from.toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                })} – ${dateRange.to.toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                })}`
-              : "Add dates"}
-          </button>
-        </div>
-        <div ref={guestsRef} className="relative self-end">
-          <button
-            type="button"
-            onClick={() => {
-              setIsGuestsOpen(!isGuestsOpen);
-              setIsCalendarOpen(false);
-            }}
-            aria-expanded={isGuestsOpen}
-            aria-controls="mobile-booking-guests"
-            className="cursor-pointer text-sm text-muted-foreground underline underline-offset-2"
-          >
-            {guests} {guests === 1 ? "guest" : "guests"}
-          </button>
-
-          {isGuestsOpen && (
-            <div
-              id="mobile-booking-guests"
-              className="absolute bottom-full right-0 z-50 mb-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              ref={dateButtonRef}
+              onClick={() => {
+                setIsCalendarOpen(!isCalendarOpen);
+                setIsGuestsOpen(false);
+              }}
+              aria-expanded={isCalendarOpen}
+              aria-controls="mobile-booking-calendar"
+              className="inline-flex min-h-11 items-center justify-center px-2 text-sm text-muted-foreground underline underline-offset-2 cursor-pointer"
             >
-              <div className="flex items-center justify-between gap-4">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGuests((current) => Math.max(1, current - 1))
-                  }
-                  disabled={guests <= 1}
-                  aria-label="Remove one guest"
-                  className="btn-counter"
+              {dateRange?.from && dateRange?.to
+                ? `${dateRange.from.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })} – ${dateRange.to.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })}`
+                : "Add dates"}
+            </button>
+            <div ref={mobileGuestsRef} className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsGuestsOpen(!isGuestsOpen);
+                  setIsCalendarOpen(false);
+                }}
+                aria-expanded={isGuestsOpen}
+                aria-controls="mobile-booking-guests"
+                className="inline-flex min-h-11 items-center justify-center px-2 text-sm text-muted-foreground underline underline-offset-2 cursor-pointer"
+              >
+                {guests} {guests === 1 ? "guest" : "guests"}
+              </button>
+              {isGuestsOpen && (
+                <div
+                  id="mobile-booking-guests"
+                  className="absolute bottom-full right-0 z-50 mb-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
                 >
-                  −
-                </button>
-
-                <span aria-live="polite">{guests}</span>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGuests((current) => Math.min(maxGuests, current + 1))
-                  }
-                  disabled={guests >= maxGuests}
-                  aria-label="Add one guest"
-                  className="btn-counter"
-                >
-                  +
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsGuestsOpen(false)}
-                  aria-label="Confirm guests"
-                  className="btn-confirm"
-                >
-                  ✓
-                </button>
-              </div>
+                  <GuestSelector
+                    guests={guests}
+                    maxGuests={maxGuests}
+                    onChange={setGuests}
+                    onConfirm={() => setIsGuestsOpen(false)}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
+
         {isCalendarOpen && (
           <div
             ref={calendarRef}
@@ -223,7 +200,7 @@ export function BookingCard({
         <button
           type="button"
           onClick={handleReserve}
-          className="btn-primary mt-4 w-full"
+          className="btn-primary w-full"
         >
           Reserve
         </button>
@@ -288,65 +265,33 @@ export function BookingCard({
           />
         </div>
       )}
-      <div ref={guestsRef} className="relative mt-4">
-        <button
-          type="button"
-          onClick={() => {
-            setIsGuestsOpen(!isGuestsOpen);
-            setIsCalendarOpen(false);
-          }}
-          aria-expanded={isGuestsOpen}
-          aria-controls="booking-guests"
-          className="flex w-full flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left cursor-pointer"
-        >
-          <span className="text-xs font-semibold text-muted-foreground">
-            Guests
-          </span>
-          <span>
-            {guests} {guests === 1 ? "guest" : "guests"}
-          </span>
-        </button>
+      <div
+        ref={guestsRef}
+        className="mt-4 rounded-lg border border-border bg-card p-3 text-foreground"
+      >
+        <span className="text-xs font-semibold text-muted-foreground">
+          Guests
+        </span>
 
-        {isGuestsOpen && (
-          <div
-            id="booking-guests"
-            className="absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
+        {isGuestsOpen ? (
+          <GuestSelector
+            guests={guests}
+            maxGuests={maxGuests}
+            onChange={setGuests}
+            onConfirm={() => setIsGuestsOpen(false)}
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setIsGuestsOpen(true);
+              setIsCalendarOpen(false);
+            }}
+            aria-expanded={isGuestsOpen}
+            className="mt-1 w-full cursor-pointer text-left"
           >
-            <div className="flex items-center justify-between gap-4">
-              <button
-                type="button"
-                onClick={() => setGuests((current) => Math.max(1, current - 1))}
-                disabled={guests <= 1}
-                aria-label="Remove one guest"
-                className="btn-counter"
-              >
-                −
-              </button>
-
-              <span aria-live="polite">{guests}</span>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setGuests((current) => Math.min(maxGuests, current + 1))
-                }
-                disabled={guests >= maxGuests}
-                aria-label="Add one guest"
-                className="btn-counter"
-              >
-                +
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsGuestsOpen(false)}
-                aria-label="Confirm guests"
-                className="btn-confirm"
-              >
-                ✓
-              </button>
-            </div>
-          </div>
+            {guests} {guests === 1 ? "guest" : "guests"}
+          </button>
         )}
       </div>
       <button

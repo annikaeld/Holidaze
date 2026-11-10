@@ -6,6 +6,7 @@ import { VenueImage } from "@/features/venues/components/VenueImage";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
+import { GuestSelector } from "@/features/venues/components/GuestSelector";
 
 export function BookingSummaryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -130,48 +131,18 @@ export function BookingSummaryPage() {
               </button>
             )}
             {isGuestsOpen && (
-              <div className="mt-4 mb-6 flex items-center justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGuests((current) => Math.max(1, current - 1))
-                  }
-                  disabled={guests <= 1}
-                  aria-label="Remove one guest"
-                  className="btn-counter"
-                >
-                  −
-                </button>
-
-                <span aria-live="polite">{guests}</span>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGuests((current) =>
-                      Math.min(venue.maxGuests, current + 1),
-                    )
-                  }
-                  disabled={guests >= venue.maxGuests}
-                  aria-label="Add one guest"
-                  className="btn-counter"
-                >
-                  +
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
+              <div className="flex items-center justify-end">
+                <GuestSelector
+                  guests={guests}
+                  maxGuests={venue.maxGuests}
+                  onChange={setGuests}
+                  onConfirm={() => {
                     const params = new URLSearchParams(searchParams);
                     params.set("guests", String(guests));
                     setSearchParams(params, { replace: true });
                     setIsGuestsOpen(false);
                   }}
-                  aria-label="Confirm guests"
-                  className="btn-confirm"
-                >
-                  ✓
-                </button>
+                />
               </div>
             )}
           </div>
