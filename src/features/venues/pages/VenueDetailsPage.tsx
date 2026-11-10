@@ -147,6 +147,8 @@ export function VenueDetailsPage() {
             checkIn={checkIn}
             checkOut={checkOut}
             bookings={venue.bookings ?? []}
+            venueId={venue.id}
+            maxGuests={venue.maxGuests}
           />
         </div>
       </div>
@@ -157,6 +159,8 @@ export function VenueDetailsPage() {
           checkIn={checkIn}
           checkOut={checkOut}
           bookings={venue.bookings ?? []}
+          venueId={venue.id}
+          maxGuests={venue.maxGuests}
           variant="mobile"
         />
       </div>
