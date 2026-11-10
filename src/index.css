@@ -24,6 +24,7 @@
     --primary-disabled: #ede7ef;
     --disabled-foreground: #8a788d;
     --focus-ring: #653451;
+    --error: #b42318;
 }
 
 .dark {
@@ -48,6 +49,7 @@
     --disabled-foreground: #8d7e9b;
     --focus-ring: #c7b0d6;
     --calendar-range: #51405F;
+    --error: #ff8a80;
 }
 
 @theme inline {
@@ -71,6 +73,7 @@
     --color-primary-disabled: var(--primary-disabled);
     --color-disabled-foreground: var(--disabled-foreground);
     --color-focus-ring: var(--focus-ring);
+    --color-error: var(--error);
 }
 
 @layer base {
