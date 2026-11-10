@@ -10,7 +10,7 @@ The application uses the Noroff Holidaze API.
 
 The project aims to provide an intuitive experience for browsing and booking accommodation. The completed application is intended to support both travellers and registered venue managers.
 
-### Currently implemented
+### Currently Implemented
 
 - Browse accommodation listings.
 - Search venues by destination.
@@ -21,7 +21,7 @@ The project aims to provide an intuitive experience for browsing and booking acc
 - Open an image modal with keyboard navigation.
 - View formatted descriptions, amenities and host information.
 
-### Under development
+### Under Development
 
 - Pagination across all venue results.
 - Location information and interactive maps.
@@ -127,7 +127,37 @@ If environment variables are introduced, client-facing variables must use the `V
 
 ## Usage
 
-### Available npm scripts
+### Test Accounts
+
+The following test accounts are provided to allow examiners and testers to explore the application's functionality without registering new users.
+
+### Test Accounts
+
+The following test accounts are provided for examiners and testers
+to explore the application's functionality without registering.
+
+#### Customer Account
+
+- **Email:** norofftest_8@stud.noroff.no
+- **Password:** norofftest_8
+- **Role:** Customer
+
+This account can be used to create bookings and view upcoming bookings.
+
+#### Venue Manager Account
+
+- **Email:** test_manager8@stud.noroff.no
+- **Password:** test_manager8
+- **Role:** Venue Manager
+
+This account can be used to create, update and delete venues,
+as well as view bookings associated with managed venues.
+
+**Note for testers:** These accounts are intended for testing
+purposes only. Please avoid changing passwords or deleting
+existing test data.
+
+### Available npm Scripts
 
 | Command           | Description                                         |
 | ----------------- | --------------------------------------------------- |
@@ -144,7 +174,7 @@ Check the project for linting issues:
 npm run lint
 ```
 
-### Dependency security
+### Dependency Security
 
 Check installed dependencies for known vulnerabilities:
 
@@ -170,11 +200,11 @@ React Router handles navigation between:
 
 Search criteria are stored in URL query parameters.
 
-### Data fetching
+### Data Fetching
 
 TanStack Query manages API requests, caching and loading/error states.
 
-### Image galleries
+### Image Galleries
 
 Swiper provides responsive image navigation.
 
@@ -186,16 +216,22 @@ The gallery includes:
 - Keyboard navigation.
 - Image fallbacks.
 
-### Venue descriptions
+### Venue Descriptions
 
 Descriptions are formatted to handle HTML content and line breaks returned by the API.
 
 Long descriptions can be expanded or collapsed using **Show more / Show less**.
 
-### Location data
+### Location Data
 
 The Holidaze API may return incomplete location information, including `null` coordinates.
 
 The application must handle missing location data and avoid displaying misleading map positions.
 
-## Current
+## AI Usage
+
+ChatGPT has been used as an external, chat-based assistant for technical guidance, concept clarification, code review, debugging and implementation discussions.
+
+No AI coding assistants or AI extensions have been integrated into VS Code.
+
+For further information, see [AI Usage Documentation](./AI_USAGE.md).
