@@ -1,12 +1,12 @@
 import type { VenueBooking } from "../types/venue";
-import { addDays, parseISO, differenceInCalendarDays } from "date-fns";
+import { format, parseISO, differenceInCalendarDays } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { useNavigate, useSearchParams } from "react-router";
-import { format } from "date-fns";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { GuestSelector } from "./GuestSelector";
+import { getBookedDates } from "../utils/getBookedDates";
 
 interface BookingCardProps {
   venueId: string;
@@ -94,10 +94,7 @@ export function BookingCard({
       : 0;
   const totalPrice =
     Number.isFinite(nights) && nights > 0 ? price * nights : null;
-  const bookedDates = bookings.map((booking) => ({
-    from: parseISO(booking.dateFrom),
-    to: addDays(parseISO(booking.dateTo), -1),
-  }));
+  const bookedDates = getBookedDates(bookings);
   function handleReserve() {
     if (!dateRange?.from || !dateRange?.to || nights <= 0) {
       setIsCalendarOpen(true);

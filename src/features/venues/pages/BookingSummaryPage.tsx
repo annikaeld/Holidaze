@@ -1,12 +1,13 @@
 import { useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getVenue } from "@/features/venues/services/venuesApi";
-import { addDays, differenceInCalendarDays, parseISO, format } from "date-fns";
+import { differenceInCalendarDays, parseISO, format } from "date-fns";
 import { VenueImage } from "@/features/venues/components/VenueImage";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { GuestSelector } from "@/features/venues/components/GuestSelector";
+import { getBookedDates } from "../utils/getBookedDates";
 
 export function BookingSummaryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,10 +54,7 @@ export function BookingSummaryPage() {
       : 0;
 
   const totalPrice = nights > 0 ? venue.price * nights : 0;
-  const bookedDates = (venue.bookings ?? []).map((booking) => ({
-    from: parseISO(booking.dateFrom),
-    to: addDays(parseISO(booking.dateTo), -1),
-  }));
+  const bookedDates = getBookedDates(venue.bookings ?? []);
   return (
     <section className="w-full min-w-0 bg-background py-8 sm:py-12">
       <div className="mx-auto w-full max-w-3xl px-4">
