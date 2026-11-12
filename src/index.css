@@ -25,6 +25,13 @@
     --disabled-foreground: #8a788d;
     --focus-ring: #653451;
     --error: #b42318;
+    /* Toast feedback */
+    --toast-error: #F5E7EA;
+    --toast-error-foreground: #7F3E50;
+    --toast-error-border: #A16A7C;
+    --toast-success: #EDF3ED;
+    --toast-success-foreground: #345D47;
+    --toast-success-border: #588069;
 }
 
 .dark {
@@ -50,6 +57,13 @@
     --focus-ring: #c7b0d6;
     --calendar-range: #51405F;
     --error: #ff8a80;
+    /* Toast feedback */
+    --toast-error: #35232D;
+    --toast-error-foreground: #DDB6C0;
+    --toast-error-border: #A47888;
+    --toast-success: #202D29;
+    --toast-success-foreground: #B0D3C0;
+    --toast-success-border: #6F9580;
 }
 
 @theme inline {
@@ -74,6 +88,14 @@
     --color-disabled-foreground: var(--disabled-foreground);
     --color-focus-ring: var(--focus-ring);
     --color-error: var(--error);
+    /* Toast feedback */
+    --color-toast-error: var(--toast-error);
+    --color-toast-error-foreground: var(--toast-error-foreground);
+    --color-toast-error-border: var(--toast-error-border);
+
+    --color-toast-success: var(--toast-success);
+    --color-toast-success-foreground: var(--toast-success-foreground);
+    --color-toast-success-border: var(--toast-success-border);
 }
 
 @layer base {
@@ -236,6 +258,19 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .holidaze-calendar .rdp-disabled {
     text-decoration: line-through;
+}
+
+/* Sonner toast styling */
+[data-sonner-toast][data-type="success"] {
+    --normal-bg: var(--toast-success);
+    --normal-text: var(--toast-success-foreground);
+    --normal-border: var(--toast-success-border);
+}
+
+[data-sonner-toast][data-type="error"] {
+    --normal-bg: var(--toast-error);
+    --normal-text: var(--toast-error-foreground);
+    --normal-border: var(--toast-error-border);
 }
 
 @media (min-width: 375px) {

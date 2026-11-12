@@ -229,7 +229,6 @@ export function VenueSearchForm({
                   );
                 }
               }}
-              disabled={{ before: new Date() }}
               onClear={() => {
                 setDateRange(undefined);
 

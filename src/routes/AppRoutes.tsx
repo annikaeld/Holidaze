@@ -6,6 +6,7 @@ import { VenueDetailsPage } from "@/features/venues/pages/VenueDetailsPage";
 import { RegisterPage } from "@/features/auth/pages/RegisterPage";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { BookingSummaryPage } from "@/features/venues/pages/BookingSummaryPage";
+import { BookingSuccessPage } from "@/features/venues/pages/BookingSuccessPage";
 
 export function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export function AppRoutes() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="booking/summary" element={<BookingSummaryPage />} />
+        <Route path="/booking/success" element={<BookingSuccessPage />} />
       </Route>
     </Routes>
   );

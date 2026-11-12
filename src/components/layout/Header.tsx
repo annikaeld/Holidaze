@@ -77,7 +77,15 @@ export function Header() {
                     type="button"
                     className="flex cursor-pointer items-center gap-2 text-foreground hover:text-primary"
                   >
-                    <UserRound size={20} aria-hidden="true" />
+                    {user.avatar?.url ? (
+                      <img
+                        src={user.avatar.url}
+                        alt=""
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <UserRound size={20} aria-hidden="true" />
+                    )}
                     <span>Hi, {user.name}</span>
                     <ChevronDown size={16} aria-hidden="true" />
                   </button>

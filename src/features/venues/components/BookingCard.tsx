@@ -6,7 +6,7 @@ import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { useNavigate, useSearchParams } from "react-router";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { GuestSelector } from "./GuestSelector";
-import { getBookedDates } from "../utils/getBookedDates";
+import { hasBookingOverlap } from "../utils/hasBookingOverlap";
 
 interface BookingCardProps {
   venueId: string;
@@ -94,9 +94,16 @@ export function BookingCard({
       : 0;
   const totalPrice =
     Number.isFinite(nights) && nights > 0 ? price * nights : null;
-  const bookedDates = getBookedDates(bookings);
+
   function handleReserve() {
     if (!dateRange?.from || !dateRange?.to || nights <= 0) {
+      setIsCalendarOpen(true);
+      setIsGuestsOpen(false);
+      return;
+    }
+
+    if (hasBookingOverlap(dateRange.from, dateRange.to, bookings)) {
+      setDateRange(undefined);
       setIsCalendarOpen(true);
       setIsGuestsOpen(false);
       return;
@@ -185,7 +192,7 @@ export function BookingCard({
               id="mobile-booking-calendar"
               selected={dateRange}
               onSelect={setDateRange}
-              disabled={[{ before: new Date() }, ...bookedDates]}
+              bookings={bookings}
               onClear={() => setDateRange(undefined)}
               onConfirm={() => {
                 setIsCalendarOpen(false);
@@ -253,7 +260,7 @@ export function BookingCard({
             id="booking-calendar"
             selected={dateRange}
             onSelect={setDateRange}
-            disabled={[{ before: new Date() }, ...bookedDates]}
+            bookings={bookings}
             onClear={() => setDateRange(undefined)}
             onConfirm={() => {
               setIsCalendarOpen(false);

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   useEffect(() => {
@@ -22,6 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <AppRoutes />
+      <Toaster position="top-center" />
     </AuthProvider>
   );
 }

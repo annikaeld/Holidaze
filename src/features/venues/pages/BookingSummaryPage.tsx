@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchParams, useNavigate } from "react-router";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getVenue } from "@/features/venues/services/venuesApi";
 import { differenceInCalendarDays, parseISO, format } from "date-fns";
 import { VenueImage } from "@/features/venues/components/VenueImage";
@@ -7,11 +7,18 @@ import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { GuestSelector } from "@/features/venues/components/GuestSelector";
-import { getBookedDates } from "../utils/getBookedDates";
+import {
+  createBooking,
+  type CreateBookingData,
+} from "@/features/venues/services/bookingsApi";
+import { useAuth } from "@/features/auth/context/useAuth";
+import { toast } from "sonner";
+import { hasBookingOverlap } from "@/features/venues/utils/hasBookingOverlap";
 
 export function BookingSummaryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const venueId = searchParams.get("venueId");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
@@ -37,6 +44,31 @@ export function BookingSummaryPage() {
     queryFn: () => getVenue(venueId!),
     enabled: Boolean(venueId),
   });
+
+  const bookingMutation = useMutation({
+    mutationFn: (data: CreateBookingData) => {
+      if (!user) {
+        throw new Error("You must be logged in to book.");
+      }
+
+      return createBooking(data, user.accessToken);
+    },
+    onSuccess: (response) => {
+      navigate("/booking/success", {
+        replace: true,
+        state: {
+          booking: {
+            ...response.data,
+            venue,
+          },
+        },
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Something went wrong. Please try again.");
+    },
+  });
+
   if (!venueId) {
     return <p>Missing venue information.</p>;
   }
@@ -54,7 +86,34 @@ export function BookingSummaryPage() {
       : 0;
 
   const totalPrice = nights > 0 ? venue.price * nights : 0;
-  const bookedDates = getBookedDates(venue.bookings ?? []);
+
+  function handleConfirmBooking() {
+    if (
+      !venueId ||
+      !venue ||
+      !dateRange?.from ||
+      !dateRange?.to ||
+      nights <= 0 ||
+      guests < 1 ||
+      guests > venue.maxGuests ||
+      bookingMutation.isPending ||
+      bookingMutation.isSuccess
+    ) {
+      return;
+    }
+
+    if (hasBookingOverlap(dateRange.from, dateRange.to, venue.bookings ?? [])) {
+      toast.error("These dates are no longer available.");
+      return;
+    }
+
+    bookingMutation.mutate({
+      venueId,
+      dateFrom: dateRange.from.toISOString(),
+      dateTo: dateRange.to.toISOString(),
+      guests,
+    });
+  }
   return (
     <section className="w-full min-w-0 bg-background py-8 sm:py-12">
       <div className="mx-auto w-full max-w-3xl px-4">
@@ -95,7 +154,7 @@ export function BookingSummaryPage() {
                 <DateRangeCalendar
                   selected={dateRange}
                   onSelect={setDateRange}
-                  disabled={[{ before: new Date() }, ...bookedDates]}
+                  bookings={venue.bookings ?? []}
                   onClear={() => setDateRange(undefined)}
                   onConfirm={() => {
                     if (!dateRange?.from || !dateRange?.to) return;
@@ -161,6 +220,24 @@ export function BookingSummaryPage() {
               <span>{totalPrice.toLocaleString("en-GB")}</span>
             </div>
           </div>
+        </div>
+        <div className="mt-6 flex justify-end">
+          <button
+            type="button"
+            onClick={handleConfirmBooking}
+            className="btn-primary w-full sm:w-auto"
+            disabled={
+              bookingMutation.isPending ||
+              bookingMutation.isSuccess ||
+              isCalendarOpen ||
+              isGuestsOpen ||
+              nights <= 0 ||
+              guests < 1 ||
+              guests > venue.maxGuests
+            }
+          >
+            {bookingMutation.isPending ? "Confirming..." : "Confirm booking"}
+          </button>
         </div>
       </div>
     </section>
