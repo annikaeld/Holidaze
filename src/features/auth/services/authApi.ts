@@ -79,3 +79,35 @@ export async function getHolidazeProfile(
     venueManager: result.data.venueManager,
   };
 }
+
+interface UpdateAvatarData {
+  avatar: {
+    url: string;
+    alt: string;
+  };
+}
+
+export async function updateAvatar(
+  name: string,
+  accessToken: string,
+  data: UpdateAvatarData,
+) {
+  const response = await fetch(
+    `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not update avatar. Please try again.");
+  }
+
+  return response.json();
+}

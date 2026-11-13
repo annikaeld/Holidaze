@@ -8,6 +8,7 @@ import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { BookingSummaryPage } from "@/features/venues/pages/BookingSummaryPage";
 import { BookingSuccessPage } from "@/features/venues/pages/BookingSuccessPage";
 import { MyBookingsPage } from "@/features/venues/pages/MyBookingsPage";
+import { MyProfilePage } from "@/features/auth/pages/MyProfilePage";
 
 export function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export function AppRoutes() {
         <Route path="booking/summary" element={<BookingSummaryPage />} />
         <Route path="/booking/success" element={<BookingSuccessPage />} />
         <Route path="my-bookings" element={<MyBookingsPage />} />
+        <Route path="profile" element={<MyProfilePage />} />
       </Route>
     </Routes>
   );

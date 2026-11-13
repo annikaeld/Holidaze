@@ -6,8 +6,9 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Link, useNavigate } from "react-router";
-import { UserRound, ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { useAuth } from "@/features/auth/context/useAuth";
+import { AvatarImage } from "@/features/auth/components/AvatarImage";
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -77,15 +78,7 @@ export function Header() {
                     type="button"
                     className="flex cursor-pointer items-center gap-2 text-foreground hover:text-primary"
                   >
-                    {user.avatar?.url ? (
-                      <img
-                        src={user.avatar.url}
-                        alt=""
-                        className="h-8 w-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <UserRound size={20} aria-hidden="true" />
-                    )}
+                    <AvatarImage url={user.avatar?.url} size="sm" />
                     <span>Hi, {user.name}</span>
                     <ChevronDown size={16} aria-hidden="true" />
                   </button>
