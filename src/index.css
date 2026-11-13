@@ -164,6 +164,16 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }
 
+/* Keep autofilled inputs consistent with the active theme */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--card) inset;
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+}
+
 /* Venue gallery */
 .venue-gallery {
     --swiper-navigation-color: var(--foreground);
@@ -254,6 +264,12 @@ input[type="search"]::-webkit-search-cancel-button {
     --rdp-day-height: 40px;
     --rdp-day_button-width: 36px;
     --rdp-day_button-height: 40px;
+    --rdp-accent-color: var(--primary);
+    --rdp-accent-background-color: var(--hero);
+    --rdp-range_middle-background-color: var(--calendar-range, var(--hero));
+    --rdp-range_middle-color: var(--foreground);
+    --rdp-range_start-color: var(--primary-foreground);
+    --rdp-range_end-color: var(--primary-foreground);
 }
 
 .holidaze-calendar .rdp-disabled {
@@ -279,12 +295,6 @@ input[type="search"]::-webkit-search-cancel-button {
         --rdp-day-height: 44px;
         --rdp-day_button-width: 42px;
         --rdp-day_button-height: 44px;
-        --rdp-accent-color: var(--primary);
-        --rdp-accent-background-color: var(--hero);
-        --rdp-range_middle-background-color: var(--calendar-range, var(--hero));
-        --rdp-range_middle-color: var(--foreground);
-        --rdp-range_start-color: var(--primary-foreground);
-        --rdp-range_end-color: var(--primary-foreground);
     }
 }
 
