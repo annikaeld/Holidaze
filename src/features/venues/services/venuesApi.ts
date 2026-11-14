@@ -1,4 +1,5 @@
 import type { ApiResponse, Venue } from "../types/venue";
+import type { VenueFormData } from "../schemas/venueSchema";
 
 const API_URL = "https://v2.api.noroff.dev/holidaze/venues";
 
@@ -65,4 +66,32 @@ export async function getAllVenues(query = ""): Promise<Venue[]> {
     ...firstPage.data,
     ...remainingPages.flatMap((response) => response.data),
   ];
+}
+
+export async function createVenue(
+  data: VenueFormData,
+  accessToken: string,
+): Promise<Venue> {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorResponse = await response.json().catch(() => null);
+
+    throw new Error(
+      errorResponse?.errors?.[0]?.message ||
+        "Could not create venue. Please try again.",
+    );
+  }
+
+  const result: ApiResponse<Venue> = await response.json();
+
+  return result.data;
 }
