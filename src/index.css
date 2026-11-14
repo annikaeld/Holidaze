@@ -124,12 +124,16 @@
 
 @layer components {
     .btn-primary {
-        @apply w-full min-w-32 self-center cursor-pointer rounded-full px-4 py-3 font-medium transition-colors duration-200;
+        @apply inline-flex w-full min-w-32 items-center justify-center self-center cursor-pointer rounded-full px-4 py-3 font-medium transition-colors duration-200;
         @apply bg-primary text-primary-foreground;
         @apply hover:bg-primary-hover;
         @apply active:bg-primary-pressed;
         @apply disabled:cursor-not-allowed disabled:bg-primary-disabled disabled:text-disabled-foreground;
         @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring;
+    }
+
+    .btn-primary-compact {
+        @apply w-auto px-6;
     }
 
     .btn-counter {

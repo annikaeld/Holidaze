@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { EditAvatarDialog } from "@/features/auth/components/EditAvatarDialog";
-import { updateAvatar } from "@/features/auth/services/authApi";
+import { updateProfile } from "@/features/auth/services/authApi";
 import type { AvatarFormData } from "@/features/auth/schemas/avatarSchema";
 import { AvatarImage } from "@/features/auth/components/AvatarImage";
 
@@ -20,7 +20,7 @@ export function MyProfilePage() {
         throw new Error("You must be logged in.");
       }
 
-      return updateAvatar(user.name, user.accessToken, {
+      return updateProfile(user.name, user.accessToken, {
         avatar: data,
       });
     },

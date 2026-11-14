@@ -80,17 +80,18 @@ export async function getHolidazeProfile(
   };
 }
 
-interface UpdateAvatarData {
-  avatar: {
+interface UpdateProfileData {
+  avatar?: {
     url: string;
     alt: string;
   };
+  venueManager?: boolean;
 }
 
-export async function updateAvatar(
+export async function updateProfile(
   name: string,
   accessToken: string,
-  data: UpdateAvatarData,
+  data: UpdateProfileData,
 ) {
   const response = await fetch(
     `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}`,
@@ -106,7 +107,7 @@ export async function updateAvatar(
   );
 
   if (!response.ok) {
-    throw new Error("Could not update avatar. Please try again.");
+    throw new Error("Could not update profile. Please try again.");
   }
 
   return response.json();

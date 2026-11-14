@@ -106,6 +106,14 @@ export function MobileNav() {
                   My profile
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  to={user.venueManager ? "/my-venues" : "/list-venue"}
+                  className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
+                >
+                  {user.venueManager ? "My venues" : "Become a venue manager"}
+                </Link>
+              </DropdownMenuItem>
 
               <DropdownMenuSeparator className="my-1 bg-border" />
 
