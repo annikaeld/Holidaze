@@ -12,6 +12,7 @@ import { MyProfilePage } from "@/features/auth/pages/MyProfilePage";
 import { BecomeVenueManagerPage } from "@/features/auth/pages/BecomeVenueManagerPage";
 import { MyVenuesPage } from "@/features/venues/pages/MyVenuesPage";
 import { CreateVenuePage } from "@/features/venues/pages/CreateVenuePage";
+import { EditVenuePage } from "@/features/venues/pages/EditVenuePage";
 
 export function AppRoutes() {
   return (
@@ -29,6 +30,7 @@ export function AppRoutes() {
         <Route path="list-venue" element={<BecomeVenueManagerPage />} />
         <Route path="my-venues" element={<MyVenuesPage />} />
         <Route path="my-venues/create" element={<CreateVenuePage />} />
+        <Route path="my-venues/:id/edit" element={<EditVenuePage />} />
       </Route>
     </Routes>
   );

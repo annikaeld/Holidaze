@@ -129,3 +129,32 @@ export async function getManagedVenues(
     ...remainingPages.flatMap((result) => result.data),
   ];
 }
+
+export async function updateVenue(
+  id: string,
+  data: VenueFormData,
+  accessToken: string,
+): Promise<Venue> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorResponse = await response.json().catch(() => null);
+
+    throw new Error(
+      errorResponse?.errors?.[0]?.message ||
+        "Could not update venue. Please try again.",
+    );
+  }
+
+  const result: ApiResponse<Venue> = await response.json();
+
+  return result.data;
+}

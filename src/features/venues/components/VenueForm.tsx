@@ -9,9 +9,16 @@ import { VenuePreviewDialog } from "./VenuePreviewDialog";
 interface VenueFormProps {
   onSubmit: (data: VenueFormData) => void;
   isPending: boolean;
+  initialValues?: VenueFormData;
+  submitLabel?: string;
 }
 
-export function VenueForm({ onSubmit, isPending }: VenueFormProps) {
+export function VenueForm({
+  onSubmit,
+  isPending,
+  initialValues,
+  submitLabel = "Create venue",
+}: VenueFormProps) {
   const {
     register,
     handleSubmit,
@@ -24,7 +31,7 @@ export function VenueForm({ onSubmit, isPending }: VenueFormProps) {
     resolver: zodResolver(venueSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: {
+    defaultValues: initialValues ?? {
       name: "",
       description: "",
       price: undefined,
@@ -49,8 +56,17 @@ export function VenueForm({ onSubmit, isPending }: VenueFormProps) {
     control,
     name: "rating",
   });
-  const [images, setImages] = useState([{ id: 0, url: "", alt: "" }]);
-  const [nextImageId, setNextImageId] = useState(1);
+  const [images, setImages] = useState(() =>
+    (initialValues?.media?.length
+      ? initialValues.media
+      : [{ url: "", alt: "" }]
+    ).map((image, index) => ({
+      id: index,
+      ...image,
+    })),
+  );
+
+  const [nextImageId, setNextImageId] = useState(images.length);
   const [previewData, setPreviewData] = useState<VenueFormData | null>(null);
 
   function updateImages(updatedImages: typeof images) {
@@ -406,7 +422,7 @@ export function VenueForm({ onSubmit, isPending }: VenueFormProps) {
           disabled={isPending}
           className="btn-primary btn-primary-compact"
         >
-          {isPending ? "Creating venue..." : "Create venue"}
+          {isPending ? "Saving..." : submitLabel}
         </button>
       </div>
       {previewData && (

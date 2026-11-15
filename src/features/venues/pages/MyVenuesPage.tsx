@@ -83,12 +83,21 @@ export function MyVenuesPage() {
               title={venue.name}
               image={venue.media?.[0]}
               actions={
-                <Link
-                  to={`/venues/${venue.id}`}
-                  className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
-                >
-                  View venue
-                </Link>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link
+                    to={`/venues/${venue.id}`}
+                    className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                  >
+                    View venue
+                  </Link>
+
+                  <Link
+                    to={`/my-venues/${venue.id}/edit`}
+                    className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                  >
+                    Edit venue
+                  </Link>
+                </div>
               }
             >
               <p className="text-sm">
