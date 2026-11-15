@@ -158,3 +158,25 @@ export async function updateVenue(
 
   return result.data;
 }
+
+export async function deleteVenue(
+  id: string,
+  accessToken: string,
+): Promise<void> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+    },
+  });
+
+  if (!response.ok) {
+    const errorResponse = await response.json().catch(() => null);
+
+    throw new Error(
+      errorResponse?.errors?.[0]?.message ||
+        "Could not delete venue. Please try again.",
+    );
+  }
+}

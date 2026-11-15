@@ -1,11 +1,40 @@
 import { Link, Navigate } from "react-router";
 import { useAuth } from "@/features/auth/context/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { getManagedVenues } from "../services/venuesApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getManagedVenues, deleteVenue } from "../services/venuesApi";
 import { OverviewCard } from "../components/OverviewCard";
+import { toast } from "sonner";
+import { useState } from "react";
+import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 
 export function MyVenuesPage() {
   const { user } = useAuth();
+  const [venueToDelete, setVenueToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => {
+      if (!user) {
+        throw new Error("You must be logged in.");
+      }
+
+      return deleteVenue(id, user.accessToken);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["managed-venues"] });
+      setVenueToDelete(null);
+      toast.success("Venue deleted successfully!");
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const {
     data: venues = [],
     isLoading,
@@ -46,8 +75,8 @@ export function MyVenuesPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <div className="flex w-full flex-wrap items-center justify-between gap-4">
         <h1>My venues</h1>
 
         {venues.length > 0 && (
@@ -83,20 +112,36 @@ export function MyVenuesPage() {
               title={venue.name}
               image={venue.media?.[0]}
               actions={
-                <div className="flex flex-wrap items-center gap-4">
-                  <Link
-                    to={`/venues/${venue.id}`}
-                    className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
-                  >
-                    View venue
-                  </Link>
+                <div className="flex w-full flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <Link
+                      to={`/venues/${venue.id}`}
+                      className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                    >
+                      View venue
+                    </Link>
 
-                  <Link
-                    to={`/my-venues/${venue.id}/edit`}
-                    className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                    <Link
+                      to={`/my-venues/${venue.id}/edit`}
+                      className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                    >
+                      Edit venue
+                    </Link>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVenueToDelete({ id: venue.id, name: venue.name })
+                    }
+                    disabled={deleteMutation.isPending}
+                    className="cursor-pointer text-sm font-semibold text-error disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    Edit venue
-                  </Link>
+                    {deleteMutation.isPending &&
+                    deleteMutation.variables === venue.id
+                      ? "Deleting..."
+                      : "Delete venue"}
+                  </button>
                 </div>
               }
             >
@@ -109,6 +154,33 @@ export function MyVenuesPage() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={Boolean(venueToDelete)}
+        title="Delete venue?"
+        confirmLabel="Delete venue"
+        cancelLabel="Keep venue"
+        isPending={deleteMutation.isPending}
+        onConfirm={() => {
+          if (venueToDelete) {
+            deleteMutation.mutate(venueToDelete.id);
+          }
+        }}
+        onClose={() => setVenueToDelete(null)}
+      >
+        {venueToDelete && (
+          <>
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{venueToDelete.name}</strong>?
+            </p>
+
+            <p className="text-muted-foreground">
+              This action cannot be undone.
+            </p>
+          </>
+        )}
+      </ConfirmDialog>
     </main>
   );
 }

@@ -3,7 +3,7 @@ import { Link, Navigate } from "react-router";
 import { isAfter, parseISO, startOfDay, format } from "date-fns";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { House } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import {
   getCustomerBookings,
@@ -11,6 +11,7 @@ import {
   type CustomerBooking,
 } from "@/features/venues/services/bookingsApi";
 import { OverviewCard } from "../components/OverviewCard";
+import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 
 export function MyBookingsPage() {
   const { user } = useAuth();
@@ -51,19 +52,6 @@ export function MyBookingsPage() {
       toast.error(error.message || "Unable to cancel booking.");
     },
   });
-
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    if (bookingToCancel && !dialog.open) {
-      dialog.showModal();
-    } else if (!bookingToCancel && dialog.open) {
-      dialog.close();
-    }
-  }, [bookingToCancel]);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -164,68 +152,39 @@ export function MyBookingsPage() {
           ))}
         </div>
       )}
-      <dialog
-        ref={dialogRef}
-        aria-labelledby="cancel-booking-title"
-        aria-describedby="cancel-booking-description"
-        onCancel={(event) => {
-          if (cancelMutation.isPending) {
-            event.preventDefault();
-            return;
-          }
 
-          setBookingToCancel(null);
+      <ConfirmDialog
+        open={Boolean(bookingToCancel)}
+        title="Cancel booking?"
+        confirmLabel="Cancel booking"
+        cancelLabel="Keep booking"
+        isPending={cancelMutation.isPending}
+        onConfirm={() => {
+          if (bookingToCancel) {
+            cancelMutation.mutate(bookingToCancel.id);
+          }
         }}
-        className="fixed inset-0 m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-card-border bg-card p-6 text-card-foreground shadow-xl backdrop:bg-black/50"
+        onClose={() => setBookingToCancel(null)}
       >
         {bookingToCancel && (
           <>
-            <h2 id="cancel-booking-title" className="text-xl font-semibold">
-              Cancel booking?
-            </h2>
-
-            <p id="cancel-booking-description" className="mt-4 text-sm">
+            <p>
               Are you sure you want to cancel your booking at{" "}
               <strong>{bookingToCancel.venue.name}</strong>?
             </p>
 
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="text-muted-foreground">
               {format(parseISO(bookingToCancel.dateFrom), "dd MMM yyyy")}
               {" – "}
               {format(parseISO(bookingToCancel.dateTo), "dd MMM yyyy")}
             </p>
 
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p className="text-muted-foreground">
               This action cannot be undone.
             </p>
-
-            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end ">
-              <button
-                type="button"
-                autoFocus
-                disabled={cancelMutation.isPending}
-                onClick={() => setBookingToCancel(null)}
-                className="cursor-pointer rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-field-active disabled:cursor-not-allowed w-full sm:w-auto"
-              >
-                Keep booking
-              </button>
-
-              <button
-                type="button"
-                disabled={cancelMutation.isPending}
-                onClick={() => {
-                  if (bookingToCancel) {
-                    cancelMutation.mutate(bookingToCancel.id);
-                  }
-                }}
-                className="cursor-pointer rounded-full border border-toast-error-border bg-toast-error px-4 py-2 text-sm font-medium text-toast-error-foreground hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 w-full sm:w-auto"
-              >
-                {cancelMutation.isPending ? "Cancelling..." : "Cancel booking"}
-              </button>
-            </div>
           </>
         )}
-      </dialog>
+      </ConfirmDialog>
     </main>
   );
 }
