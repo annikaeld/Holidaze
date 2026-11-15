@@ -95,3 +95,37 @@ export async function createVenue(
 
   return result.data;
 }
+
+export async function getManagedVenues(
+  name: string,
+  accessToken: string,
+): Promise<Venue[]> {
+  const url = `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}/venues`;
+
+  async function getPage(page: number): Promise<ApiResponse<Venue[]>> {
+    const response = await fetch(`${url}?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not load your venues.");
+    }
+
+    return response.json();
+  }
+
+  const firstPage = await getPage(1);
+  const pageCount = firstPage.meta.pageCount;
+
+  const remainingPages = await Promise.all(
+    Array.from({ length: pageCount - 1 }, (_, index) => getPage(index + 2)),
+  );
+
+  return [
+    ...firstPage.data,
+    ...remainingPages.flatMap((result) => result.data),
+  ];
+}

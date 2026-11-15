@@ -10,6 +10,7 @@ import {
   deleteBooking,
   type CustomerBooking,
 } from "@/features/venues/services/bookingsApi";
+import { OverviewCard } from "../components/OverviewCard";
 
 export function MyBookingsPage() {
   const { user } = useAuth();
@@ -127,37 +128,12 @@ export function MyBookingsPage() {
       ) : (
         <div className="mt-8 flex flex-col gap-4">
           {upcomingBookings.map((booking) => (
-            <article
+            <OverviewCard
               key={booking.id}
-              className="flex flex-col overflow-hidden rounded-xl border border-card-border bg-card sm:flex-row"
-            >
-              {booking.venue.media?.[0] && (
-                <img
-                  src={booking.venue.media[0].url}
-                  alt={booking.venue.media[0].alt || booking.venue.name}
-                  className="aspect-video w-full object-cover sm:aspect-square sm:w-44 sm:shrink-0"
-                  loading="lazy"
-                />
-              )}
-
-              <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 p-5">
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    {booking.venue.name}
-                  </h2>
-
-                  <p className="mt-3 text-sm">
-                    {format(parseISO(booking.dateFrom), "dd MMM yyyy")}
-                    {" – "}
-                    {format(parseISO(booking.dateTo), "dd MMM yyyy")}
-                  </p>
-
-                  <p className="mt-2 text-sm">
-                    {booking.guests} {booking.guests === 1 ? "guest" : "guests"}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between gap-4">
+              title={booking.venue.name}
+              image={booking.venue.media?.[0]}
+              actions={
+                <>
                   <Link
                     to={`/venues/${booking.venue.id}`}
                     className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
@@ -172,9 +148,19 @@ export function MyBookingsPage() {
                   >
                     Cancel booking
                   </button>
-                </div>
-              </div>
-            </article>
+                </>
+              }
+            >
+              <p className="text-sm">
+                {format(parseISO(booking.dateFrom), "dd MMM yyyy")}
+                {" – "}
+                {format(parseISO(booking.dateTo), "dd MMM yyyy")}
+              </p>
+
+              <p className="text-sm">
+                {booking.guests} {booking.guests === 1 ? "guest" : "guests"}
+              </p>
+            </OverviewCard>
           ))}
         </div>
       )}
