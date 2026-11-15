@@ -160,7 +160,7 @@
     }
 
     .search-surface {
-        @apply lg:rounded-xl lg:border lg:border-border lg:bg-card lg:shadow-md;
+        @apply md:rounded-xl md:border md:border-border md:bg-card md:shadow-md;
     }
 }
 

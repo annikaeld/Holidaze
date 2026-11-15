@@ -66,7 +66,9 @@ export function BookingSuccessPage() {
             />
           )}
 
-          <h2 className="text-lg">{booking.venue.name}</h2>
+          <h2 className="min-w-0 wrap-anywhere text-lg">
+            {booking.venue.name}
+          </h2>
         </div>
 
         <div className="mt-6 space-y-4 border-t border-card-border pt-5">

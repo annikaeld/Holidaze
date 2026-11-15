@@ -85,7 +85,7 @@ export function VenueSearchForm({
       className={
         variant === "filters"
           ? "flex w-full flex-col gap-3"
-          : "flex w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-0 lg:p-2 search-surface"
+          : "flex w-full flex-col gap-3 md:flex-row md:items-stretch md:gap-0 md:p-2 search-surface"
       }
     >
       {variant === "filters" &&
@@ -104,7 +104,7 @@ export function VenueSearchForm({
         className={
           variant === "filters"
             ? "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring"
-            : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:flex-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg"
+            : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:flex-2 md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg"
         }
       >
         <label
@@ -154,7 +154,7 @@ export function VenueSearchForm({
         className={
           variant === "filters"
             ? "relative grid min-w-0 grid-cols-1 gap-3"
-            : "relative grid min-w-0 grid-cols-2 gap-3 lg:flex-2"
+            : "relative grid min-w-0 grid-cols-2 gap-3 md:flex-2"
         }
       >
         <div className="min-w-0">
@@ -169,7 +169,7 @@ export function VenueSearchForm({
             className={
               variant === "filters"
                 ? "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring"
-                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring lg:border-0 lg:bg-transparent lg:rounded-lg lg:focus-visible:bg-field-active lg:aria-expanded:bg-field-active"
+                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring md:border-0 md:bg-transparent md:rounded-lg md:focus-visible:bg-field-active md:aria-expanded:bg-field-active"
             }
           >
             <span className="text-xs font-semibold text-muted-foreground">
@@ -241,16 +241,21 @@ export function VenueSearchForm({
             />
           </div>
         )}
+
         <div
           className={
             variant === "filters"
-              ? "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring"
-              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring lg:rounded-none lg:border-0 lg:bg-transparent lg:focus-within:ring-0 lg:focus-within:bg-field-active lg:focus-within:rounded-lg"
+              ? `relative min-w-0 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring ${
+                  isGuestsOpen
+                    ? "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3"
+                    : "flex flex-col gap-1"
+                }`
+              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg"
           }
         >
           <label
             htmlFor="guests"
-            className="text-xs font-semibold text-muted-foreground"
+            className="col-start-1 row-start-1 text-xs font-semibold text-muted-foreground"
           >
             Guests
           </label>
@@ -273,17 +278,11 @@ export function VenueSearchForm({
               id="guests-popover"
               className={
                 variant === "filters"
-                  ? "mt-3 w-full border-t border-border pt-3"
+                  ? "col-start-2 row-start-1 row-span-2 self-center"
                   : "absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
               }
             >
-              <div
-                className={
-                  variant === "filters"
-                    ? "flex items-center justify-center gap-4"
-                    : "flex items-center justify-between gap-4"
-                }
-              >
+              <div className="flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -332,7 +331,7 @@ export function VenueSearchForm({
         </div>
       </div>
       {variant !== "filters" && (
-        <div className="lg:flex lg:items-center lg:pl-3">
+        <div className="md:flex md:items-center md:pl-3">
           <button type="submit" className="btn-primary">
             Search
           </button>

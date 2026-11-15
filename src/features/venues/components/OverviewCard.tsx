@@ -37,7 +37,7 @@ export function OverviewCard({
 
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 p-5">
         <div>
-          <h2 className="text-xl font-semibold">{title}</h2>
+          <h2 className="text-xl font-semibold wrap-anywhere">{title}</h2>
 
           <div className="mt-3 space-y-2">{children}</div>
         </div>

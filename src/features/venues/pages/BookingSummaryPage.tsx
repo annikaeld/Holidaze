@@ -125,7 +125,7 @@ export function BookingSummaryPage() {
             </div>
 
             <div className="min-w-0">
-              <h2 className="font-semibold">{venue.name}</h2>
+              <h2 className="font-semibold wrap-anywhere">{venue.name}</h2>
             </div>
           </div>
 

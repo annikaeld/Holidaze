@@ -31,9 +31,14 @@ export function VenueCard({ venue }: VenueCardProps) {
           )}
         </div>
         <div className="p-4">
-          <h2 className="line-clamp-2 min-h-14 wrap-break-words text-lg font-semibold">
+          <h2 className="line-clamp-2 min-h-14 wrap-anywhere text-lg font-semibold">
             {venue.name}
           </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {[venue.location?.city, venue.location?.country]
+              .filter(Boolean)
+              .join(", ") || "Location not available"}
+          </p>
 
           <p className="mt-2 text-base font-semibold text-card-foreground">
             NOK {formattedPrice}
