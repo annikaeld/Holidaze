@@ -1,67 +1,64 @@
 # Holidaze
 
-Holidaze is a responsive accommodation discovery and booking application developed for Noroff Project Exam 2.
+Holidaze is a responsive accommodation discovery and booking application developed for **Noroff Project Exam 2**.
 
-The application allows travellers to search for accommodation, explore venues, check availability and create bookings using the Noroff Holidaze API.
+The application allows travellers to discover accommodation, check availability and manage bookings. Registered venue managers can create, update and delete venues, as well as view upcoming guest bookings.
 
-**Project status:** Work in progress. The traveller booking flow is implemented and deployed. Booking management and venue management functionality are still under development.
+**Project status:** All core booking and venue management functionality has been implemented. Final testing, accessibility improvements and production polish are ongoing.
 
 ## Description
 
 Holidaze aims to provide an intuitive accommodation booking experience for travellers and registered venue managers.
 
-The application focuses on responsive design, clear navigation and an accessible user experience across mobile and desktop devices.
+The application focuses on responsive design, clear navigation, reusable components and an accessible user experience across mobile and desktop devices.
 
-### Currently Implemented
+### Implemented Functionality
+
+**Accommodation discovery**
 
 - Browse accommodation listings.
 - Search venues by destination or name.
-- Filter venues by region, price range, amenities, guest capacity and availability.
+- Filter venues by region, price, amenities, guest capacity and availability.
 - Sort venues by newest, price or rating.
-- Navigate through venue results using pagination.
+- Navigate results using pagination.
+- View venue details, images, amenities, ratings and host information.
+- View venue locations on interactive maps when valid coordinates are available.
+
+**Bookings**
+
 - Select check-in and check-out dates.
 - Select the number of guests.
-- View individual venue pages with descriptions, images, amenities and host information.
-- View pricing, ratings and guest capacity.
-- Explore responsive image galleries with modal viewing and keyboard navigation.
-- View venue locations on interactive maps when valid coordinates are available.
+- Validate booking availability and prevent overlapping reservations.
 - Register, log in and log out.
 - Preserve booking details when redirected to login.
 - Review and edit booking information before confirmation.
 - Create authenticated bookings through the Noroff Holidaze API.
-- Prevent overlapping bookings while allowing adjacent stays and single-night bookings.
-- Display a booking confirmation page with venue details, dates, guests and total price.
-- Handle booking errors using toast notifications.
-- Switch between light and dark themes.
+- View booking confirmation details.
+- View upcoming bookings in My Bookings.
+- Cancel bookings with confirmation.
+- Receive success and error notifications.
 
-### Under Development
+**Venue management**
 
-- My Bookings page for viewing upcoming and previous bookings.
-- Venue management functionality for registered venue managers.
-- Viewing bookings associated with managed venues.
-- Further accessibility improvements, testing and production polish.
+- Upgrade an existing account to venue manager.
+- View all venues owned by the logged-in manager.
+- Create venues with images, descriptions, prices, amenities and location information.
+- Preview venues before creating or updating them.
+- Edit existing venues using a shared form.
+- Delete owned venues with confirmation.
+- View upcoming guest bookings across all managed venues.
+- View customer names and avatars associated with bookings.
+- Restrict venue management actions to authorised users.
 
-## Features
+**User experience**
 
-- Responsive design for mobile and desktop.
-- Destination and accommodation search.
-- Advanced filtering and sorting.
-- Pagination.
-- Date-range selection with availability validation.
-- Guest count selection.
-- Accommodation cards and detailed venue pages.
-- Responsive image galleries using Swiper.
-- Interactive maps using Leaflet.
-- Expandable venue descriptions.
-- Conditional amenity and host information.
-- User registration and authentication.
-- Authenticated booking creation.
-- Editable booking summary.
-- Booking confirmation page.
-- Loading states and error handling.
-- Prevention of duplicate submissions during booking requests.
-- Theme-aware success and error notifications.
+- Responsive layouts for mobile and desktop.
 - Light and dark mode.
+- Loading and error states.
+- Image fallbacks.
+- Reusable booking and venue overview cards.
+- Reusable confirmation dialogs.
+- Theme-aware toast notifications.
 
 ## Tech Stack & Tools
 
@@ -71,14 +68,16 @@ The application focuses on responsive design, clear navigation and an accessible
 - **Tailwind CSS 4** – Utility-first CSS framework.
 - **React Router** – Client-side navigation and URL search parameters.
 - **TanStack Query** – Data fetching, caching and server-state management.
+- **React Hook Form** – Form handling.
+- **Zod** – Schema validation.
 - **React DayPicker** – Date-range selection.
 - **date-fns** – Date formatting and booking date calculations.
 - **Swiper** – Responsive image galleries and modal navigation.
 - **Lucide React** – Interface icons.
-- **Leaflet** – Interactive map functionality.
-- **React Leaflet** – React components for Leaflet maps.
+- **Leaflet** – Interactive maps.
+- **React Leaflet** – React components for Leaflet.
 - **OpenStreetMap** – Map tile provider.
-- **Sonner** – Toast notifications for user feedback.
+- **Sonner** – Toast notifications.
 - **ESLint** – Code-quality checks.
 - **Git & GitHub** – Version control and project management.
 - **Figma** – Interface design and planning.
@@ -130,20 +129,20 @@ npm run preview
 
 ## Environment Variables & API
 
-The application uses the public Noroff Holidaze API:
+The application uses the Noroff Holidaze API:
 
 [Holidaze API](https://v2.api.noroff.dev/holidaze/venues)
 
 Public venue browsing does not require authentication.
 
-Authenticated booking requests use:
+Authenticated requests use:
 
 - The authenticated user's access token.
 - A Noroff API key configured through `VITE_API_KEY`.
 
-Vite exposes environment variables prefixed with `VITE_` to client-side code.
+Authenticated operations include creating and cancelling bookings, updating user profiles, activating venue manager privileges and managing venues.
 
-**Never store confidential server-side secrets in client-side environment variables or commit credentials to the repository.**
+Vite exposes environment variables prefixed with `VITE_` to client-side code. These variables must not contain confidential server-side secrets.
 
 For production deployments, configure the required environment variables in Vercel.
 
@@ -151,7 +150,7 @@ For production deployments, configure the required environment variables in Verc
 
 ### Test Accounts
 
-The following accounts are provided for examiners and testers to explore the application's functionality without registering new users.
+The following accounts are provided for examiners and testers to explore the application without registering new users.
 
 #### Customer Account
 
@@ -159,9 +158,14 @@ The following accounts are provided for examiners and testers to explore the app
 - **Password:** norofftest_8
 - **Role:** Customer
 
-This account can be used to sign in and create bookings.
+This account can be used to:
 
-The My Bookings page is planned but has not yet been implemented.
+- Browse and search venues.
+- Create bookings.
+- View upcoming bookings.
+- Cancel bookings.
+- Update profile information.
+- Upgrade to venue manager.
 
 #### Venue Manager Account
 
@@ -169,9 +173,15 @@ The My Bookings page is planned but has not yet been implemented.
 - **Password:** test_manager8
 - **Role:** Venue Manager
 
-This account is intended for testing venue management functionality as it becomes available.
+This account can be used to:
 
-**Note for testers:** These accounts are intended for testing purposes only. Please avoid changing passwords or deleting existing test data.
+- Access My Venues.
+- Create, edit and delete owned venues.
+- Preview venues before saving.
+- View upcoming guest bookings.
+- Manage personal bookings as a customer.
+
+**Note for testers:** These accounts are intended for testing purposes only. Please avoid changing passwords or deleting existing test data unless necessary for testing.
 
 ### Available npm Scripts
 
@@ -182,7 +192,7 @@ This account is intended for testing venue management functionality as it become
 | `npm run preview` | Preview the production build                        |
 | `npm run lint`    | Run ESLint                                          |
 
-### ESLint
+### Code Quality
 
 Check the project for linting issues:
 
@@ -190,44 +200,17 @@ Check the project for linting issues:
 npm run lint
 ```
 
-### Dependency Security
-
 Check installed dependencies for known vulnerabilities:
 
 ```bash
 npm audit
 ```
 
-## Styling
-
-The project uses Tailwind CSS 4 with the Vite plugin.
-
-Global styles, design tokens, typography and reusable component styles are defined in:
-
-`src/index.css`
-
-The application uses semantic CSS variables to maintain consistent styling across components.
-
-### Light and Dark Mode
-
-Holidaze supports light and dark themes.
-
-Theme-specific colors are defined using CSS variables, allowing components to adapt without duplicating styling logic.
-
-The design system includes semantic colors for:
-
-- Backgrounds and surfaces.
-- Text and headings.
-- Borders and interactive states.
-- Buttons and form controls.
-- Calendar selections.
-- Success and error feedback.
-
-## Development
+## Project Structure
 
 The project follows a feature-based folder structure.
 
-Venue-related components, pages, API services, types and utilities are organised under:
+Venue-related components, pages, API services, schemas, types and utilities are organised under:
 
 `src/features/venues/`
 
@@ -235,35 +218,67 @@ Authentication-related functionality is organised under:
 
 `src/features/auth/`
 
-### Routing
+Shared components and reusable functionality are organised under:
 
-React Router handles navigation between:
+`src/shared/`
 
-| Route              | Description                               |
-| ------------------ | ----------------------------------------- |
-| `/`                | Home page                                 |
-| `/venues`          | Accommodation listings and search results |
-| `/venues/:id`      | Individual venue details                  |
-| `/register`        | User registration                         |
-| `/login`           | User login                                |
-| `/booking/summary` | Booking summary and confirmation          |
-| `/booking/success` | Successful booking confirmation           |
+### Reusable Components
 
-Search criteria and booking details are passed between pages using URL search parameters.
+Several components are reused across different parts of the application:
+
+- **`OverviewCard`** – Displays venue and booking information in a consistent layout.
+- **`VenueForm`** – Shared form for creating and editing venues.
+- **`VenuePreviewDialog`** – Allows users to preview venue information before saving.
+- **`ConfirmDialog`** – Shared confirmation dialog for cancelling bookings and deleting venues.
+- **`PageMessage`** – Shared component for page-level loading, error and access messages.
+- **`VenueImagePreview`** – Displays image previews when entering venue media URLs.
+
+The goal is to reuse existing functionality where appropriate while keeping the code understandable and maintainable.
+
+## Routing
+
+React Router handles navigation between the application's pages.
+
+| Route                 | Description                                |
+| --------------------- | ------------------------------------------ |
+| `/`                   | Home page                                  |
+| `/venues`             | Accommodation listings and search results  |
+| `/venues/:id`         | Individual venue details                   |
+| `/register`           | User registration                          |
+| `/login`              | User login                                 |
+| `/booking/summary`    | Booking summary                            |
+| `/booking/success`    | Successful booking confirmation            |
+| `/my-bookings`        | Customer's upcoming bookings               |
+| `/profile`            | User profile                               |
+| `/list-venue`         | Become a venue manager                     |
+| `/my-venues`          | Manager's venues                           |
+| `/my-venues/create`   | Create a venue                             |
+| `/my-venues/:id/edit` | Edit an owned venue                        |
+| `/my-venues/bookings` | Upcoming guest bookings for managed venues |
+
+Search criteria and booking information are passed between pages using URL search parameters where appropriate.
 
 The booking confirmation page receives the completed booking through React Router navigation state. Refreshing the page without this state currently redirects to the home page.
 
-Additional routes for booking history and venue management are planned.
+### Authentication and Access Control
 
-### Data Fetching
+Users can register, log in and log out.
 
-TanStack Query manages API requests, caching and loading/error states.
+Authenticated users can access their personal booking information and update their profile, including their avatar.
 
-The application uses queries for retrieving venue data and mutations for creating bookings.
+Existing users can activate venue manager privileges without registering a separate account.
+
+Venue management pages check authentication and manager privileges.
+
+Editing a venue also checks that the logged-in manager owns the venue.
+
+The Holidaze API provides server-side authorisation for protected operations.
+
+## Accommodation Discovery
+
+Travellers can browse and search for accommodation using destinations or venue names.
 
 ### Searching and Filtering
-
-Travellers can search for accommodation using destinations or venue names.
 
 Available filters include:
 
@@ -282,15 +297,55 @@ Pagination allows users to navigate large result sets.
 
 Search and filter selections are maintained using URL search parameters.
 
-### Booking Functionality
+### Venue Details
+
+Individual venue pages display:
+
+- Venue name and description.
+- Image gallery.
+- Price per night.
+- Rating.
+- Maximum guest capacity.
+- Available amenities.
+- Host information.
+- Location information.
+- Available booking dates.
+
+Descriptions are formatted to handle HTML content and line breaks returned by the API.
+
+Long descriptions can be expanded or collapsed using **Show more / Show less**.
+
+### Image Galleries
+
+Swiper provides responsive image navigation.
+
+The gallery includes:
+
+- Mobile image carousel.
+- Desktop image grid.
+- Modal image viewing.
+- Keyboard navigation.
+- Image fallbacks.
+
+### Location Data
+
+Venue locations are displayed using Leaflet and OpenStreetMap when valid coordinates are available.
+
+The Holidaze API may return incomplete location information, including `null` coordinates.
+
+The application handles missing location data and avoids displaying misleading map positions.
+
+## Customer Bookings
+
+### Creating a Booking
 
 The booking process includes:
 
 1. Selecting a venue.
 2. Choosing available check-in and check-out dates.
-3. Selecting the number of guests within the venue's capacity.
+3. Selecting the number of guests.
 4. Logging in when authentication is required.
-5. Reviewing the selected booking details.
+5. Reviewing the booking details.
 6. Editing dates or guests if needed.
 7. Confirming the booking.
 8. Viewing the booking confirmation page.
@@ -304,7 +359,7 @@ The request includes:
 - `guests`
 - `venueId`
 
-The booking submission button is disabled while the request is processing to prevent duplicate submissions.
+The submission button is disabled while the request is processing to prevent duplicate submissions.
 
 ### Booking Availability
 
@@ -321,11 +376,9 @@ This allows:
 
 Booking availability is validated before submission.
 
-### Booking Confirmation and Error Handling
+### Booking Confirmation
 
-After a successful booking, the user is redirected to a dedicated confirmation page.
-
-The page displays:
+After a successful booking, the user is redirected to a confirmation page displaying:
 
 - Confirmation message.
 - Venue name and image.
@@ -333,37 +386,205 @@ The page displays:
 - Number of guests.
 - Number of nights.
 - Total price.
-- Navigation back to the home page.
 
-Failed booking requests display an error notification using Sonner.
+Failed requests display an error notification using Sonner.
 
-Notifications follow the application's light and dark color themes.
+### My Bookings
 
-### Image Galleries
+Authenticated users can view their upcoming bookings on the **My Bookings** page.
 
-Swiper provides responsive image navigation.
+Bookings are displayed using reusable `OverviewCard` components.
 
-The gallery includes:
+Each booking card includes:
 
-- Mobile image carousel.
-- Desktop image grid.
-- Modal image viewing.
-- Keyboard navigation.
-- Image fallbacks.
+- Venue name and image.
+- Check-in and check-out dates.
+- Number of guests.
+- Link to the venue.
+- Option to cancel the booking.
 
-### Venue Descriptions
+Users must confirm cancellation through the shared `ConfirmDialog` component.
 
-Descriptions are formatted to handle HTML content and line breaks returned by the API.
+After successful cancellation, the booking list is refreshed automatically using TanStack Query.
 
-Long descriptions can be expanded or collapsed using **Show more / Show less**.
+## Venue Management
 
-### Location Data
+Registered venue managers can manage accommodation listings through **My Venues**.
 
-Venue locations are displayed using Leaflet and OpenStreetMap.
+### Become a Venue Manager
 
-The Holidaze API may return incomplete location information, including `null` coordinates.
+An authenticated user can activate venue manager privileges through the **Become a venue manager** page.
 
-The application handles missing location data and avoids displaying misleading map positions.
+The existing account is updated through the Holidaze API.
+
+After successful activation, the user can access venue management features without creating another account.
+
+### My Venues
+
+The My Venues page displays all venues owned by the logged-in manager.
+
+Each venue is displayed using `OverviewCard` and includes:
+
+- Venue name and image.
+- Price per night.
+- Maximum guest capacity.
+- Link to view the public venue page.
+- Link to edit the venue.
+- Option to delete the venue.
+
+The page includes a **Create venue** action and a link to **Guest bookings**.
+
+When no venues exist, an empty state encourages the user to create their first listing.
+
+Venue data is retrieved across multiple API pages when necessary.
+
+### Create Venue
+
+Venue managers can create accommodation listings through a validated form.
+
+The form includes:
+
+- Venue name.
+- Description.
+- Rating.
+- Price per night.
+- Maximum number of guests.
+- Amenities: Wi-Fi, parking, breakfast and pets.
+- Location: country, optional city or area, and optional street address.
+- Multiple image URLs with corresponding alt text.
+
+React Hook Form and Zod handle form state and validation.
+
+Users can add, replace and remove image entries and view image previews.
+
+A venue can be previewed before submission without creating a listing in the API.
+
+After successful creation, the user is redirected to the new venue.
+
+### Edit Venue
+
+Venue managers can edit venues they own.
+
+The Edit Venue page retrieves the existing venue information and pre-fills the shared `VenueForm`.
+
+The same form fields, validation and preview functionality are used for both creation and editing.
+
+Users can:
+
+- Update venue information.
+- Modify amenities and location details.
+- Add, replace or remove images.
+- Preview changes before saving.
+- Cancel editing without saving.
+
+Changes are saved through an authenticated `PUT` request.
+
+After a successful update, TanStack Query refreshes the relevant venue data.
+
+### Delete Venue
+
+Venue managers can delete venues they own.
+
+The Delete venue action is separated visually from View and Edit to reduce accidental selection.
+
+Before deletion, users must confirm the action through the shared `ConfirmDialog`.
+
+The application:
+
+- Sends an authenticated `DELETE` request.
+- Disables deletion actions while a request is pending.
+- Displays success or error feedback using Sonner.
+- Updates My Venues after successful deletion without requiring a manual refresh.
+
+### Guest Bookings
+
+Venue managers can access **Guest bookings** from My Venues.
+
+This page is separate from My Bookings:
+
+- **My Bookings** displays reservations made by the logged-in user as a guest.
+- **Guest bookings** displays reservations made by customers at venues owned by the logged-in manager.
+
+Guest bookings are retrieved through the manager's venues using `_bookings=true`.
+
+This includes the associated booking and customer information without requiring separate customer API requests.
+
+Bookings from all managed venues are combined into a single list.
+
+Each booking card displays:
+
+- Venue name and image.
+- Check-in and check-out dates.
+- Number of guests.
+- Customer name and avatar.
+- Link to the venue.
+
+The same venue can appear multiple times when it has multiple bookings.
+
+Only upcoming and ongoing bookings are displayed. Historical bookings are excluded.
+
+Bookings are sorted by check-in date, with the earliest first.
+
+An empty state is displayed when there are no upcoming guest bookings.
+
+## Styling and Design
+
+The project uses Tailwind CSS 4 with the Vite plugin.
+
+Global styles, design tokens, typography and reusable component styles are defined in:
+
+`src/index.css`
+
+The application uses semantic CSS variables to maintain consistent styling across components.
+
+### Light and Dark Mode
+
+Holidaze supports light and dark themes.
+
+Theme-specific colours are defined using CSS variables, allowing components to adapt without duplicating styling logic.
+
+The design system includes semantic colours for:
+
+- Backgrounds and surfaces.
+- Text and headings.
+- Borders and interactive states.
+- Buttons and form controls.
+- Calendar selections.
+- Success and error feedback.
+
+### Loading, Errors and Confirmation
+
+TanStack Query manages API request states and caching.
+
+The application uses:
+
+- Loading states while data is being retrieved.
+- Error messages when requests fail.
+- Sonner notifications for successful and failed actions.
+- Disabled submit buttons during pending mutations.
+- Confirmation dialogs for destructive actions.
+
+The shared `PageMessage` component provides consistent presentation for page-level loading and error messages where implemented.
+
+## Development and Testing
+
+Development follows an incremental approach, with features implemented and tested individually.
+
+Testing includes:
+
+- Form validation.
+- Authentication and route protection.
+- Booking availability.
+- Venue creation and editing.
+- Booking cancellation.
+- Venue deletion and confirmation.
+- API error handling.
+- Empty states.
+- Responsive layouts.
+- Light and dark mode.
+- Production builds.
+
+Additional accessibility testing, UI consistency improvements and final production verification remain part of the finishing work.
 
 ## AI Usage
 
