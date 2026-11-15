@@ -229,11 +229,16 @@ export function VenuesPage() {
             <SlidersHorizontal size={20} aria-hidden="true" />
           </button>
 
-          {!isLoading && !error && (
+          {isLoading ? (
+            <div
+              aria-hidden="true"
+              className="ml-auto h-5 w-20 animate-pulse rounded bg-placeholder"
+            />
+          ) : !error ? (
             <span className="ml-auto whitespace-nowrap text-sm text-muted-foreground">
               {venues.length.toLocaleString("en-US")} stays
             </span>
-          )}
+          ) : null}
         </div>
       </div>
       {filtersOpen && (
@@ -356,10 +361,6 @@ export function VenuesPage() {
           <p role="status" className="sr-only">
             Loading venues...
           </p>
-          <div
-            aria-hidden="true"
-            className="mb-4 h-5 w-20 animate-pulse rounded bg-placeholder"
-          />
           <div
             aria-hidden="true"
             className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
