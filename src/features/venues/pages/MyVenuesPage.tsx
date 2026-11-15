@@ -6,6 +6,7 @@ import { OverviewCard } from "../components/OverviewCard";
 import { toast } from "sonner";
 import { useState } from "react";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
+import { PageMessage } from "@/shared/components/PageMessage";
 
 export function MyVenuesPage() {
   const { user } = useAuth();
@@ -55,22 +56,14 @@ export function MyVenuesPage() {
   }
 
   if (isLoading) {
-    return (
-      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
-        <h1>My venues</h1>
-        <p className="mt-8 text-muted-foreground">Loading your venues...</p>
-      </main>
-    );
+    return <PageMessage>Loading your venues...</PageMessage>;
   }
 
   if (isError) {
     return (
-      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
-        <h1>My venues</h1>
-        <p role="alert" className="mt-8 text-error">
-          Unable to load your venues. Please try again.
-        </p>
-      </main>
+      <PageMessage isError>
+        Unable to load your venues. Please try again.
+      </PageMessage>
     );
   }
 

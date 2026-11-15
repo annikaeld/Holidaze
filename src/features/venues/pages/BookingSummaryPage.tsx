@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/features/auth/context/useAuth";
 import { toast } from "sonner";
 import { hasBookingOverlap } from "@/features/venues/utils/hasBookingOverlap";
+import { PageMessage } from "@/shared/components/PageMessage";
 
 export function BookingSummaryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -70,15 +71,15 @@ export function BookingSummaryPage() {
   });
 
   if (!venueId) {
-    return <p>Missing venue information.</p>;
+    return <PageMessage isError>Missing venue information.</PageMessage>;
   }
 
   if (isLoading) {
-    return <p>Loading booking summary...</p>;
+    return <PageMessage>Loading booking summary...</PageMessage>;
   }
 
   if (isError || !venue) {
-    return <p>Unable to load venue information.</p>;
+    return <PageMessage isError>Unable to load venue information.</PageMessage>;
   }
   const nights =
     dateRange?.from && dateRange?.to

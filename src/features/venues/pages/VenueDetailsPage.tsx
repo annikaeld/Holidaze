@@ -9,6 +9,7 @@ import { useParams, useSearchParams, Link } from "react-router";
 import { VenueRating } from "@/features/venues/components/VenueRating";
 import { UserRound, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { PageMessage } from "@/shared/components/PageMessage";
 
 export function VenueDetailsPage() {
   const [avatarError, setAvatarError] = useState(false);
@@ -26,13 +27,15 @@ export function VenueDetailsPage() {
     enabled: Boolean(id),
   });
   if (isLoading) {
-    return <p>Loading venue...</p>;
+    return <PageMessage>Loading venue...</PageMessage>;
   }
+
   if (error) {
-    return <p role="alert">{error.message}</p>;
+    return <PageMessage isError>{error.message}</PageMessage>;
   }
+
   if (!venue) {
-    return <p role="alert">Venue not found.</p>;
+    return <PageMessage isError>Venue not found.</PageMessage>;
   }
 
   return (

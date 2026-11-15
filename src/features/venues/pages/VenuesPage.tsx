@@ -12,6 +12,7 @@ import {
   isNordicCountry,
 } from "@/features/venues/utils/venueRegions";
 import { VenueCardSkeleton } from "@/features/venues/components/VenueCardSkeleton";
+import { PageMessage } from "@/shared/components/PageMessage";
 
 function datesOverlap(
   checkIn: string,
@@ -369,15 +370,9 @@ export function VenuesPage() {
           </div>
         </>
       ) : error ? (
-        <div
-          role="alert"
-          className="mt-6 rounded-lg border border-border bg-card p-6 text-card-foreground"
-        >
-          <h2 className="text-lg font-semibold">Unable to load venues</h2>
-          <p className="mt-2 text-muted-foreground">
-            Something went wrong. Please try again later.
-          </p>
-        </div>
+        <PageMessage isError>
+          Unable to load venues. Please try again later.
+        </PageMessage>
       ) : (
         <>
           {venues.length === 0 ? (

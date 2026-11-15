@@ -3,6 +3,7 @@ import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueCard } from "@/features/venues/components/VenueCard";
 import { getAllVenues } from "@/features/venues/services/venuesApi";
 import { DestinationShortcuts } from "@/features/venues/components/DestinationShortcuts";
+import { VenueCardSkeleton } from "@/features/venues/components/VenueCardSkeleton";
 
 async function getRandomVenues() {
   const venues = await getAllVenues();
@@ -39,7 +40,20 @@ export function HomePage() {
         <h2 className="mb-6">Need some inspiration?</h2>
 
         {isLoading ? (
-          <p className="text-muted-foreground">Loading inspiration...</p>
+          <>
+            <p role="status" className="sr-only">
+              Loading inspiration...
+            </p>
+
+            <div
+              aria-hidden="true"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {Array.from({ length: 6 }, (_, index) => (
+                <VenueCardSkeleton key={index} />
+              ))}
+            </div>
+          </>
         ) : isError ? (
           <p role="alert" className="text-error">
             Unable to load inspiration.
