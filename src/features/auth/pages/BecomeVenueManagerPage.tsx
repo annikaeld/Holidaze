@@ -8,6 +8,7 @@ export function BecomeVenueManagerPage() {
   const { user, login } = useAuth();
 
   const mutation = useMutation({
+    networkMode: "always",
     mutationFn: () => {
       if (!user) {
         throw new Error("You must be logged in.");
