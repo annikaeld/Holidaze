@@ -27,6 +27,14 @@ export type VenueBooking = {
   dateFrom: string;
   dateTo: string;
   guests: number;
+  customer?: {
+    name: string;
+    email: string;
+    avatar?: {
+      url: string;
+      alt?: string;
+    } | null;
+  };
 };
 
 export type VenueMeta = {

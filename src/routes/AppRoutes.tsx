@@ -13,6 +13,7 @@ import { BecomeVenueManagerPage } from "@/features/auth/pages/BecomeVenueManager
 import { MyVenuesPage } from "@/features/venues/pages/MyVenuesPage";
 import { CreateVenuePage } from "@/features/venues/pages/CreateVenuePage";
 import { EditVenuePage } from "@/features/venues/pages/EditVenuePage";
+import { GuestBookingsPage } from "@/features/venues/pages/GuestBookingsPage";
 
 export function AppRoutes() {
   return (
@@ -31,6 +32,7 @@ export function AppRoutes() {
         <Route path="my-venues" element={<MyVenuesPage />} />
         <Route path="my-venues/create" element={<CreateVenuePage />} />
         <Route path="my-venues/:id/edit" element={<EditVenuePage />} />
+        <Route path="my-venues/bookings" element={<GuestBookingsPage />} />
       </Route>
     </Routes>
   );

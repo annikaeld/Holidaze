@@ -76,17 +76,26 @@ export function MyVenuesPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <div className="flex w-full flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <h1>My venues</h1>
 
-        {venues.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3">
           <Link
-            to="/my-venues/create"
-            className="btn-primary btn-primary-compact"
+            to="/my-venues/bookings"
+            className="inline-flex items-center justify-center rounded-full border border-border px-6 py-3 font-medium hover:bg-field-active"
           >
-            Create venue
+            Guest bookings
           </Link>
-        )}
+
+          {venues.length > 0 && (
+            <Link
+              to="/my-venues/create"
+              className="btn-primary btn-primary-compact"
+            >
+              Create venue
+            </Link>
+          )}
+        </div>
       </div>
 
       {venues.length === 0 ? (

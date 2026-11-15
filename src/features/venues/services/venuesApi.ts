@@ -103,7 +103,7 @@ export async function getManagedVenues(
   const url = `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}/venues`;
 
   async function getPage(page: number): Promise<ApiResponse<Venue[]>> {
-    const response = await fetch(`${url}?page=${page}`, {
+    const response = await fetch(`${url}?page=${page}&_bookings=true`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
