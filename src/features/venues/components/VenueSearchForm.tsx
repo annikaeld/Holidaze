@@ -75,6 +75,22 @@ export function VenueSearchForm({
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
+  const [guestInput, setGuestInput] = useState<string | null>(null);
+
+  function updateGuestInput(value: string) {
+    if (!/^\d*$/.test(value)) return;
+
+    setGuestInput(value);
+
+    const count = Number(value);
+    if (!Number.isSafeInteger(count) || count < 1) return;
+
+    setGuests(count);
+
+    if (variant === "filters") {
+      onDraftChange?.("guests", String(count));
+    }
+  }
 
   return (
     <form
@@ -255,7 +271,11 @@ export function VenueSearchForm({
         >
           <label
             htmlFor="guests"
-            className="col-start-1 row-start-1 text-xs font-semibold text-muted-foreground"
+            className={
+              variant === "default" && isGuestsOpen
+                ? "sr-only"
+                : "col-start-1 row-start-1 text-xs font-semibold text-muted-foreground"
+            }
           >
             Guests
           </label>
@@ -268,21 +288,30 @@ export function VenueSearchForm({
             }}
             aria-expanded={isGuestsOpen}
             aria-controls="guests-popover"
-            className="w-full min-w-0 bg-transparent text-left text-foreground"
+            className={
+              variant === "default" && isGuestsOpen
+                ? "hidden"
+                : "w-full min-w-0 bg-transparent text-left text-foreground"
+            }
           >
             {guests} {guests === 1 ? "guest" : "guests"}
           </button>
           <input type="hidden" name="guests" value={guests} />
           {isGuestsOpen && (
             <div
-              id="guests-popover"
               className={
                 variant === "filters"
                   ? "col-start-2 row-start-1 row-span-2 self-center"
-                  : "absolute top-full right-0 z-50 mt-2 min-w-52 rounded-xl border border-border bg-card p-4 shadow-lg"
+                  : "min-w-0"
               }
             >
-              <div className="flex items-center justify-end gap-3">
+              <div
+                className={
+                  variant === "filters"
+                    ? "flex items-center justify-end gap-3"
+                    : "flex items-center justify-start gap-2"
+                }
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -300,7 +329,17 @@ export function VenueSearchForm({
                   −
                 </button>
 
-                <span aria-live="polite">{guests}</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  aria-label="Number of guests"
+                  value={guestInput ?? String(guests)}
+                  onChange={(event) =>
+                    updateGuestInput(event.currentTarget.value)
+                  }
+                  onBlur={() => setGuestInput(null)}
+                  className="w-12 rounded bg-transparent px-1 py-2 text-center text-foreground focus:bg-field-active focus:outline-hidden"
+                />
 
                 <button
                   type="button"
