@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="w-full border-t border-border bg-background">
+    <footer className="w-full bg-background dark:border-t dark:border-border">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 py-8">
         <img
           src="/images/footer-logo-light.svg"

@@ -20,7 +20,7 @@ export function Header() {
   }
 
   return (
-    <header className="w-full border-b border-border bg-background">
+    <header className="w-full bg-background dark:border-b dark:border-border">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link
           to="/"

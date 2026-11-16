@@ -86,12 +86,21 @@ export function MyProfilePage() {
         </div>
       </section>
 
-      <Link
-        to="/my-bookings"
-        className="mt-6 inline-flex text-sm font-medium text-heading underline underline-offset-4 hover:text-primary"
-      >
-        My bookings
-      </Link>
+      <div className="mt-6 flex flex-wrap gap-6">
+        <Link
+          to="/my-bookings"
+          className="text-sm font-medium text-heading underline underline-offset-4 hover:text-primary"
+        >
+          My bookings
+        </Link>
+
+        <Link
+          to={user.venueManager ? "/my-venues" : "/list-venue"}
+          className="text-sm font-medium text-heading underline underline-offset-4 hover:text-primary"
+        >
+          {user.venueManager ? "My venues" : "Become a venue manager"}
+        </Link>
+      </div>
       {isAvatarDialogOpen && (
         <EditAvatarDialog
           currentAvatar={user.avatar}

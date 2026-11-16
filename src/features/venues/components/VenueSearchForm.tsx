@@ -332,7 +332,10 @@ export function VenueSearchForm({
       </div>
       {variant !== "filters" && (
         <div className="md:flex md:items-center md:pl-3">
-          <button type="submit" className="btn-primary">
+          <button
+            type="submit"
+            className="btn-primary shadow-[0_0_16px_4px_var(--card)]"
+          >
             Search
           </button>
         </div>
