@@ -134,9 +134,13 @@ export function MyProfilePage() {
                 id="profile-bio"
                 value={bio}
                 onChange={(event) => setBio(event.target.value)}
+                maxLength={160}
                 rows={4}
                 className="w-full rounded-lg border border-border bg-card p-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
               />
+              <p className="mt-1 text-right text-xs text-muted-foreground">
+                {bio.length}/160 characters
+              </p>
 
               <div className="mt-3 flex justify-end gap-4">
                 <button

@@ -1,5 +1,11 @@
 import { Link, useLocation, Navigate } from "react-router";
-import { CheckCircle2, ArrowLeft, CalendarDays, Users } from "lucide-react";
+import {
+  CheckCircle2,
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  Users,
+} from "lucide-react";
 import { format, parseISO, differenceInCalendarDays } from "date-fns";
 
 interface BookingConfirmation {
@@ -96,13 +102,23 @@ export function BookingSuccessPage() {
         </div>
       </section>
 
-      <Link
-        to="/"
-        className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-heading underline-offset-4 hover:underline"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back to home
-      </Link>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-medium text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Back to home
+        </Link>
+
+        <Link
+          to="/my-bookings"
+          className="inline-flex items-center gap-2 text-sm font-medium text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+        >
+          My bookings
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </div>
     </main>
   );
 }

@@ -52,8 +52,8 @@
     --primary-foreground: #1a0f2e;
     --primary-hover: #ff8580;
     --primary-pressed: #e67e73;
-    --primary-disabled: #241d30;
-    --disabled-foreground: #8d7e9b;
+    --primary-disabled: #403549;
+    --disabled-foreground: #B8A6C6;
     --focus-ring: #c7b0d6;
     --calendar-range: #51405F;
     --error: #ff8a80;
@@ -62,7 +62,7 @@
     --toast-error-foreground: #DDB6C0;
     --toast-error-border: #A47888;
     --toast-success: #202D29;
-    --toast-success-foreground: #B0D3C0;
+    --toast-success-foreground: #C4E8CF;
     --toast-success-border: #6F9580;
 }
 
@@ -139,8 +139,9 @@
     .btn-counter {
         @apply flex size-9 cursor-pointer items-center justify-center rounded-full;
         @apply border border-border bg-card text-foreground;
-        @apply hover:bg-field-active;
-        @apply disabled:cursor-not-allowed disabled:opacity-40;
+        @apply enabled:hover:bg-field-active;
+        @apply disabled:cursor-not-allowed disabled:border-card-border disabled:bg-primary-disabled disabled:text-disabled-foreground;
+        @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring;
     }
 
     .btn-confirm {
@@ -292,6 +293,18 @@ input:-webkit-autofill:active {
     --normal-bg: var(--toast-error);
     --normal-text: var(--toast-error-foreground);
     --normal-border: var(--toast-error-border);
+}
+
+/* Hide number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 @media (min-width: 375px) {

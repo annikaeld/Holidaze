@@ -106,7 +106,14 @@ export async function updateProfile(
   );
 
   if (!response.ok) {
-    throw new Error("Could not update profile. Please try again.");
+    const errorResponse = await response.json().catch(() => null);
+
+    const errorMessage =
+      errorResponse?.errors?.[0]?.message ||
+      errorResponse?.message ||
+      "Could not update profile. Please try again.";
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
