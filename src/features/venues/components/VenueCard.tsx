@@ -16,6 +16,7 @@ export function VenueCard({ venue }: VenueCardProps) {
   return (
     <article className="group relative overflow-hidden rounded-lg border-[0.5px] border-card-border bg-card text-card-foreground shadow-sm shadow-shadow transition-shadow duration-200 hover:shadow-lg">
       <Link
+        data-venue-id={venue.id}
         to={{
           pathname: `/venues/${venue.id}`,
           search: searchParams.toString(),

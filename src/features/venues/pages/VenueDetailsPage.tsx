@@ -45,6 +45,7 @@ export function VenueDetailsPage() {
           pathname: "/venues",
           search: searchParams.toString(),
         }}
+        state={{ returnFocusTo: id }}
         className="inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
       >
         <ArrowLeft size={16} aria-hidden="true" />

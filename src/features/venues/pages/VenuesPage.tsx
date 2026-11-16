@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllVenues } from "@/features/venues/services/venuesApi";
 import { VenueCard } from "@/features/venues/components/VenueCard";
-import { useSearchParams } from "react-router";
+import { useLocation, useSearchParams } from "react-router";
 import { Pagination } from "@/features/venues/components/Pagination";
 import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
@@ -27,6 +27,8 @@ function datesOverlap(
 }
 
 export function VenuesPage() {
+  const location = useLocation();
+  const restoredLocationKey = useRef<string | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [draftParams, setDraftParams] = useState(
@@ -182,6 +184,27 @@ export function VenuesPage() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   );
+  useEffect(() => {
+    const venueId = location.state?.returnFocusTo;
+
+    if (
+      typeof venueId !== "string" ||
+      isLoading ||
+      error ||
+      restoredLocationKey.current === location.key
+    ) {
+      return;
+    }
+
+    const venueLink = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-venue-id]"),
+    ).find((link) => link.dataset.venueId === venueId);
+
+    if (venueLink) {
+      venueLink.focus();
+      restoredLocationKey.current = location.key;
+    }
+  }, [location, isLoading, error, paginatedVenues]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
