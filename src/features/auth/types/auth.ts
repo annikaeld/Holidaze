@@ -24,6 +24,7 @@ export interface LoginResponse {
     email: string;
     venueManager: boolean;
     accessToken: string;
+    bio?: string;
     avatar?: {
       url: string;
       alt: string;

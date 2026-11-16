@@ -41,6 +41,7 @@ export function LoginPage() {
       return {
         ...response.data,
         venueManager: profile.venueManager,
+        bio: profile.bio,
       };
     },
     onSuccess: (user) => {

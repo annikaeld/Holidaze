@@ -13,6 +13,8 @@ export function MyProfilePage() {
   const { user, login } = useAuth();
 
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bio, setBio] = useState(user?.bio ?? "");
 
   const avatarMutation = useMutation({
     mutationFn: (data: AvatarFormData) => {
@@ -43,6 +45,41 @@ export function MyProfilePage() {
         error instanceof Error
           ? error.message
           : "Could not update avatar. Please try again.",
+      );
+    }
+  }
+
+  const bioMutation = useMutation({
+    mutationFn: (newBio: string) => {
+      if (!user) {
+        throw new Error("You must be logged in.");
+      }
+
+      return updateProfile(user.name, user.accessToken, {
+        bio: newBio,
+      });
+    },
+  });
+
+  async function handleSaveBio() {
+    if (!user) return;
+
+    try {
+      const response = await bioMutation.mutateAsync(bio.trim());
+
+      login({
+        ...user,
+        bio: response.data.bio,
+      });
+
+      setBio(response.data.bio);
+      setIsEditingBio(false);
+      toast.success("Your bio has been updated.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Could not update bio. Please try again.",
       );
     }
   }
@@ -83,6 +120,64 @@ export function MyProfilePage() {
               {user.email}
             </p>
           </div>
+        </div>
+        <div className="mt-6 border-t border-card-border pt-4">
+          <h3 className="text-sm font-semibold">About me</h3>
+
+          {isEditingBio ? (
+            <div className="mt-3">
+              <label htmlFor="profile-bio" className="sr-only">
+                About me
+              </label>
+
+              <textarea
+                id="profile-bio"
+                value={bio}
+                onChange={(event) => setBio(event.target.value)}
+                rows={4}
+                className="w-full rounded-lg border border-border bg-card p-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+              />
+
+              <div className="mt-3 flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBio(user.bio ?? "");
+                    setIsEditingBio(false);
+                  }}
+                  disabled={bioMutation.isPending}
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full border border-border px-6 py-2 text-sm font-medium text-foreground transition-colors hover:bg-field-active focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSaveBio}
+                  disabled={bioMutation.isPending}
+                  className="btn-primary btn-primary-compact"
+                >
+                  {bioMutation.isPending ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+                {user.bio || "No bio added yet"}
+              </p>
+
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsEditingBio(true)}
+                  className="cursor-pointer text-sm font-medium text-heading underline underline-offset-4 hover:text-primary"
+                >
+                  {user.bio ? "Edit" : "Add bio"}
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

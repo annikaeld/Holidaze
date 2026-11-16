@@ -55,7 +55,7 @@ export async function loginUser(userData: LoginData): Promise<LoginResponse> {
 export async function getHolidazeProfile(
   name: string,
   accessToken: string,
-): Promise<{ venueManager: boolean }> {
+): Promise<{ venueManager: boolean; bio: string }> {
   const response = await fetch(
     `${import.meta.env.VITE_API_BASE}/holidaze/profiles/${encodeURIComponent(name)}`,
     {
@@ -74,10 +74,12 @@ export async function getHolidazeProfile(
 
   return {
     venueManager: result.data.venueManager,
+    bio: result.data.bio ?? "",
   };
 }
 
 interface UpdateProfileData {
+  bio?: string;
   avatar?: {
     url: string;
     alt: string;
