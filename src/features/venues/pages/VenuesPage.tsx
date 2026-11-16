@@ -6,7 +6,7 @@ import { Pagination } from "@/features/venues/components/Pagination";
 import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
 import { useEffect, useRef, useState } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, ChevronDown } from "lucide-react";
 import {
   getVenueRegion,
   isNordicCountry,
@@ -189,33 +189,40 @@ export function VenuesPage() {
         <h1>Venues</h1>
 
         <div className="flex items-center gap-3">
-          <select
-            aria-label="Sort venues"
-            value={sort}
-            onChange={(event) => {
-              const value = event.target.value;
+          <div className="relative">
+            <select
+              aria-label="Sort venues"
+              value={sort}
+              onChange={(event) => {
+                const value = event.target.value;
 
-              setSearchParams((previous) => {
-                const params = new URLSearchParams(previous);
+                setSearchParams((previous) => {
+                  const params = new URLSearchParams(previous);
 
-                if (value === "newest") {
-                  params.delete("sort");
-                } else {
-                  params.set("sort", value);
-                }
+                  if (value === "newest") {
+                    params.delete("sort");
+                  } else {
+                    params.set("sort", value);
+                  }
 
-                params.delete("page");
-                return params;
-              });
-            }}
-            className="min-w-0 cursor-pointer rounded-lg border border-border bg-card px-3 py-3 text-sm text-card-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
-          >
-            <option value="newest">Newest first</option>
-            <option value="price-asc">Price: Low to high</option>
-            <option value="price-desc">Price: High to low</option>
-            <option value="rating-desc">Rating: High to low</option>
-            <option value="rating-asc">Rating: Low to high</option>
-          </select>
+                  params.delete("page");
+                  return params;
+                });
+              }}
+              className="w-40 cursor-pointer appearance-none rounded-2xl bg-card py-3 pl-4 pr-10 text-sm text-card-foreground shadow-sm dark:border dark:border-border dark:shadow-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+            >
+              <option value="newest">Newest first</option>
+              <option value="price-asc">Price: Low to high</option>
+              <option value="price-desc">Price: High to low</option>
+              <option value="rating-desc">Rating: High to low</option>
+              <option value="rating-asc">Rating: Low to high</option>
+            </select>
+            <ChevronDown
+              size={16}
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-card-foreground"
+            />
+          </div>
           <button
             ref={filterButtonRef}
             type="button"
@@ -224,7 +231,7 @@ export function VenuesPage() {
               setFiltersOpen(true);
             }}
             aria-label="Open filters"
-            className="cursor-pointer rounded-lg border border-border bg-card p-3"
+            className="cursor-pointer rounded-2xl bg-card p-3 shadow-sm dark:border dark:border-border dark:shadow-none"
           >
             <SlidersHorizontal size={20} aria-hidden="true" />
           </button>
