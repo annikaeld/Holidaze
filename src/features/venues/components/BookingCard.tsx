@@ -30,6 +30,7 @@ export function BookingCard({
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const guestButtonRef = useRef<HTMLButtonElement>(null);
 
   const [guests, setGuests] = useState(() => {
     const requestedGuests = Number(searchParams.get("guests")) || 1;
@@ -254,7 +255,7 @@ export function BookingCard({
       {isCalendarOpen && (
         <div
           ref={calendarRef}
-          className="absolute top-full right-0 z-50 mt-2 rounded-xl border border-border bg-card p-2 shadow-lg"
+          className="absolute bottom-full right-0 z-50 mb-2 rounded-xl border border-border bg-card p-2 shadow-lg"
         >
           <DateRangeCalendar
             id="booking-calendar"
@@ -282,7 +283,10 @@ export function BookingCard({
             guests={guests}
             maxGuests={maxGuests}
             onChange={setGuests}
-            onConfirm={() => setIsGuestsOpen(false)}
+            onConfirm={() => {
+              setIsGuestsOpen(false);
+              requestAnimationFrame(() => guestButtonRef.current?.focus());
+            }}
           />
         ) : (
           <button
@@ -291,6 +295,7 @@ export function BookingCard({
               setIsGuestsOpen(true);
               setIsCalendarOpen(false);
             }}
+            ref={guestButtonRef}
             aria-expanded={isGuestsOpen}
             className="mt-1 w-full cursor-pointer text-left"
           >

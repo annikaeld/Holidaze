@@ -27,15 +27,16 @@ export function HomePage() {
 
   return (
     <main>
-      <section className="relative mx-auto flex min-h-[480px] w-full max-w-[1440px] min-w-0 items-center justify-center overflow-hidden sm:min-h-96">
-        <img
-          src="/images/etienne-dayer-vwH7zX3CeiA-unsplash.jpg"
-          alt="baloons in the sky"
-          className="absolute inset-0 h-full w-full object-cover object-[center_45%] md:object-[center_52%] lg:object-[center_100%]"
-        />
+      <section className="relative z-10 mx-auto flex min-h-480px w-full max-w-1440px min-w-0 items-center justify-center sm:min-h-96">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <img
+            src="/images/etienne-dayer-vwH7zX3CeiA-unsplash.jpg"
+            alt="baloons in the sky"
+            className="absolute inset-0 h-full w-full object-cover object-[center_45%] md:object-[center_52%] lg:object-[center_100%]"
+          />
 
-        <div className="absolute inset-0 bg-surface opacity-70" />
-
+          <div className="absolute inset-0 bg-surface opacity-70" />
+        </div>
         <div className="relative z-10 w-full min-w-0 max-w-6xl px-4 py-12 sm:py-10">
           <h1>Find your next stay</h1>
           <VenueSearchForm />

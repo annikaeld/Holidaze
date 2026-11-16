@@ -88,7 +88,6 @@ export function DateRangeCalendar({
     <div className="calendar-content">
       <DayPicker
         id={id}
-        autoFocus
         mode="range"
         selected={selected}
         onSelect={handleSelect}
@@ -121,7 +120,7 @@ export function DateRangeCalendar({
             <button
               type="button"
               onClick={onConfirm}
-              disabled={!selected?.from || !selected?.to}
+              disabled={Boolean(selected?.from && !selected?.to)}
               aria-label="Confirm dates"
               className="btn-confirm"
             >
