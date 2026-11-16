@@ -42,14 +42,11 @@ export async function loginUser(userData: LoginData): Promise<LoginResponse> {
   });
 
   if (!response.ok) {
-    const errorResponse = await response.json().catch(() => null);
+    if (response.status === 401) {
+      throw new Error("Incorrect email or password. Please try again.");
+    }
 
-    const errorMessage =
-      errorResponse?.errors?.[0]?.message ||
-      errorResponse?.message ||
-      "Could not log in";
-
-    throw new Error(errorMessage);
+    throw new Error("Unable to log in right now. Please try again later.");
   }
 
   return response.json();
