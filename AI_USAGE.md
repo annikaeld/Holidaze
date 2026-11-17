@@ -53,6 +53,10 @@ into the project where appropriate.
 - Reviewing accessibility considerations, including semantic HTML, form validation, and colour contrast.
 - Exploring interface improvements and design alternatives.
 
+## Prototype
+
+I designed and built Holidaze before creating the Figma prototype. I used screenshots of my own implementation as input to Figma AI, which generated a clickable prototype based on those screens. The prototype demonstrates the user flows I designed for Holidaze.
+
 ---
 
 ## Development Process
@@ -78,7 +82,3 @@ I am responsible for:
 AI is used as a supporting development tool, not as a replacement for independent learning and decision-making.
 
 ---
-
-## External Code and References
-
-External code sources, including any third-party examples requiring attribution, should be documented with appropriate references and licence information where applicable.
