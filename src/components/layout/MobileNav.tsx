@@ -125,6 +125,14 @@ export function MobileNav() {
               >
                 <DropdownMenuItem asChild>
                   <Link
+                    to="/profile"
+                    className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
+                  >
+                    My profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
                     to={user.venueManager ? "/my-venues" : "/list-venue"}
                     className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
                   >

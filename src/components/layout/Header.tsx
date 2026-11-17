@@ -45,9 +45,14 @@ export function Header() {
           className="hidden lg:flex items-center gap-6"
         >
           {!user ? (
-            <Link to="/login" className="text-foreground hover:text-primary">
-              Log in
-            </Link>
+            <>
+              <Link to="/venues" className="text-foreground hover:text-primary">
+                Venues
+              </Link>
+              <Link to="/login" className="text-foreground hover:text-primary">
+                Log in
+              </Link>
+            </>
           ) : (
             <>
               {user.venueManager ? (

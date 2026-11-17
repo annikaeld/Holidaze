@@ -23,7 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <AppRoutes />
-      <Toaster position="top-center" />
+      <Toaster position="top-center" offset={{ top: 88 }} />
     </AuthProvider>
   );
 }

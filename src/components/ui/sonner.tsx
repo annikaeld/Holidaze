@@ -25,10 +25,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-bg": "var(--card)",
           "--normal-text": "var(--card-foreground)",
           "--normal-border": "var(--card-border)",
-          "--border-radius": "var(--radius)",
+          "--border-radius": "var(--radius-xl)",
         } as React.CSSProperties
       }
       toastOptions={{
+        style: { padding: "30px" },
         classNames: {
           toast: "cn-toast",
           success: "cn-toast-success",
