@@ -266,7 +266,7 @@ export function VenueSearchForm({
                     ? "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3"
                     : "flex flex-col gap-1"
                 }`
-              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg"
+              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg md:justify-center"
           }
         >
           <label
