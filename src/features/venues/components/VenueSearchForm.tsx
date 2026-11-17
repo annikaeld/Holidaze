@@ -299,6 +299,7 @@ export function VenueSearchForm({
           <input type="hidden" name="guests" value={guests} />
           {isGuestsOpen && (
             <div
+              id="guests-popover"
               className={
                 variant === "filters"
                   ? "col-start-2 row-start-1 row-span-2 self-center"

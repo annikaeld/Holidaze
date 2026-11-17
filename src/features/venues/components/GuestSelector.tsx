@@ -18,11 +18,6 @@ export function GuestSelector({
     if (!/^\d*$/.test(value)) return;
 
     setGuestInput(value);
-
-    const count = Number(value);
-    if (count >= 1 && count <= maxGuests) {
-      onChange(count);
-    }
   }
   return (
     <div className="flex flex-col gap-3">
@@ -43,7 +38,19 @@ export function GuestSelector({
           aria-label="Number of guests"
           value={guestInput ?? String(guests)}
           onChange={(event) => updateGuestInput(event.currentTarget.value)}
-          onBlur={() => setGuestInput(null)}
+          onBlur={(event) => {
+            const count = Number(event.currentTarget.value);
+
+            if (
+              Number.isSafeInteger(count) &&
+              count >= 1 &&
+              count <= maxGuests
+            ) {
+              onChange(count);
+            }
+
+            setGuestInput(null);
+          }}
           className="w-12 rounded bg-transparent px-1 py-2 text-center text-foreground focus:bg-field-active focus:outline-hidden"
         />
 

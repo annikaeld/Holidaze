@@ -27,7 +27,7 @@ export function HomePage() {
 
   return (
     <main>
-      <section className="relative z-10 mx-auto flex min-h-480px w-full max-w-1440px min-w-0 items-center justify-center sm:min-h-96">
+      <section className="relative z-10 mx-auto flex 	min-h-[480px] w-full max-w-[1440px] min-w-0 items-center justify-center sm:min-h-96">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <img
             src="/images/etienne-dayer-vwH7zX3CeiA-unsplash.jpg"
