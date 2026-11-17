@@ -35,7 +35,7 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
         >
           {media.map((image, index) => (
             <SwiperSlide key={`${image.url}-${index}`}>
-              <GalleryImage image={image} name={name} />
+              <GalleryImage image={image} name={name} priority={index === 0} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -115,10 +115,12 @@ function GalleryImage({
   image,
   name,
   variant = "default",
+  priority = false,
 }: {
   image: VenueMedia;
   name: string;
   variant?: "default" | "modal";
+  priority?: boolean;
 }) {
   const [imageError, setImageError] = useState(false);
 
@@ -134,7 +136,8 @@ function GalleryImage({
     <img
       src={image.url}
       alt={image.alt || name}
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
       className={
         variant === "modal"
           ? "max-h-[75vh] max-w-full object-contain"
