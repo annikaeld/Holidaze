@@ -1,7 +1,7 @@
 import type { ApiResponse, Venue } from "../types/venue";
 import type { VenueFormData } from "../schemas/venueSchema";
 
-const API_URL = "https://v2.api.noroff.dev/holidaze/venues";
+const API_URL = `${import.meta.env.VITE_API_BASE}/holidaze/venues`;
 
 export async function getVenues(page = 1): Promise<ApiResponse<Venue[]>> {
   const response = await fetch(`${API_URL}?page=${page}&_bookings=true`);
@@ -100,7 +100,7 @@ export async function getManagedVenues(
   name: string,
   accessToken: string,
 ): Promise<Venue[]> {
-  const url = `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}/venues`;
+  const url = `${import.meta.env.VITE_API_BASE}/holidaze/profiles/${encodeURIComponent(name)}/venues`;
 
   async function getPage(page: number): Promise<ApiResponse<Venue[]>> {
     const response = await fetch(`${url}?page=${page}&_bookings=true`, {

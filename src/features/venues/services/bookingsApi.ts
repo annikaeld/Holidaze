@@ -1,4 +1,4 @@
-const API_URL = "https://v2.api.noroff.dev/holidaze/bookings";
+const API_URL = `${import.meta.env.VITE_API_BASE}/holidaze/bookings`;
 
 export interface CreateBookingData {
   dateFrom: string;
@@ -53,7 +53,7 @@ export async function getCustomerBookings(
   accessToken: string,
 ): Promise<CustomerBooking[]> {
   const response = await fetch(
-    `https://v2.api.noroff.dev/holidaze/profiles/${encodeURIComponent(name)}/bookings?_venue=true`,
+    `${import.meta.env.VITE_API_BASE}/holidaze/profiles/${encodeURIComponent(name)}/bookings?_venue=true`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
