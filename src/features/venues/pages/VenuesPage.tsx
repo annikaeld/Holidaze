@@ -138,6 +138,7 @@ export function VenuesPage() {
       venue.description,
       venue.location?.city,
       venue.location?.country,
+      venue.location?.continent,
     ].some((value) => value?.toLowerCase().includes(searchTerm));
   });
 

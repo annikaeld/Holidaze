@@ -39,8 +39,11 @@ export function VenueCard({ venue, from }: VenueCardProps) {
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {[venue.location?.city, venue.location?.country]
+              .map((value) => value?.trim())
               .filter(Boolean)
-              .join(", ") || "Location not available"}
+              .join(", ") ||
+              venue.location?.continent?.trim() ||
+              "Location not available"}
           </p>
 
           <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
