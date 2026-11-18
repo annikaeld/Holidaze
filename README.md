@@ -103,11 +103,13 @@ Install dependencies:
 npm install
 ```
 
-Create a `.env.local` file in the project root and add the API key required for authenticated requests:
+Copy `.env.example` to `.env` in the project root:
 
-```env
-VITE_API_KEY=your_noroff_api_key
+```bash
+cp .env.example .env
 ```
+
+The template sets `VITE_API_BASE` to `https://v2.api.noroff.dev`. Replace the `VITE_API_KEY` placeholder in `.env` with your Noroff API key.
 
 Start the development server:
 
@@ -232,6 +234,7 @@ Several components are reused across different parts of the application:
 - **`ConfirmDialog`** – Shared confirmation dialog for cancelling bookings and deleting venues.
 - **`PageMessage`** – Shared component for page-level loading, error and access messages.
 - **`VenueImagePreview`** – Displays image previews when entering venue media URLs.
+- **`Pagination`** – Shared page controls for Venues, My Venues, My Bookings and Guest Bookings. My Venues and both booking pages use `usePagination` to display up to five cards per page.
 
 The goal is to reuse existing functionality where appropriate while keeping the code understandable and maintainable.
 
@@ -279,6 +282,8 @@ The Holidaze API provides server-side authorisation for protected operations.
 Travellers can browse and search for accommodation using destinations or venue names.
 
 ### Searching and Filtering
+
+Search from the home page or refine your search directly on the Venues page. Search matches venue names, descriptions, cities, countries and continents.
 
 Available filters include:
 
@@ -400,6 +405,7 @@ Each booking card includes:
 - Venue name and image.
 - Check-in and check-out dates.
 - Number of guests.
+- Number of nights.
 - Link to the venue.
 - Option to cancel the booking.
 
@@ -451,7 +457,7 @@ The form includes:
 - Maximum number of guests.
 - Amenities: Wi-Fi, parking, breakfast and pets.
 - Location: country, optional city or area, and optional street address.
-- Multiple image URLs with corresponding alt text.
+- At least one image URL, with alt text for each image.
 
 React Hook Form and Zod handle form state and validation.
 
