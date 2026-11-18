@@ -5,6 +5,7 @@ import {
   CalendarDays,
   UserRound,
   LogOut,
+  LogIn,
   ChevronDown,
 } from "lucide-react";
 import { useAuth } from "@/features/auth/context/useAuth";
@@ -155,14 +156,19 @@ export function MobileNav() {
                 </DropdownMenuItem>
               </>
             ) : (
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/login"
-                  className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
-                >
-                  Log in
-                </Link>
-              </DropdownMenuItem>
+              <>
+                <DropdownMenuSeparator className="my-1 bg-border" />
+
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/login"
+                    className="cursor-pointer gap-2 rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
+                  >
+                    <LogIn size={16} aria-hidden="true" />
+                    Log in
+                  </Link>
+                </DropdownMenuItem>
+              </>
             )}
           </DropdownMenuContent>
         </DropdownMenu>
