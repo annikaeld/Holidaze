@@ -209,6 +209,9 @@ export function VenueForm({
               }
               aria-label={`${value} ${value === 1 ? "star" : "stars"}`}
               aria-pressed={rating === value}
+              aria-invalid={
+                value === 1 && Boolean(errors.rating) ? true : undefined
+              }
               className="cursor-pointer rounded-md p-1 text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
             >
               <Star
