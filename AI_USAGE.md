@@ -12,20 +12,15 @@ AI has primarily been used as a learning resource, technical discussion partner,
 
 **ChatGPT (OpenAI)**
 
-ChatGPT has been used as an external, chat-based assistant
-for technical guidance, concept clarification, code review,
-debugging, architectural discussions, and implementation suggestions.
+I used ChatGPT for technical guidance, concept clarification, code review, debugging, architectural discussions, and implementation suggestions. I worked with ChatGPT through the chat interface. I did not use GitHub Copilot or integrate any AI coding assistants or extensions into VS Code. I reviewed the code suggestions, decided what to incorporate, and tested the changes myself.
 
-AI assistance has taken place through conversations in the
-ChatGPT interface, separate from the development environment.
+ChatGPT also served as my unofficial code therapist. A typical session began with “I think I’ve broken everything.” We’d look at the diff, question the thought, and run one small test. Sometimes there was a bug. Sometimes Lighthouse was just having a different kind of day.
 
-No AI coding assistants or AI extensions have been integrated
-into VS Code. GitHub Copilot has not been used.
+We also worked on boundaries. Halfway through fixing something, I’d get an idea for a fun new feature and want to follow it right then. ChatGPT would ask how long that detour was actually going to take and remind me what I’d sat down to finish. In the end, it was up to me to tell my imagination, “Great idea. We can talk about it after submission.”
 
-Code suggestions have been manually reviewed and incorporated
-into the project where appropriate.
+## Figma AI
 
----
+I designed and built Holidaze before creating the Figma prototype. I used screenshots of my own implementation as input to Figma AI, which generated a clickable prototype based on those screens. The prototype demonstrates the user flows I designed for Holidaze.
 
 ## How AI Has Been Used
 
@@ -53,12 +48,6 @@ into the project where appropriate.
 - Reviewing accessibility considerations, including semantic HTML, form validation, and colour contrast.
 - Exploring interface improvements and design alternatives.
 
-## Prototype
-
-I designed and built Holidaze before creating the Figma prototype. I used screenshots of my own implementation as input to Figma AI, which generated a clickable prototype based on those screens. The prototype demonstrates the user flows I designed for Holidaze.
-
----
-
 ## Development Process
 
 AI assistance has been used as part of an iterative development process.
@@ -67,18 +56,6 @@ Suggestions and generated examples have been considered in relation to project r
 
 AI has contributed explanations, code examples, and implementation suggestions. The final implementation is subject to my own review, adaptation, and testing.
 
----
-
 ## Student Responsibility
 
-I am responsible for:
-
-- Understanding the code and functionality included in the submitted project.
-- Making the final technical and design decisions.
-- Reviewing and testing suggested implementations.
-- Ensuring that the application meets the project requirements.
-- Following Noroff's academic integrity regulations and examination guidelines.
-
-AI is used as a supporting development tool, not as a replacement for independent learning and decision-making.
-
----
+I made the final technical and design decisions for Holidaze. I reviewed the AI suggestions, decided which ones fit the project, and tested the changes I incorporated. I am responsible for understanding the code I submit and for ensuring that my work meets Noroff’s exam requirements and academic integrity guidelines.
