@@ -2,7 +2,7 @@ import { Link, Navigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { VenueForm } from "../components/VenueForm";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { createVenue } from "../services/venuesApi";
@@ -10,7 +10,7 @@ import type { VenueFormData } from "../schemas/venueSchema";
 
 export function CreateVenuePage() {
   const { user } = useAuth();
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const createMutation = useMutation({
@@ -24,6 +24,7 @@ export function CreateVenuePage() {
 
     onSuccess: (venue) => {
       toast.success("Venue created successfully!");
+      queryClient.invalidateQueries({ queryKey: ["venues"] });
       navigate(`/venues/${venue.id}`);
     },
 
