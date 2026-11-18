@@ -20,7 +20,7 @@ We also worked on boundaries. Halfway through fixing something, I’d get an ide
 
 ## Figma AI
 
-I designed and built Holidaze before creating the Figma prototype. I used screenshots of my own implementation as input to Figma AI, which generated a clickable prototype based on those screens. The prototype demonstrates the user flows I designed for Holidaze.
+I designed and built Holidaze before creating the Figma prototype. I used screenshots of my own implementation as input to Figma AI, which generated the first clickable version. I then made some adjustments to the prototype myself. The final version demonstrates the user flows I designed for Holidaze.
 
 ## How AI Has Been Used
 
