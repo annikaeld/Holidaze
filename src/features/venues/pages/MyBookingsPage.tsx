@@ -1,6 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, Navigate } from "react-router";
-import { isAfter, parseISO, startOfDay, format } from "date-fns";
+import {
+  isAfter,
+  parseISO,
+  startOfDay,
+  format,
+  differenceInCalendarDays,
+} from "date-fns";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { House } from "lucide-react";
 import { useState } from "react";
@@ -108,42 +114,51 @@ export function MyBookingsPage() {
         </div>
       ) : (
         <div className="mt-8 flex flex-col gap-4">
-          {upcomingBookings.map((booking) => (
-            <OverviewCard
-              key={booking.id}
-              title={booking.venue.name}
-              image={booking.venue.media?.[0]}
-              actions={
-                <>
-                  <Link
-                    to={`/venues/${booking.venue.id}`}
-                    state={{ from: "my-bookings" }}
-                    className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
-                  >
-                    View venue
-                  </Link>
+          {upcomingBookings.map((booking) => {
+            const nights = differenceInCalendarDays(
+              parseISO(booking.dateTo),
+              parseISO(booking.dateFrom),
+            );
 
-                  <button
-                    type="button"
-                    onClick={() => setBookingToCancel(booking)}
-                    className="cursor-pointer text-sm text-error underline-offset-4 hover:underline"
-                  >
-                    Cancel booking
-                  </button>
-                </>
-              }
-            >
-              <p className="text-sm">
-                {format(parseISO(booking.dateFrom), "dd MMM yyyy")}
-                {" – "}
-                {format(parseISO(booking.dateTo), "dd MMM yyyy")}
-              </p>
+            return (
+              <OverviewCard
+                key={booking.id}
+                title={booking.venue.name}
+                image={booking.venue.media?.[0]}
+                actions={
+                  <>
+                    <Link
+                      to={`/venues/${booking.venue.id}`}
+                      state={{ from: "my-bookings" }}
+                      className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
+                    >
+                      View venue
+                    </Link>
 
-              <p className="text-sm">
-                {booking.guests} {booking.guests === 1 ? "guest" : "guests"}
-              </p>
-            </OverviewCard>
-          ))}
+                    <button
+                      type="button"
+                      onClick={() => setBookingToCancel(booking)}
+                      className="cursor-pointer text-sm text-error underline-offset-4 hover:underline"
+                    >
+                      Cancel booking
+                    </button>
+                  </>
+                }
+              >
+                <p className="text-sm">
+                  {format(parseISO(booking.dateFrom), "dd MMM yyyy")}
+                  {" – "}
+                  {format(parseISO(booking.dateTo), "dd MMM yyyy")}
+                </p>
+
+                <p className="text-sm">
+                  {booking.guests} {booking.guests === 1 ? "guest" : "guests"}
+                  {" · "}
+                  {nights} {nights === 1 ? "night" : "nights"}
+                </p>
+              </OverviewCard>
+            );
+          })}
         </div>
       )}
 
