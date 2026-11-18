@@ -27,10 +27,6 @@ export function CreateVenuePage() {
       queryClient.invalidateQueries({ queryKey: ["venues"] });
       navigate(`/venues/${venue.id}`);
     },
-
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 
   if (!user) {
@@ -54,7 +50,7 @@ export function CreateVenuePage() {
       <h1 className="mb-8">Create venue</h1>
 
       <VenueForm
-        onSubmit={(data) => createMutation.mutate(data)}
+        onSubmit={(data) => createMutation.mutateAsync(data)}
         isPending={createMutation.isPending}
       />
     </main>

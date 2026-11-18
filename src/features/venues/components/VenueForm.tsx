@@ -1,13 +1,14 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { venueSchema, type VenueFormData } from "../schemas/venueSchema";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Star, X } from "lucide-react";
 import { VenueImagePreview } from "./VenueImagePreview";
 import { VenuePreviewDialog } from "./VenuePreviewDialog";
+import { toast } from "sonner";
 
 interface VenueFormProps {
-  onSubmit: (data: VenueFormData) => void;
+  onSubmit: (data: VenueFormData) => void | Promise<unknown>;
   isPending: boolean;
   initialValues?: VenueFormData;
   submitLabel?: string;
@@ -19,12 +20,14 @@ export function VenueForm({
   initialValues,
   submitLabel = "Create venue",
 }: VenueFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
   const {
     register,
     handleSubmit,
     control,
     getValues,
     setValue,
+    setError,
     trigger,
     formState: { errors },
   } = useForm<VenueFormData>({
@@ -95,9 +98,61 @@ export function VenueForm({
       ),
     );
   }
+  async function submitVenue(data: VenueFormData) {
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Could not save venue.";
+      const imageErrorPrefix =
+        "Image is not accessible, please double check the image address:";
 
+      if (message.startsWith(imageErrorPrefix)) {
+        const rejectedUrl = message.slice(imageErrorPrefix.length).trim();
+        let matched = false;
+
+        getValues("media").forEach((image, index) => {
+          if (rejectedUrl && image.url.trim() === rejectedUrl) {
+            setError(`media.${index}.url`, {
+              type: "server",
+              message:
+                "This image couldn’t be added. Check the URL or remove the image and try again.",
+            });
+            matched = true;
+          }
+        });
+
+        if (!matched) {
+          toast.error(
+            "An image couldn’t be added. Check the image URLs and try again.",
+          );
+        }
+
+        return;
+      }
+
+      toast.error(message);
+    }
+  }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form
+      ref={formRef}
+      onSubmit={(event) => {
+        void handleSubmit(submitVenue, () => {
+          requestAnimationFrame(() => {
+            const firstInvalidField =
+              formRef.current?.querySelector<HTMLElement>(
+                '[aria-invalid="true"]',
+              );
+
+            firstInvalidField?.scrollIntoView({ block: "center" });
+            firstInvalidField?.focus({ preventScroll: true });
+          });
+        })(event);
+      }}
+      className="space-y-4"
+      noValidate
+    >
       <h2>Tell us about your place</h2>
 
       <div>
@@ -309,7 +364,7 @@ export function VenueForm({
         <h2>Photos</h2>
 
         <p className="text-sm text-muted-foreground">
-          Add image URLs and describe each image.
+          Add at least one photo and describe each image.
         </p>
 
         {images.map((image, index) => (
@@ -362,7 +417,9 @@ export function VenueForm({
 
               {errors.media?.[index]?.url && (
                 <p role="alert" className="mt-1 text-sm text-error">
-                  {errors.media[index]?.url?.message}
+                  {image.url.trim()
+                    ? errors.media[index]?.url?.message
+                    : "Enter an image URL"}
                 </p>
               )}
             </div>
