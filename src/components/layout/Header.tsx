@@ -44,15 +44,13 @@ export function Header() {
           aria-label="Main navigation"
           className="hidden lg:flex items-center gap-6"
         >
+          <Link to="/venues" className="text-foreground hover:text-primary">
+            Venues
+          </Link>
           {!user ? (
-            <>
-              <Link to="/venues" className="text-foreground hover:text-primary">
-                Venues
-              </Link>
-              <Link to="/login" className="text-foreground hover:text-primary">
-                Log in
-              </Link>
-            </>
+            <Link to="/login" className="text-foreground hover:text-primary">
+              Log in
+            </Link>
           ) : (
             <>
               {user.venueManager ? (

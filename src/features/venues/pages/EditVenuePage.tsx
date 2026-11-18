@@ -27,7 +27,7 @@ export function EditVenuePage() {
     onSuccess: (updatedVenue) => {
       queryClient.setQueryData(["venue", id], updatedVenue);
       queryClient.invalidateQueries({ queryKey: ["managed-venues"] });
-
+      queryClient.invalidateQueries({ queryKey: ["venues"] });
       toast.success("Venue updated successfully!");
       navigate("/my-venues");
     },
