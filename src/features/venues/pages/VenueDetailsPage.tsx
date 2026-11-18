@@ -8,7 +8,7 @@ import { BookingCard } from "@/features/venues/components/BookingCard";
 import { useParams, useSearchParams, Link, useLocation } from "react-router";
 import { VenueRating } from "@/features/venues/components/VenueRating";
 import { UserRound, ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageMessage } from "@/shared/components/PageMessage";
 
 export function VenueDetailsPage() {
@@ -42,6 +42,11 @@ export function VenueDetailsPage() {
     queryFn: () => getVenue(id!),
     enabled: Boolean(id),
   });
+  const venueName = venue?.name;
+
+  useEffect(() => {
+    document.title = `${venueName ?? "Venue details"} | Holidaze`;
+  }, [venueName]);
   if (isLoading) {
     return <PageMessage>Loading venue...</PageMessage>;
   }
