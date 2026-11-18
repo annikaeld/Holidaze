@@ -6,7 +6,7 @@ import {
 } from "../schemas/registerSchema";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../services/authApi";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -153,6 +153,15 @@ export function RegisterPage() {
           </p>
         )}
       </form>
+      <p className="mt-6 text-center text-sm text-foreground">
+        Already have an account?{" "}
+        <Link
+          to={{ pathname: "/login", search }}
+          className="font-medium text-primary underline underline-offset-4 hover:no-underline"
+        >
+          Log in
+        </Link>
+      </p>
     </main>
   );
 }
