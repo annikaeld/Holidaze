@@ -17,7 +17,7 @@ interface VenueGalleryProps {
 
 export function VenueGallery({ media, name }: VenueGalleryProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  if (media.length === 0) {
+  if (!media.some((image) => image.url?.trim())) {
     return (
       <div className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-video">
         No image available
@@ -43,22 +43,25 @@ export function VenueGallery({ media, name }: VenueGalleryProps) {
       <div className="relative hidden md:block">
         <div
           className={`grid aspect-video gap-2 ${
-            media.length === 1 ? "grid-cols-1" : "grid-cols-[2fr_1fr]"
+            media.length === 1
+              ? "grid-cols-1 [&:has([data-gallery-placeholder])]:aspect-[32/9]"
+              : "grid-cols-[2fr_1fr]"
           }`}
         >
           <div className="min-h-0 overflow-hidden">
             {media[0] && <GalleryImage image={media[0]} name={name} />}
           </div>
-
-          <div className="grid min-h-0 grid-rows-2 gap-2 overflow-hidden">
-            {media.slice(1, 3).map((image, index) => (
-              <GalleryImage
-                key={`${image.url}-${index}`}
-                image={image}
-                name={name}
-              />
-            ))}
-          </div>
+          {media.length > 1 && (
+            <div className="grid min-h-0 grid-rows-2 gap-2 overflow-hidden">
+              {media.slice(1, 3).map((image, index) => (
+                <GalleryImage
+                  key={`${image.url}-${index}`}
+                  image={image}
+                  name={name}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {media.length > 1 && (
@@ -126,7 +129,10 @@ function GalleryImage({
 
   if (!image.url || imageError) {
     return (
-      <div className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-auto md:h-full">
+      <div
+        data-gallery-placeholder=""
+        className="flex aspect-4/3 w-full items-center justify-center bg-placeholder text-placeholder-foreground md:aspect-auto md:h-full"
+      >
         No image available
       </div>
     );

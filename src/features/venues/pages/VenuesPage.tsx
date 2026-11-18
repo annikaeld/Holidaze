@@ -6,7 +6,7 @@ import { Pagination } from "@/features/venues/components/Pagination";
 import { VenueSearchForm } from "@/features/venues/components/VenueSearchForm";
 import { VenueFilters } from "@/features/venues/components/VenueFilters";
 import { useEffect, useRef, useState } from "react";
-import { SlidersHorizontal, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, Search } from "lucide-react";
 import {
   getVenueRegion,
   isNordicCountry,
@@ -123,12 +123,25 @@ export function VenuesPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["venues", destination],
-    queryFn: () => getAllVenues(destination),
+    queryKey: ["venues"],
+    queryFn: () => getAllVenues(),
     staleTime: 5 * 60 * 1000,
   });
 
-  const venues = (venuesData ?? []).filter((venue) => {
+  const searchTerm = destination.trim().toLowerCase();
+
+  const matchingVenues = (venuesData ?? []).filter((venue) => {
+    if (!searchTerm) return true;
+
+    return [
+      venue.name,
+      venue.description,
+      venue.location?.city,
+      venue.location?.country,
+    ].some((value) => value?.toLowerCase().includes(searchTerm));
+  });
+
+  const venues = matchingVenues.filter((venue) => {
     if (selectedRegions.length > 0) {
       const country = venue.location?.country ?? null;
       const continent = venue.location?.continent ?? null;
@@ -211,7 +224,49 @@ export function VenuesPage() {
       <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1>Venues</h1>
 
-        <div className="flex items-center gap-3">
+        <div className="flex w-full flex-wrap items-center gap-3 lg:w-auto lg:flex-nowrap">
+          <form
+            key={destination}
+            role="search"
+            aria-label="Search venues"
+            className="flex basis-full items-center rounded-2xl bg-card text-sm text-card-foreground shadow-sm dark:border dark:border-border dark:shadow-none lg:w-60 lg:basis-auto"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const value = String(
+                new FormData(event.currentTarget).get("destination") ?? "",
+              ).trim();
+
+              setSearchParams((previous) => {
+                const params = new URLSearchParams(previous);
+
+                if (value) {
+                  params.set("destination", value);
+                } else {
+                  params.delete("destination");
+                }
+
+                params.delete("page");
+                return params;
+              });
+            }}
+          >
+            <input
+              type="search"
+              name="destination"
+              aria-label="Search destinations or stays"
+              placeholder="Search destinations or stays"
+              defaultValue={destination}
+              className="min-w-0 flex-1 rounded-2xl bg-transparent py-3 pl-4 focus-visible:outline-2 focus-visible:outline-focus-ring"
+            />
+            <button
+              type="submit"
+              aria-label="Search"
+              className="shrink-0 cursor-pointer rounded-2xl px-3 py-3 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+            >
+              <Search size={16} aria-hidden="true" />
+            </button>
+          </form>
+
           <div className="relative">
             <select
               aria-label="Sort venues"
