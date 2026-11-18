@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from "react-router";
-
+import { Users } from "lucide-react";
 import { VenueImage } from "./VenueImage";
 import type { Venue } from "../types/venue.ts";
 import { VenueRating } from "./VenueRating.tsx";
@@ -43,12 +43,21 @@ export function VenueCard({ venue, from }: VenueCardProps) {
               .join(", ") || "Location not available"}
           </p>
 
-          <p className="mt-2 text-base font-semibold text-card-foreground">
-            NOK {formattedPrice}
-            <span className="ml-1 text-sm font-normal text-muted-foreground">
-              / night
-            </span>
-          </p>
+          <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <p className="text-base font-semibold text-card-foreground">
+              NOK {formattedPrice}
+              <span className="ml-1 text-sm font-normal text-muted-foreground">
+                / night
+              </span>
+            </p>
+            <p className="ml-auto inline-flex items-center gap-1 whitespace-nowrap text-sm text-muted-foreground">
+              <Users size={16} aria-hidden="true" />
+              <span>
+                <span className="sr-only">Up to </span>
+                {venue.maxGuests} {venue.maxGuests === 1 ? "guest" : "guests"}
+              </span>
+            </p>
+          </div>
         </div>
       </Link>
     </article>
