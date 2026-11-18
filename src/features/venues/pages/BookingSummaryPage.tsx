@@ -231,7 +231,6 @@ export function BookingSummaryPage() {
               bookingMutation.isPending ||
               bookingMutation.isSuccess ||
               isCalendarOpen ||
-              isGuestsOpen ||
               nights <= 0 ||
               guests < 1 ||
               guests > venue.maxGuests
