@@ -8,10 +8,10 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PageMessage } from "@/shared/components/PageMessage";
 import { Pagination } from "@/features/venues/components/Pagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 
 export function MyVenuesPage() {
   const { user } = useAuth();
-  const [page, setPage] = useState(1);
   const [venueToDelete, setVenueToDelete] = useState<{
     id: string;
     name: string;
@@ -49,6 +49,13 @@ export function MyVenuesPage() {
     retry: false,
   });
 
+  const {
+    visibleItems: visibleVenues,
+    currentPage,
+    pageCount,
+    goToPage,
+  } = usePagination(venues);
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
@@ -67,18 +74,6 @@ export function MyVenuesPage() {
         Unable to load your venues. Please try again.
       </PageMessage>
     );
-  }
-  const pageSize = 5;
-  const pageCount = Math.max(1, Math.ceil(venues.length / pageSize));
-  const currentPage = Math.min(page, pageCount);
-  const firstIndex = (currentPage - 1) * pageSize;
-  const visibleVenues = venues.slice(firstIndex, firstIndex + pageSize);
-
-  function goToPage(nextPage: number) {
-    setPage(nextPage);
-    document.getElementById("my-venues-heading")?.scrollIntoView({
-      block: "start",
-    });
   }
 
   return (
@@ -169,13 +164,12 @@ export function MyVenuesPage() {
               <p className="text-sm">Up to {venue.maxGuests} guests</p>
             </OverviewCard>
           ))}
-          {pageCount > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              pageCount={pageCount}
-              onPageChange={goToPage}
-            />
-          )}
+
+          <Pagination
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onPageChange={goToPage}
+          />
         </div>
       )}
 

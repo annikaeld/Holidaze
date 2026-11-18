@@ -19,6 +19,8 @@ import {
 import { OverviewCard } from "../components/OverviewCard";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PageMessage } from "@/shared/components/PageMessage";
+import { Pagination } from "@/features/venues/components/Pagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 
 export function MyBookingsPage() {
   const { user } = useAuth();
@@ -60,6 +62,21 @@ export function MyBookingsPage() {
     },
   });
 
+  const today = startOfDay(new Date());
+
+  const upcomingBookings = bookings
+    .filter((booking) => isAfter(parseISO(booking.dateTo), today))
+    .sort(
+      (a, b) => parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime(),
+    );
+
+  const {
+    visibleItems: visibleBookings,
+    currentPage,
+    pageCount,
+    goToPage,
+  } = usePagination(upcomingBookings);
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
@@ -75,14 +92,6 @@ export function MyBookingsPage() {
       </PageMessage>
     );
   }
-
-  const today = startOfDay(new Date());
-
-  const upcomingBookings = bookings
-    .filter((booking) => isAfter(parseISO(booking.dateTo), today))
-    .sort(
-      (a, b) => parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime(),
-    );
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:py-12">
@@ -114,7 +123,7 @@ export function MyBookingsPage() {
         </div>
       ) : (
         <div className="mt-8 flex flex-col gap-4">
-          {upcomingBookings.map((booking) => {
+          {visibleBookings.map((booking) => {
             const nights = differenceInCalendarDays(
               parseISO(booking.dateTo),
               parseISO(booking.dateFrom),
@@ -159,6 +168,11 @@ export function MyBookingsPage() {
               </OverviewCard>
             );
           })}
+          <Pagination
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onPageChange={goToPage}
+          />
         </div>
       )}
 

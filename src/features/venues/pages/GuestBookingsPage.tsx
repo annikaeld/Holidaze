@@ -6,6 +6,8 @@ import { useAuth } from "@/features/auth/context/useAuth";
 import { getManagedVenues } from "../services/venuesApi";
 import { OverviewCard } from "../components/OverviewCard";
 import { PageMessage } from "@/shared/components/PageMessage";
+import { Pagination } from "@/features/venues/components/Pagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 
 export function GuestBookingsPage() {
   const { user } = useAuth();
@@ -20,6 +22,27 @@ export function GuestBookingsPage() {
     enabled: Boolean(user?.venueManager),
     retry: false,
   });
+
+  const today = startOfDay(new Date());
+
+  const bookings = venues
+    .flatMap((venue) =>
+      (venue.bookings ?? []).map((booking) => ({
+        ...booking,
+        venue,
+      })),
+    )
+    .filter((booking) => isAfter(parseISO(booking.dateTo), today))
+    .sort(
+      (a, b) => parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime(),
+    );
+
+  const {
+    visibleItems: visibleBookings,
+    currentPage,
+    pageCount,
+    goToPage,
+  } = usePagination(bookings);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -40,20 +63,6 @@ export function GuestBookingsPage() {
       </PageMessage>
     );
   }
-
-  const today = startOfDay(new Date());
-
-  const bookings = venues
-    .flatMap((venue) =>
-      (venue.bookings ?? []).map((booking) => ({
-        ...booking,
-        venue,
-      })),
-    )
-    .filter((booking) => isAfter(parseISO(booking.dateTo), today))
-    .sort(
-      (a, b) => parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime(),
-    );
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
@@ -76,7 +85,7 @@ export function GuestBookingsPage() {
         </div>
       ) : (
         <div className="mt-8 flex flex-col gap-4">
-          {bookings.map((booking) => (
+          {visibleBookings.map((booking) => (
             <OverviewCard
               key={booking.id}
               title={booking.venue.name}
@@ -117,6 +126,11 @@ export function GuestBookingsPage() {
               </div>
             </OverviewCard>
           ))}
+          <Pagination
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onPageChange={goToPage}
+          />
         </div>
       )}
     </main>
