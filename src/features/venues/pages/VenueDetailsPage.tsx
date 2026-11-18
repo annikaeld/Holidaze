@@ -5,18 +5,34 @@ import { VenueDescription } from "@/features/venues/components/VenueDescription"
 import { Wifi, CarFront, Coffee, PawPrint, Users } from "lucide-react";
 import { VenueMap } from "@/features/venues/components/VenueMap";
 import { BookingCard } from "@/features/venues/components/BookingCard";
-import { useParams, useSearchParams, Link } from "react-router";
+import { useParams, useSearchParams, Link, useLocation } from "react-router";
 import { VenueRating } from "@/features/venues/components/VenueRating";
 import { UserRound, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { PageMessage } from "@/shared/components/PageMessage";
 
 export function VenueDetailsPage() {
+  const { id } = useParams<{ id: string }>();
   const [avatarError, setAvatarError] = useState(false);
   const [searchParams] = useSearchParams();
   const checkIn = searchParams.get("checkIn") ?? undefined;
   const checkOut = searchParams.get("checkOut") ?? undefined;
-  const { id } = useParams<{ id: string }>();
+  const { state } = useLocation();
+  const backLink =
+    state?.from === "my-venues"
+      ? { to: "/my-venues", label: "Back to my venues" }
+      : state?.from === "my-bookings"
+        ? { to: "/my-bookings", label: "Back to my bookings" }
+        : state?.from === "guest-bookings"
+          ? { to: "/my-venues/bookings", label: "Back to guest bookings" }
+          : state?.from === "home"
+            ? { to: "/", label: "Back to home" }
+            : {
+                to: { pathname: "/venues", search: searchParams.toString() },
+                label: "Back to venues",
+                state: { returnFocusTo: id },
+              };
+
   const {
     data: venue,
     isLoading,
@@ -41,15 +57,12 @@ export function VenueDetailsPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-4">
       <Link
-        to={{
-          pathname: "/venues",
-          search: searchParams.toString(),
-        }}
-        state={{ returnFocusTo: id }}
+        to={backLink.to}
+        state={backLink.state}
         className="inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
       >
         <ArrowLeft size={16} aria-hidden="true" />
-        Back to venues
+        {backLink.label}
       </Link>
       <h1 className="mb-2">{venue.name}</h1>
       <VenueGallery media={venue.media} name={venue.name} />

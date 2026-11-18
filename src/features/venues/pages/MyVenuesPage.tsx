@@ -118,6 +118,7 @@ export function MyVenuesPage() {
                   <div className="flex items-center gap-4">
                     <Link
                       to={`/venues/${venue.id}`}
+                      state={{ from: "my-venues" }}
                       className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
                     >
                       View venue

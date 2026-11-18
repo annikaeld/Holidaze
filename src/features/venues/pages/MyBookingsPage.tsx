@@ -117,6 +117,7 @@ export function MyBookingsPage() {
                 <>
                   <Link
                     to={`/venues/${booking.venue.id}`}
+                    state={{ from: "my-bookings" }}
                     className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
                   >
                     View venue

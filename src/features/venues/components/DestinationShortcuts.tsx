@@ -22,9 +22,7 @@ const destinations = [
 export function DestinationShortcuts() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-12">
-      <h2 className="mb-8 text-center">
-        What type of destination are you looking for?
-      </h2>
+      <h2 className="mb-8 text-center">Where would you like to go?</h2>
 
       <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible">
         {destinations.map(({ label, href, Icon }) => (

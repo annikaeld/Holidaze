@@ -6,9 +6,10 @@ import { VenueRating } from "./VenueRating.tsx";
 
 interface VenueCardProps {
   venue: Venue;
+  from?: "home";
 }
 
-export function VenueCard({ venue }: VenueCardProps) {
+export function VenueCard({ venue, from }: VenueCardProps) {
   const [searchParams] = useSearchParams();
   const formattedPrice = new Intl.NumberFormat("en-NO", {
     maximumFractionDigits: 2,
@@ -21,6 +22,7 @@ export function VenueCard({ venue }: VenueCardProps) {
           pathname: `/venues/${venue.id}`,
           search: searchParams.toString(),
         }}
+        state={from ? { from } : undefined}
         className="block rounded-lg focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus-ring"
       >
         <div className="relative">
