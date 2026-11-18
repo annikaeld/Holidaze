@@ -7,9 +7,11 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PageMessage } from "@/shared/components/PageMessage";
+import { Pagination } from "@/features/venues/components/Pagination";
 
 export function MyVenuesPage() {
   const { user } = useAuth();
+  const [page, setPage] = useState(1);
   const [venueToDelete, setVenueToDelete] = useState<{
     id: string;
     name: string;
@@ -66,11 +68,23 @@ export function MyVenuesPage() {
       </PageMessage>
     );
   }
+  const pageSize = 5;
+  const pageCount = Math.max(1, Math.ceil(venues.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const firstIndex = (currentPage - 1) * pageSize;
+  const visibleVenues = venues.slice(firstIndex, firstIndex + pageSize);
+
+  function goToPage(nextPage: number) {
+    setPage(nextPage);
+    document.getElementById("my-venues-heading")?.scrollIntoView({
+      block: "start",
+    });
+  }
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1>My venues</h1>
+        <h1 id="my-venues-heading">My venues</h1>
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
@@ -108,7 +122,7 @@ export function MyVenuesPage() {
         </div>
       ) : (
         <div className="mt-8 space-y-4">
-          {venues.map((venue) => (
+          {visibleVenues.map((venue) => (
             <OverviewCard
               key={venue.id}
               title={venue.name}
@@ -155,6 +169,13 @@ export function MyVenuesPage() {
               <p className="text-sm">Up to {venue.maxGuests} guests</p>
             </OverviewCard>
           ))}
+          {pageCount > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              pageCount={pageCount}
+              onPageChange={goToPage}
+            />
+          )}
         </div>
       )}
 
