@@ -91,41 +91,45 @@ export function MobileNav() {
           </Link>
         ))}
 
-        {user ? (
-          <div className="flex min-w-20 items-center justify-center">
-            <Link
-              to="/profile"
-              aria-current={pathname === "/profile" ? "page" : undefined}
-              className={`flex flex-col items-center gap-1 text-xs ${
-                pathname === "/profile"
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-primary"
-              }`}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="flex min-w-20 cursor-pointer flex-col items-center gap-1 text-xs text-muted-foreground hover:text-primary"
             >
-              <UserRound size={22} aria-hidden="true" />
-              <span>Profile</span>
-            </Link>
+              <span className="relative inline-flex">
+                <UserRound size={22} aria-hidden="true" />
+                <ChevronDown
+                  size={16}
+                  aria-hidden="true"
+                  className="absolute left-full top-1/2 ml-1 -translate-y-1/2"
+                />
+              </span>
+              <span>Account</span>
+            </button>
+          </DropdownMenuTrigger>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  aria-label="Open profile menu"
-                  className="flex h-10 cursor-pointer items-center px-2 text-muted-foreground hover:text-primary"
-                >
-                  <ChevronDown size={16} aria-hidden="true" />
-                </button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent
-                align="end"
-                side="top"
-                sideOffset={12}
-                className="min-w-44 rounded-lg border-border bg-card p-2 text-foreground shadow-lg"
+          <DropdownMenuContent
+            align="end"
+            side="top"
+            sideOffset={12}
+            className="min-w-44 rounded-lg border-border bg-card p-2 text-foreground shadow-lg"
+          >
+            <DropdownMenuItem asChild>
+              <Link
+                to="/venues"
+                className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
               >
+                Venues
+              </Link>
+            </DropdownMenuItem>
+
+            {user ? (
+              <>
                 <DropdownMenuItem asChild>
                   <Link
                     to="/profile"
+                    aria-current={pathname === "/profile" ? "page" : undefined}
                     className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
                   >
                     My profile
@@ -149,18 +153,19 @@ export function MobileNav() {
                   <LogOut size={16} aria-hidden="true" />
                   Log out
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ) : (
-          <Link
-            to="/login"
-            className="flex min-w-20 flex-col items-center gap-1 text-xs text-muted-foreground hover:text-primary"
-          >
-            <UserRound size={22} aria-hidden="true" />
-            <span>Log in</span>
-          </Link>
-        )}
+              </>
+            ) : (
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/login"
+                  className="cursor-pointer rounded-md px-3 py-2 text-sm focus:bg-primary/15 focus:text-foreground"
+                >
+                  Log in
+                </Link>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );
