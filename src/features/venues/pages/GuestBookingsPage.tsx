@@ -77,9 +77,9 @@ export function GuestBookingsPage() {
       <h1>Guest bookings</h1>
 
       {bookings.length === 0 ? (
-        <div className="mt-8 text-center">
-          <h2>No upcoming guest bookings</h2>
-          <p className="mt-3 text-muted-foreground">
+        <div className="mt-8 rounded-lg border border-border bg-card p-6">
+          <h2 className="text-xl font-semibold">No upcoming guest bookings</h2>
+          <p className="mt-2 text-muted-foreground">
             Bookings for your venues will appear here.
           </p>
         </div>
