@@ -41,6 +41,7 @@ export function VenueFilters({
             <label key={region.value} className="flex items-center gap-2">
               <input
                 type="checkbox"
+                className="theme-checkbox"
                 value={region.value}
                 checked={selectedRegions.includes(region.value)}
                 onChange={(event) =>
@@ -108,6 +109,7 @@ export function VenueFilters({
             >
               <input
                 type="checkbox"
+                className="theme-checkbox"
                 checked={selected.includes(value)}
                 onChange={(event) => onChange(value, event.target.checked)}
               />

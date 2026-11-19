@@ -134,8 +134,12 @@ export function RegisterPage() {
         </div>
 
         <label className="flex items-center gap-2">
-          <input type="checkbox" {...register("venueManager")} />I want to list
-          and manage venues
+          <input
+            type="checkbox"
+            className="theme-checkbox"
+            {...register("venueManager")}
+          />
+          I want to list and manage venues
         </label>
 
         <button

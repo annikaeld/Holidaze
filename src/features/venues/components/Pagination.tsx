@@ -75,7 +75,9 @@ function PageNumbers({
             aria-current={item === currentPage ? "page" : undefined}
             onClick={() => onPageChange(item)}
             className={`cursor-pointer px-2 py-1 ${
-              item === currentPage ? "font-bold" : ""
+              item === currentPage
+                ? "font-bold text-primary"
+                : "text-muted-foreground hover:text-primary"
             }`}
           >
             {item}
@@ -106,7 +108,7 @@ export function Pagination({
         aria-label="Previous page"
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+        className="cursor-pointer text-muted-foreground hover:text-primary disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:hover:text-disabled-foreground"
       >
         <ChevronLeft aria-hidden="true" />
       </button>
@@ -130,7 +132,7 @@ export function Pagination({
         aria-label="Next page"
         disabled={currentPage >= pageCount}
         onClick={() => onPageChange(currentPage + 1)}
-        className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+        className="cursor-pointer text-muted-foreground hover:text-primary disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:hover:text-disabled-foreground"
       >
         <ChevronRight aria-hidden="true" />
       </button>

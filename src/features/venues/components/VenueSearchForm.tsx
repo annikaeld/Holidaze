@@ -117,11 +117,11 @@ export function VenueSearchForm({
             ),
         )}
       <div
-        className={
+        className={`relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:bg-field-active focus-within:ring-2 focus-within:ring-focus-ring ${
           variant === "filters"
-            ? "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring"
-            : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:flex-2 md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg"
-        }
+            ? ""
+            : "md:flex-2 md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:rounded-lg"
+        }`}
       >
         <label
           htmlFor="destination"
@@ -184,8 +184,8 @@ export function VenueSearchForm({
             aria-controls="date-calendar"
             className={
               variant === "filters"
-                ? "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring"
-                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-ring md:border-0 md:bg-transparent md:rounded-lg md:focus-visible:bg-field-active md:aria-expanded:bg-field-active"
+                ? "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-focus-ring"
+                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-focus-ring md:border-0 md:bg-transparent md:rounded-lg md:focus-visible:bg-field-active md:aria-expanded:bg-field-active"
             }
           >
             <span className="text-xs font-semibold text-muted-foreground">
@@ -259,15 +259,16 @@ export function VenueSearchForm({
         )}
 
         <div
-          className={
+          data-active={isGuestsOpen}
+          className={`relative min-w-0 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-focus-ring data-[active=true]:bg-field-active ${
             variant === "filters"
-              ? `relative min-w-0 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring ${
-                  isGuestsOpen
-                    ? "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3"
-                    : "flex flex-col gap-1"
+              ? isGuestsOpen
+                ? "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3"
+                : "flex flex-col gap-1"
+              : `flex flex-col gap-1 md:justify-center md:rounded-none md:border-0 md:bg-transparent md:focus-within:rounded-lg md:focus-within:ring-0 ${
+                  isGuestsOpen ? "max-[360px]:px-1" : ""
                 }`
-              : "relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:ring-2 focus-within:ring-ring md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:bg-field-active md:focus-within:rounded-lg md:justify-center"
-          }
+          }`}
         >
           <label
             htmlFor="guests"
@@ -310,7 +311,7 @@ export function VenueSearchForm({
                 className={
                   variant === "filters"
                     ? "flex items-center justify-end gap-3"
-                    : "flex items-center justify-start gap-2"
+                    : "flex items-center justify-between gap-1 max-md:[&>button]:size-8 max-md:[&>button]:shrink-0 max-md:[&>input]:min-w-0 max-md:[&>input]:flex-1 md:justify-start md:gap-2"
                 }
               >
                 <button
