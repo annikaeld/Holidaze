@@ -19,6 +19,10 @@ export async function createBooking(
       "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
     },
     body: JSON.stringify(data),
+  }).catch(() => {
+    throw new Error(
+      "Couldn't confirm your booking. Check your connection and try again",
+    );
   });
 
   if (!response.ok) {

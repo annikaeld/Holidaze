@@ -47,6 +47,7 @@ export function BookingSummaryPage() {
   });
 
   const bookingMutation = useMutation({
+    networkMode: "always",
     mutationFn: (data: CreateBookingData) => {
       if (!user) {
         throw new Error("You must be logged in to book.");
