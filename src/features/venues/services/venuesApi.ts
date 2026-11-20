@@ -89,6 +89,10 @@ export async function createVenue(
       "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
     },
     body: JSON.stringify(data),
+  }).catch(() => {
+    throw new Error(
+      "Couldn't create this venue. Check your connection and try again.",
+    );
   });
 
   if (!response.ok) {
@@ -152,6 +156,10 @@ export async function updateVenue(
       "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
     },
     body: JSON.stringify(data),
+  }).catch(() => {
+    throw new Error(
+      "Couldn't update this venue. Check your connection and try again.",
+    );
   });
 
   if (!response.ok) {

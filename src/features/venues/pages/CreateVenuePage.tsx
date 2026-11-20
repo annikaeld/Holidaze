@@ -14,6 +14,7 @@ export function CreateVenuePage() {
   const navigate = useNavigate();
 
   const createMutation = useMutation({
+    networkMode: "always",
     mutationFn: (data: VenueFormData) => {
       if (!user) {
         throw new Error("You must be logged in.");

@@ -16,6 +16,7 @@ export function EditVenuePage() {
   const queryClient = useQueryClient();
 
   const updateMutation = useMutation({
+    networkMode: "always",
     mutationFn: (data: VenueFormData) => {
       if (!user || !id) {
         throw new Error("Unable to update venue.");

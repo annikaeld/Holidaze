@@ -42,6 +42,7 @@ export function MyBookingsPage() {
   });
 
   const cancelMutation = useMutation({
+    networkMode: "always",
     mutationFn: (bookingId: string) => {
       if (!user) {
         throw new Error("You must be logged in.");
