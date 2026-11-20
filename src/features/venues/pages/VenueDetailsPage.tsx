@@ -91,7 +91,7 @@ export function VenueDetailsPage() {
       <Link
         to={backLink.to}
         state={backLink.state}
-        className="inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+        className="mt-4 inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         {backLink.label}

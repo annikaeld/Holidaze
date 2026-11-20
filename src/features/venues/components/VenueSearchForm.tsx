@@ -120,7 +120,7 @@ export function VenueSearchForm({
         className={`relative flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3 focus-within:bg-field-active focus-within:ring-2 focus-within:ring-focus-ring ${
           variant === "filters"
             ? ""
-            : "md:flex-2 md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:rounded-lg"
+            : "dark:border-card-border md:flex-2 md:rounded-none md:border-0 md:bg-transparent md:focus-within:ring-0 md:focus-within:rounded-lg"
         }`}
       >
         <label
@@ -147,7 +147,7 @@ export function VenueSearchForm({
             setIsCalendarOpen(false);
             setIsGuestsOpen(false);
           }}
-          className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
+          className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground"
         />
         {destination && (
           <button
@@ -185,7 +185,7 @@ export function VenueSearchForm({
             className={
               variant === "filters"
                 ? "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-focus-ring"
-                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-focus-ring md:border-0 md:bg-transparent md:rounded-lg md:focus-visible:bg-field-active md:aria-expanded:bg-field-active"
+                : "flex w-full min-w-0 flex-col items-start gap-1 rounded-lg border border-border dark:border-card-border bg-card p-3 text-left focus-visible:ring-2 focus-visible:ring-focus-ring md:border-0 md:bg-transparent md:rounded-lg md:focus-visible:bg-field-active md:aria-expanded:bg-field-active"
             }
           >
             <span className="text-xs font-semibold text-muted-foreground">
@@ -265,7 +265,7 @@ export function VenueSearchForm({
               ? isGuestsOpen
                 ? "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3"
                 : "flex flex-col gap-1"
-              : `flex flex-col gap-1 md:justify-center md:rounded-none md:border-0 md:bg-transparent md:focus-within:rounded-lg md:focus-within:ring-0 ${
+              : `flex flex-col gap-1 md:justify-center md:rounded-none dark:border-card-border md:border-0 md:bg-transparent md:focus-within:rounded-lg md:focus-within:ring-0 ${
                   isGuestsOpen ? "max-[360px]:px-1" : ""
                 }`
           }`}

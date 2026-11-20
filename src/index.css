@@ -36,11 +36,11 @@
 }
 
 .dark {
-    --heading: #FFF6F5;
+    --heading: #E7DFED;
     --surface: #130D1F;
-    --foreground: #f5f5f5;
+    --foreground: #E7DFED;
     --card: #282232;
-    --card-foreground: #FFF6F5;
+    --card-foreground: var(--foreground);
     --muted-foreground: #B8A6C6;
     --placeholder: #241D30;
     --placeholder-foreground: #B8A6C6;
@@ -373,4 +373,16 @@ input[type="number"] {
 .theme-checkbox:focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
+}
+
+@media (forced-colors: none) {
+    .theme-checkbox:not(:checked) {
+        appearance: none;
+        inline-size: 13px;
+        block-size: 13px;
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background-color: var(--card);
+    }
 }

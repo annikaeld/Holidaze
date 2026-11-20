@@ -4,6 +4,7 @@ import { VenueCard } from "@/features/venues/components/VenueCard";
 import { getAllVenues } from "@/features/venues/services/venuesApi";
 import { DestinationShortcuts } from "@/features/venues/components/DestinationShortcuts";
 import { VenueCardSkeleton } from "@/features/venues/components/VenueCardSkeleton";
+import { useEffect } from "react";
 
 async function getRandomVenues() {
   const venues = await getAllVenues();
@@ -15,6 +16,9 @@ async function getRandomVenues() {
 }
 
 export function HomePage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
   const {
     data: randomVenues = [],
     isLoading,

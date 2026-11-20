@@ -71,7 +71,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className={`fixed inset-x-0 bottom-0 z-50 dark:border-t dark:border-border shadow-[0_-4px_12px_rgba(0,0,0,0.08)] dark:shadow-none bg-card pb-[env(safe-area-inset-bottom)] transition-transform duration-300 ease-in-out lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-50 dark:border-t dark:border-card-border shadow-[0_-4px_12px_rgba(0,0,0,0.08)] dark:shadow-none bg-card pb-[env(safe-area-inset-bottom)] transition-transform duration-300 ease-in-out lg:hidden ${
         isVisible ? "translate-y-0" : "translate-y-full"
       }`}
     >
