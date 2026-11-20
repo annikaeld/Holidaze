@@ -32,10 +32,7 @@ export function Header() {
             alt=""
             className="h-14 w-14 object-contain"
           />
-          <span
-            className="text-[32px] font-normal text-heading"
-            style={{ fontFamily: '"Lustria", serif' }}
-          >
+          <span className="font-header text-[40px] font-normal leading-none text-heading dark:text-muted-foreground [-webkit-text-stroke:0.35px_currentColor]">
             Holidaze
           </span>
         </Link>

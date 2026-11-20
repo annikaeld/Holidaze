@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lustria&family=Source+Sans+3:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lustria&family=Poiret+One&family=Source+Sans+3:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -92,10 +93,11 @@
     --color-toast-error: var(--toast-error);
     --color-toast-error-foreground: var(--toast-error-foreground);
     --color-toast-error-border: var(--toast-error-border);
-
     --color-toast-success: var(--toast-success);
     --color-toast-success-foreground: var(--toast-success-foreground);
     --color-toast-success-border: var(--toast-success-border);
+
+    --font-header: "Poiret One", sans-serif;
 }
 
 @layer base {
@@ -162,7 +164,7 @@
 
     .search-surface {
         @apply md:rounded-4xl md:bg-card md:shadow-md;
-        @apply dark:md:border dark:md:border-border;
+        @apply dark:md:border dark:md:border-card-border;
     }
 }
 

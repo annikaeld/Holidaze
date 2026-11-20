@@ -53,12 +53,14 @@ export function VenueCard({ venue, from }: VenueCardProps) {
                 / night
               </span>
             </p>
-            <p className="ml-auto inline-flex items-center gap-1 whitespace-nowrap text-sm text-muted-foreground">
-              <Users size={16} aria-hidden="true" />
-              <span>
-                <span className="sr-only">Up to </span>
-                {venue.maxGuests} {venue.maxGuests === 1 ? "guest" : "guests"}
-              </span>
+            <p className="ml-auto whitespace-nowrap text-sm text-muted-foreground">
+              <Users
+                size={16}
+                aria-hidden="true"
+                className="mr-1 inline-block align-middle"
+              />
+              <span className="sr-only">Up to </span>
+              {venue.maxGuests} {venue.maxGuests === 1 ? "guest" : "guests"}
             </p>
           </div>
         </div>
