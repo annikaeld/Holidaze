@@ -31,15 +31,24 @@ export async function searchVenues(
 
   return result;
 }
+export class VenueRequestError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
 
 export async function getVenue(id: string): Promise<Venue> {
   const response = await fetch(`${API_URL}/${id}?_owner=true&_bookings=true`);
 
   if (response.status === 400) {
-    throw new Error("Invalid venue ID");
+    throw new VenueRequestError("Invalid venue ID", response.status);
   }
+
   if (response.status === 404) {
-    throw new Error("Venue not found");
+    throw new VenueRequestError("Venue not found", response.status);
   }
 
   if (!response.ok) {

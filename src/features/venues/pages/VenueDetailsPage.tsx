@@ -1,4 +1,7 @@
-import { getVenue } from "@/features/venues/services/venuesApi";
+import {
+  getVenue,
+  VenueRequestError,
+} from "@/features/venues/services/venuesApi";
 import { useQuery } from "@tanstack/react-query";
 import { VenueGallery } from "@/features/venues/components/VenueGallery";
 import { VenueDescription } from "@/features/venues/components/VenueDescription";
@@ -41,7 +44,18 @@ export function VenueDetailsPage() {
     queryKey: ["venue", id],
     queryFn: () => getVenue(id!),
     enabled: Boolean(id),
+    retry: (failureCount, error) => {
+      if (
+        error instanceof VenueRequestError &&
+        (error.status === 400 || error.status === 404)
+      ) {
+        return false;
+      }
+
+      return failureCount < 3;
+    },
   });
+
   const venueName = venue?.name;
 
   useEffect(() => {
