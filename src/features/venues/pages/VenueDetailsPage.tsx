@@ -13,6 +13,8 @@ import { VenueRating } from "@/features/venues/components/VenueRating";
 import { UserRound, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PageMessage } from "@/shared/components/PageMessage";
+import { parseISO } from "date-fns";
+import type { DateRange } from "react-day-picker";
 
 export function VenueDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +22,15 @@ export function VenueDetailsPage() {
   const [searchParams] = useSearchParams();
   const checkIn = searchParams.get("checkIn") ?? undefined;
   const checkOut = searchParams.get("checkOut") ?? undefined;
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() =>
+    checkIn && checkOut
+      ? { from: parseISO(checkIn), to: parseISO(checkOut) }
+      : undefined,
+  );
+
+  const [selectedGuests, setGuests] = useState(
+    () => Number(searchParams.get("guests")) || 1,
+  );
   const { state } = useLocation();
   const backLink =
     state?.from === "my-venues"
@@ -72,6 +83,8 @@ export function VenueDetailsPage() {
   if (!venue) {
     return <PageMessage isError>Venue not found.</PageMessage>;
   }
+
+  const guests = Math.min(Math.max(1, selectedGuests), venue.maxGuests);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4">
@@ -180,8 +193,10 @@ export function VenueDetailsPage() {
         <div className="hidden self-start lg:sticky lg:top-6 lg:block">
           <BookingCard
             price={venue.price}
-            checkIn={checkIn}
-            checkOut={checkOut}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            guests={guests}
+            setGuests={setGuests}
             bookings={venue.bookings ?? []}
             venueId={venue.id}
             maxGuests={venue.maxGuests}
@@ -192,8 +207,10 @@ export function VenueDetailsPage() {
       <div className="fixed inset-x-0 bottom-0 z-40 bg-card px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-4px_12px_rgba(0,0,0,0.08)] dark:border-t dark:border-card-border dark:shadow-none lg:hidden">
         <BookingCard
           price={venue.price}
-          checkIn={checkIn}
-          checkOut={checkOut}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          guests={guests}
+          setGuests={setGuests}
           bookings={venue.bookings ?? []}
           venueId={venue.id}
           maxGuests={venue.maxGuests}

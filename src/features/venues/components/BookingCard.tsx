@@ -1,9 +1,9 @@
 import type { VenueBooking } from "../types/venue";
-import { format, parseISO, differenceInCalendarDays } from "date-fns";
+import { format, differenceInCalendarDays } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { GuestSelector } from "./GuestSelector";
 import { hasBookingOverlap } from "../utils/hasBookingOverlap";
@@ -12,8 +12,10 @@ interface BookingCardProps {
   venueId: string;
   maxGuests: number;
   price: number;
-  checkIn?: string;
-  checkOut?: string;
+  dateRange: DateRange | undefined;
+  setDateRange: (range: DateRange | undefined) => void;
+  guests: number;
+  setGuests: (guests: number) => void;
   bookings: VenueBooking[];
   variant?: "desktop" | "mobile";
 }
@@ -22,30 +24,17 @@ export function BookingCard({
   venueId,
   maxGuests,
   price,
-  checkIn,
-  checkOut,
+  dateRange,
+  setDateRange,
+  guests,
+  setGuests,
   bookings,
   variant = "desktop",
 }: BookingCardProps) {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const guestButtonRef = useRef<HTMLButtonElement>(null);
-
-  const [guests, setGuests] = useState(() => {
-    const requestedGuests = Number(searchParams.get("guests")) || 1;
-    return Math.min(Math.max(1, requestedGuests), maxGuests);
-  });
-
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
-    if (!checkIn || !checkOut) return undefined;
-
-    return {
-      from: parseISO(checkIn),
-      to: parseISO(checkOut),
-    };
-  });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const dateButtonRef = useRef<HTMLButtonElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -53,7 +42,6 @@ export function BookingCard({
   const mobileGuestsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isCalendarOpen && !isGuestsOpen) return;
-
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsCalendarOpen(false);
@@ -96,6 +84,12 @@ export function BookingCard({
   const totalPrice =
     Number.isFinite(nights) && nights > 0 ? price * nights : null;
 
+  const formattedPrice = `NOK ${(totalPrice ?? price).toLocaleString("en-GB")}`;
+  const priceDetails =
+    totalPrice === null
+      ? "/ night"
+      : `for ${nights} ${nights === 1 ? "night" : "nights"}`;
+
   function handleReserve() {
     if (!dateRange?.from || !dateRange?.to || nights <= 0) {
       setIsCalendarOpen(true);
@@ -129,8 +123,13 @@ export function BookingCard({
     return (
       <aside className="relative flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2">
-          <p className="font-semibold whitespace-nowrap">
-            NOK {(totalPrice ?? price).toLocaleString("en-GB")}
+          <p className="shrink-0">
+            <strong className="block whitespace-nowrap">
+              {formattedPrice}
+            </strong>
+            <span className="block text-xs text-muted-foreground">
+              {priceDetails}
+            </span>
           </p>
           <div className="flex items-center gap-1">
             <button
@@ -216,15 +215,7 @@ export function BookingCard({
   return (
     <aside className="booking-card relative">
       <p>
-        <strong>
-          NOK{" "}
-          {totalPrice !== null
-            ? totalPrice.toLocaleString("en-GB")
-            : price.toLocaleString("en-GB")}
-        </strong>
-        {totalPrice !== null
-          ? ` for ${nights} ${nights === 1 ? "night" : "nights"}`
-          : " / night"}
+        <strong>{formattedPrice}</strong> {priceDetails}
       </p>
       <button
         type="button"
