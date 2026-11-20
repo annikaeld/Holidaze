@@ -178,6 +178,10 @@ export async function deleteVenue(
       Authorization: `Bearer ${accessToken}`,
       "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
     },
+  }).catch(() => {
+    throw new Error(
+      "Couldn't delete this venue. Check your connection and try again",
+    );
   });
 
   if (!response.ok) {

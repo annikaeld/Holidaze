@@ -19,6 +19,7 @@ export function MyVenuesPage() {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
+    networkMode: "always",
     mutationFn: (id: string) => {
       if (!user) {
         throw new Error("You must be logged in.");
