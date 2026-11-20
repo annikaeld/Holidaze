@@ -15,6 +15,7 @@ interface EditAvatarDialogProps {
   onClose: () => void;
   onSave: (data: AvatarFormData) => Promise<void>;
   isPending: boolean;
+  errorMessage?: string;
 }
 
 export function EditAvatarDialog({
@@ -22,6 +23,7 @@ export function EditAvatarDialog({
   onClose,
   onSave,
   isPending,
+  errorMessage,
 }: EditAvatarDialogProps) {
   const [imageError, setImageError] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -175,6 +177,12 @@ export function EditAvatarDialog({
             </p>
           )}
         </div>
+
+        {errorMessage && (
+          <p role="alert" className="text-sm text-error">
+            {errorMessage}
+          </p>
+        )}
 
         <div className="flex flex-col-reverse gap-3 pt-3 sm:flex-row sm:justify-end">
           <button

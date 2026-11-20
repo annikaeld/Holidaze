@@ -30,6 +30,7 @@ export function LoginPage() {
   });
 
   const loginMutation = useMutation({
+    networkMode: "always",
     mutationFn: async (data: LoginFormData) => {
       const response = await loginUser(data);
 

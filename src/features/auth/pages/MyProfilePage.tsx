@@ -17,6 +17,7 @@ export function MyProfilePage() {
   const [bio, setBio] = useState(user?.bio ?? "");
 
   const avatarMutation = useMutation({
+    networkMode: "always",
     mutationFn: (data: AvatarFormData) => {
       if (!user) {
         throw new Error("You must be logged in.");
@@ -28,28 +29,22 @@ export function MyProfilePage() {
     },
   });
 
-  async function handleSaveAvatar(data: AvatarFormData) {
+  async function handleSaveAvatar(data: AvatarFormData): Promise<void> {
     if (!user) return;
 
-    try {
-      const response = await avatarMutation.mutateAsync(data);
+    const response = await avatarMutation.mutateAsync(data).catch(() => null);
+    if (!response) return;
 
-      login({
-        ...user,
-        avatar: response.data.avatar,
-      });
-      setIsAvatarDialogOpen(false);
-      toast.success("Your avatar has been updated.");
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Could not update avatar. Please try again.",
-      );
-    }
+    login({
+      ...user,
+      avatar: response.data.avatar,
+    });
+    setIsAvatarDialogOpen(false);
+    toast.success("Your avatar has been updated.");
   }
 
   const bioMutation = useMutation({
+    networkMode: "always",
     mutationFn: (newBio: string) => {
       if (!user) {
         throw new Error("You must be logged in.");
@@ -107,7 +102,10 @@ export function MyProfilePage() {
             <button
               type="button"
               aria-label="Change avatar"
-              onClick={() => setIsAvatarDialogOpen(true)}
+              onClick={() => {
+                avatarMutation.reset();
+                setIsAvatarDialogOpen(true);
+              }}
               className="absolute -bottom-1 -right-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
             >
               <Pencil size={16} aria-hidden="true" />
@@ -206,6 +204,7 @@ export function MyProfilePage() {
           onClose={() => setIsAvatarDialogOpen(false)}
           onSave={handleSaveAvatar}
           isPending={avatarMutation.isPending}
+          errorMessage={avatarMutation.error?.message}
         />
       )}
     </main>

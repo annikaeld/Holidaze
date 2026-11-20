@@ -27,6 +27,7 @@ export function RegisterPage() {
     },
   });
   const registerMutation = useMutation({
+    networkMode: "always",
     mutationFn: registerUser,
     onSuccess: (response) => {
       navigate(

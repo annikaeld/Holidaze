@@ -16,6 +16,10 @@ export async function registerUser(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
+  }).catch(() => {
+    throw new Error(
+      "Couldn't create your account. Check your connection and try again",
+    );
   });
 
   if (!response.ok) {
@@ -39,6 +43,8 @@ export async function loginUser(userData: LoginData): Promise<LoginResponse> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
+  }).catch(() => {
+    throw new Error("Couldn't log in. Check your connection and try again");
   });
 
   if (!response.ok) {
@@ -64,7 +70,11 @@ export async function getHolidazeProfile(
         "X-Noroff-API-Key": import.meta.env.VITE_API_KEY,
       },
     },
-  );
+  ).catch(() => {
+    throw new Error(
+      "Couldn't load your profile. Check your connection and try again",
+    );
+  });
 
   if (!response.ok) {
     throw new Error("Could not retrieve user profile");
@@ -103,7 +113,11 @@ export async function updateProfile(
       },
       body: JSON.stringify(data),
     },
-  );
+  ).catch(() => {
+    throw new Error(
+      "Couldn't update your profile. Check your connection and try again",
+    );
+  });
 
   if (!response.ok) {
     const errorResponse = await response.json().catch(() => null);
