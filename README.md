@@ -4,7 +4,7 @@ Holidaze is a responsive accommodation discovery and booking application develop
 
 The application allows travellers to discover accommodation, check availability and manage bookings. Registered venue managers can create, update and delete venues, as well as view upcoming guest bookings.
 
-**Project status:** All core booking and venue management functionality has been implemented. Final testing, accessibility improvements and production polish are ongoing.
+**Project status:** All core booking and venue management functionality has been implemented. 
 
 ## Description
 
@@ -182,8 +182,7 @@ This account can be used to:
 - Preview venues before saving.
 - View upcoming guest bookings.
 - Manage personal bookings as a customer.
-
-**Note for testers:** These accounts are intended for testing purposes only. Please avoid changing passwords or deleting existing test data unless necessary for testing.
+- 
 
 ### Available npm Scripts
 
@@ -590,7 +589,7 @@ Testing includes:
 - Light and dark mode.
 - Production builds.
 
-Additional accessibility testing, UI consistency improvements and final production verification remain part of the finishing work.
+Accessibility testing and UI consistency improvements were done in the last stage of the project.
 
 ## AI Usage
 
