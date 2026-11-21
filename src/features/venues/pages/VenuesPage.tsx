@@ -104,7 +104,7 @@ export function VenuesPage() {
       filterButton?.focus();
     };
   }, [filtersOpen]);
-  const destination = searchParams.get("destination") ?? "";
+  const query = searchParams.get("q") ?? "";
   const guests = Number(searchParams.get("guests") ?? 1);
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
@@ -128,7 +128,7 @@ export function VenuesPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const searchTerm = destination.trim().toLowerCase();
+  const searchTerm = query.trim().toLowerCase();
 
   const matchingVenues = (venuesData ?? []).filter((venue) => {
     if (!searchTerm) return true;
@@ -227,23 +227,23 @@ export function VenuesPage() {
 
         <div className="flex w-full flex-wrap items-center gap-3 lg:w-auto lg:flex-nowrap">
           <form
-            key={destination}
+            key={query}
             role="search"
             aria-label="Search venues"
             className="flex basis-full items-center rounded-2xl bg-card text-sm text-card-foreground shadow-sm dark:border dark:border-border dark:shadow-none lg:w-60 lg:basis-auto"
             onSubmit={(event) => {
               event.preventDefault();
               const value = String(
-                new FormData(event.currentTarget).get("destination") ?? "",
+                new FormData(event.currentTarget).get("q") ?? "",
               ).trim();
 
               setSearchParams((previous) => {
                 const params = new URLSearchParams(previous);
 
                 if (value) {
-                  params.set("destination", value);
+                  params.set("q", value);
                 } else {
-                  params.delete("destination");
+                  params.delete("q");
                 }
 
                 params.delete("page");
@@ -253,10 +253,10 @@ export function VenuesPage() {
           >
             <input
               type="search"
-              name="destination"
-              aria-label="Search destinations or stays"
-              placeholder="Search destinations or stays"
-              defaultValue={destination}
+              name="q"
+              aria-label="Search venues"
+              placeholder="Search by name, city, country..."
+              defaultValue={query}
               className="min-w-0 flex-1 rounded-2xl bg-transparent py-3 pl-4 focus-visible:outline-2 focus-visible:outline-focus-ring"
             />
             <button

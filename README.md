@@ -17,7 +17,7 @@ The application focuses on responsive design, clear navigation, reusable compone
 **Accommodation discovery**
 
 - Browse accommodation listings.
-- Search venues by destination or name.
+- Search venues using free text.
 - Filter venues by region, price, amenities, guest capacity and availability.
 - Sort venues by newest, price or rating.
 - Navigate results using pagination.

@@ -45,8 +45,8 @@ export function VenueSearchForm({
   );
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const searchFormRef = useRef<HTMLFormElement>(null);
-  const [destination, setDestination] = useState(
-    searchParams.get("destination") ?? "",
+  const [query, setQuery] = useState(
+    searchParams.get("q") ?? "",
   );
 
   useEffect(() => {
@@ -124,23 +124,23 @@ export function VenueSearchForm({
         }`}
       >
         <label
-          htmlFor="destination"
+          htmlFor="search-query"
           className="text-xs font-semibold text-muted-foreground"
         >
-          Where?
+          Search
         </label>
         <input
           type="search"
-          id="destination"
-          name="destination"
-          placeholder="Search destinations or stays"
-          value={destination}
+          id="search-query"
+          name="q"
+          placeholder="Search by name, city, country..."
+          value={query}
           onChange={(event) => {
             const value = event.target.value;
-            setDestination(value);
+            setQuery(value);
 
             if (variant === "filters") {
-              onDraftChange?.("destination", value);
+              onDraftChange?.("q", value);
             }
           }}
           onFocus={() => {
@@ -149,17 +149,17 @@ export function VenueSearchForm({
           }}
           className="w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground"
         />
-        {destination && (
+        {query && (
           <button
             type="button"
             onClick={() => {
-              setDestination("");
+              setQuery("");
 
               if (variant === "filters") {
-                onDraftChange?.("destination", "");
+                onDraftChange?.("q", "");
               }
             }}
-            aria-label="Clear destination"
+            aria-label="Clear search query"
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
           >
             <X size={18} />
