@@ -14,6 +14,7 @@ import type { VenueBooking } from "../types/venue";
 
 export function GuestBookingsPage() {
   const { user } = useAuth();
+  const [showPastBookings, setShowPastBookings] = useState(false);
   const [selectedGuest, setSelectedGuest] =
     useState<VenueBooking["customer"]>(undefined);
   const guestDialogRef = useRef<HTMLDialogElement>(null);
@@ -46,10 +47,17 @@ export function GuestBookingsPage() {
         venue,
       })),
     )
-    .filter((booking) => isAfter(parseISO(booking.dateTo), today))
-    .sort(
-      (a, b) => parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime(),
-    );
+    .filter((booking) => {
+      const isCurrentOrUpcoming = isAfter(parseISO(booking.dateTo), today);
+      return showPastBookings ? !isCurrentOrUpcoming : isCurrentOrUpcoming;
+    })
+    .sort((a, b) => {
+      if (showPastBookings) {
+        return parseISO(b.dateTo).getTime() - parseISO(a.dateTo).getTime();
+      }
+
+      return parseISO(a.dateFrom).getTime() - parseISO(b.dateFrom).getTime();
+    });
 
   const {
     visibleItems: visibleBookings,
@@ -89,12 +97,47 @@ export function GuestBookingsPage() {
       </Link>
 
       <h1>Guest bookings</h1>
+      <div
+        role="group"
+        aria-label="Booking period"
+        className="mt-6 flex flex-wrap gap-2"
+      >
+        <button
+          type="button"
+          aria-pressed={!showPastBookings}
+          onClick={() => {
+            setShowPastBookings(false);
+            goToPage(1);
+          }}
+          className="min-h-11 cursor-pointer rounded-full border border-border px-4 py-2 text-sm aria-pressed:bg-primary aria-pressed:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+        >
+          Current &amp; upcoming
+        </button>
 
+        <button
+          type="button"
+          aria-pressed={showPastBookings}
+          onClick={() => {
+            setShowPastBookings(true);
+            goToPage(1);
+          }}
+          className="min-h-11 cursor-pointer rounded-full border border-border px-4 py-2 text-sm aria-pressed:bg-primary aria-pressed:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+        >
+          Past bookings
+        </button>
+      </div>
       {bookings.length === 0 ? (
         <div className="mt-8 rounded-lg border border-border bg-card p-6">
-          <h2 className="text-xl font-semibold">No upcoming guest bookings</h2>
+          <h2 className="text-xl font-semibold">
+            {showPastBookings
+              ? "No past guest bookings"
+              : "No current or upcoming guest bookings"}
+          </h2>
+
           <p className="mt-2 text-muted-foreground">
-            Bookings for your venues will appear here.
+            {showPastBookings
+              ? "Completed stays at your venues will appear here."
+              : "Current and upcoming stays at your venues will appear here."}
           </p>
         </div>
       ) : (
