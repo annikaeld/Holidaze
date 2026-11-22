@@ -30,6 +30,7 @@ export type VenueBooking = {
   customer?: {
     name: string;
     email: string;
+    bio?: string | null;
     avatar?: {
       url: string;
       alt?: string;

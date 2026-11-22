@@ -8,9 +8,23 @@ import { OverviewCard } from "../components/OverviewCard";
 import { PageMessage } from "@/shared/components/PageMessage";
 import { Pagination } from "@/features/venues/components/Pagination";
 import { usePagination } from "@/shared/hooks/usePagination";
+import { useRef, useState, useEffect } from "react";
+import { AvatarImage } from "@/features/auth/components/AvatarImage";
+import type { VenueBooking } from "../types/venue";
 
 export function GuestBookingsPage() {
   const { user } = useAuth();
+  const [selectedGuest, setSelectedGuest] =
+    useState<VenueBooking["customer"]>(undefined);
+  const guestDialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = guestDialogRef.current;
+
+    if (selectedGuest && dialog && !dialog.open) {
+      dialog.showModal();
+    }
+  }, [selectedGuest]);
 
   const {
     data: venues = [],
@@ -110,20 +124,33 @@ export function GuestBookingsPage() {
                 {booking.guests} {booking.guests === 1 ? "guest" : "guests"}
               </p>
 
-              <div className="flex items-center gap-2">
-                {booking.customer?.avatar?.url && (
-                  <img
-                    src={booking.customer.avatar.url}
-                    alt=""
-                    className="h-7 w-7 rounded-full object-cover"
-                    loading="lazy"
-                  />
-                )}
-
+              {booking.customer ? (
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={() => setSelectedGuest(booking.customer)}
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-md text-left text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+                >
+                  {booking.customer.avatar?.url && (
+                    <img
+                      src={booking.customer.avatar.url}
+                      alt=""
+                      className="h-7 w-7 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                  )}
+                  <span>
+                    Booked by:{" "}
+                    <span className="underline underline-offset-4">
+                      {booking.customer.name}
+                    </span>
+                  </span>
+                </button>
+              ) : (
                 <p className="text-sm text-muted-foreground">
-                  Booked by: {booking.customer?.name ?? "Unknown customer"}
+                  Booked by: Unknown customer
                 </p>
-              </div>
+              )}
             </OverviewCard>
           ))}
           <Pagination
@@ -133,6 +160,35 @@ export function GuestBookingsPage() {
           />
         </div>
       )}
+      <dialog
+        ref={guestDialogRef}
+        aria-labelledby="guest-profile-title"
+        onClose={() => setSelectedGuest(undefined)}
+        className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border border-card-border bg-card p-6 text-card-foreground shadow-xl backdrop:bg-black/50"
+      >
+        {selectedGuest && (
+          <div className="flex flex-col items-center gap-4 text-center">
+            <AvatarImage
+              url={selectedGuest.avatar?.url}
+              alt={selectedGuest.avatar?.alt || "Guest avatar"}
+              size="lg"
+            />
+            <h2 id="guest-profile-title">{selectedGuest.name}</h2>
+            <p className="w-full whitespace-pre-line wrap-break-word text-sm text-muted-foreground">
+              {selectedGuest.bio?.trim() || "No bio added yet"}
+            </p>
+          </div>
+        )}
+
+        <button
+          type="button"
+          autoFocus
+          onClick={() => guestDialogRef.current?.close()}
+          className="btn-primary mt-6"
+        >
+          Close
+        </button>
+      </dialog>
     </main>
   );
 }
