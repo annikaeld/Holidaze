@@ -156,10 +156,11 @@ export function VenueForm({
       <h2>Tell us about your place</h2>
 
       <div>
-        <label htmlFor="venue-name">Venue name</label>
+        <label htmlFor="venue-name">Venue name (max 100 characters)</label>
         <input
           id="venue-name"
           type="text"
+          maxLength={100}
           {...register("name")}
           aria-invalid={Boolean(errors.name)}
           className="mt-2 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"

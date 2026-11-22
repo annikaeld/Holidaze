@@ -2,7 +2,11 @@ import { z } from "zod";
 import { imageSchema } from "@/shared/schemas/imageSchema";
 
 export const venueSchema = z.object({
-  name: z.string().trim().min(1, "Venue name is required"),
+  name: z
+    .string()
+    .trim()
+    .min(1, "Venue name is required")
+    .max(100, "Venue name must be 100 characters or fewer."),
 
   description: z.string().trim().min(1, "Description is required"),
 
