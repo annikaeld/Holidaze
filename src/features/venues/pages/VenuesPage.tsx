@@ -128,6 +128,13 @@ export function VenuesPage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const [statusReady, setStatusReady] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setStatusReady(true), 100);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const searchTerm = query.trim().toLowerCase();
 
   const matchingVenues = (venuesData ?? []).filter((venue) => {
@@ -445,8 +452,8 @@ export function VenuesPage() {
         </div>
       )}
 
-      <p role="status" className="sr-only">
-        {isLoading ? "Loading venues..." : ""}
+      <p role="status" className="text-sm text-muted-foreground">
+        {statusReady && isLoading ? "Loading venues…" : ""}
       </p>
 
       {isLoading ? (
