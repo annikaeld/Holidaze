@@ -46,7 +46,7 @@ export function ConfirmDialog({
 
         onClose();
       }}
-      className="fixed inset-0 m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-card-border bg-card p-6 text-card-foreground shadow-xl backdrop:bg-black/50"
+      className="fixed inset-0 m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-card-border bg-card p-6 text-card-foreground wrap-break-word shadow-xl backdrop:bg-black/50"
     >
       <h2 id="confirm-dialog-title" className="text-xl font-semibold">
         {title}
