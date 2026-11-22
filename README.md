@@ -571,6 +571,8 @@ The application uses:
 
 The shared `PageMessage` component provides consistent presentation for page-level loading and error messages where implemented.
 
+The venue details page gives immediate, specific feedback: “Invalid venue ID” for a 400 response and “Venue not found” for a 404 response.
+
 ## Development and Testing
 
 Development follows an incremental approach, with features implemented and tested individually.
