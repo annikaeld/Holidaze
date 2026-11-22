@@ -591,6 +591,27 @@ Testing includes:
 
 Accessibility testing and UI consistency improvements were done in the last stage of the project.
 
+### Automated Testing
+
+- **Vitest** checks that overlapping bookings are detected and that a new guest can check in on the day an existing booking ends.
+- **Playwright** checks that the home page displays the search button and that a guest can review and confirm a booking with preselected dates and guest count. The booking test verifies the total price, the booking request and the confirmation page using mocked API responses.
+
+Install dependencies and the Chromium browser used by Playwright:
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+Run the unit tests and browser tests:
+
+```bash
+npx vitest run
+npx playwright test
+```
+
+Playwright starts the Vite dev server automatically. The booking test uses a simulated sign-in and does not create a real booking.
+
 ## AI Usage
 
 ChatGPT has been used as an external, chat-based assistant for technical guidance, concept clarification, code review, debugging and implementation discussions.

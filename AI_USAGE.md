@@ -14,9 +14,11 @@ AI has primarily been used as a learning resource, technical discussion partner,
 
 I used ChatGPT for technical guidance, concept clarification, code review, debugging, architectural discussions, and implementation suggestions. I worked with ChatGPT through the chat interface. I did not use GitHub Copilot or integrate any AI coding assistants or extensions into VS Code. I reviewed the code suggestions, decided what to incorporate, and tested the changes myself.
 
-ChatGPT also served as my unofficial code therapist. A typical session began with “I think I’ve broken everything.” We’d look at the diff, question the thought, and run one small test. Sometimes there was a bug. Sometimes Lighthouse was just having a different kind of day.
+ChatGPT also served as my unofficial code therapist. A typical session began with “I think I’ve broken everything.” We’d look at the diff, question that thought, and run one small test. Sometimes there was a bug. Sometimes I’d just forgotten to save a file. Switching from Ctrl+S to Command+S halfway through the project did not improve my odds.
 
-We also worked on boundaries. Halfway through fixing something, I’d get an idea for a fun new feature and want to follow it right then. ChatGPT would ask how long that detour was actually going to take and remind me what I’d sat down to finish. In the end, it was up to me to tell my imagination, “Great idea. We can talk about it after submission.”
+We also worked on boundaries. Halfway through fixing something, I’d usually think of another feature outside the project requirements and want to add it right away. ChatGPT would ask how long that detour was actually going to take and remind me what I’d sat down to finish. In the end, it was up to me to tell my imagination, “Great idea. We can talk about it after submission.”
+
+Towards the end of the project, ChatGPT helped me set up automated tests. I used Vitest to check booking overlap rules, including same-day check-in after another guest checks out. I used Playwright to check that the home page displays the search button and that the booking flow shows the correct price, sends the selected dates and guest count, and displays a confirmation. The booking test used mocked API responses. I ran the tests locally and verified that they passed.
 
 ## Figma AI
 
