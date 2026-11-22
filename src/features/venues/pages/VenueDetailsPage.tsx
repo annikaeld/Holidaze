@@ -107,7 +107,9 @@ export function VenueDetailsPage() {
         <ArrowLeft size={16} aria-hidden="true" />
         {backLink.label}
       </Link>
-      <h1 className="wrap-break-word">{venue.name}</h1>
+      <h1 className="wrap-break-word line-clamp-2 md:line-clamp-none">
+        {venue.name}
+      </h1>
       <VenueGallery media={venue.media} name={venue.name} />
       <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
         {venue.rating > 0 && <VenueRating rating={venue.rating} />}
