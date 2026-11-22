@@ -9,7 +9,7 @@ import {
 } from "date-fns";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { House } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
   getCustomerBookings,
@@ -77,6 +77,10 @@ export function MyBookingsPage() {
     pageCount,
     goToPage,
   } = usePagination(upcomingBookings);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
 
   if (!user) {
     return <Navigate to="/login" replace />;

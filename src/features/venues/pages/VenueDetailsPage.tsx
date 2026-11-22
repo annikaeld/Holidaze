@@ -72,6 +72,11 @@ export function VenueDetailsPage() {
   useEffect(() => {
     document.title = `${venueName ?? "Venue details"} | Holidaze`;
   }, [venueName]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [id]);
+
   if (isLoading) {
     return <PageMessage>Loading venue...</PageMessage>;
   }

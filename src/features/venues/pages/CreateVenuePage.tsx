@@ -1,12 +1,12 @@
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { VenueForm } from "../components/VenueForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { createVenue } from "../services/venuesApi";
 import type { VenueFormData } from "../schemas/venueSchema";
+import { useEffect } from "react";
 
 export function CreateVenuePage() {
   const { user } = useAuth();
@@ -29,6 +29,10 @@ export function CreateVenuePage() {
       navigate(`/venues/${venue.id}`);
     },
   });
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
 
   if (!user) {
     return <Navigate to="/login" replace />;

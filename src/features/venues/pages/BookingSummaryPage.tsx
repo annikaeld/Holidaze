@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { getVenue } from "@/features/venues/services/venuesApi";
 import { differenceInCalendarDays, parseISO, format } from "date-fns";
 import { VenueImage } from "@/features/venues/components/VenueImage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { DateRange } from "react-day-picker";
 import { DateRangeCalendar } from "@/components/ui/DateRangeCalendar";
 import { GuestSelector } from "@/features/venues/components/GuestSelector";
@@ -70,6 +70,10 @@ export function BookingSummaryPage() {
       toast.error(error.message || "Something went wrong. Please try again.");
     },
   });
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
 
   if (!venueId) {
     return <PageMessage isError>Missing venue information.</PageMessage>;

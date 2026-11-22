@@ -7,6 +7,7 @@ import {
   Users,
 } from "lucide-react";
 import { format, parseISO, differenceInCalendarDays } from "date-fns";
+import { useEffect } from "react";
 
 interface BookingConfirmation {
   dateFrom: string;
@@ -23,6 +24,10 @@ export function BookingSuccessPage() {
   const location = useLocation();
   const booking = (location.state as { booking?: BookingConfirmation } | null)
     ?.booking;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
 
   if (!booking) {
     return <Navigate to="/" replace />;
