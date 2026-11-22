@@ -1,4 +1,4 @@
-import { Link, Navigate, useSearchParams } from "react-router";
+import { Link, Navigate, useSearchParams, useLocation } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { format, isAfter, parseISO, startOfDay } from "date-fns";
 import { ArrowLeft } from "lucide-react";
@@ -12,8 +12,16 @@ import { useRef, useState, useEffect } from "react";
 import { AvatarImage } from "@/features/auth/components/AvatarImage";
 import type { VenueBooking } from "../types/venue";
 
+let lastBookingPosition: {
+  bookingId: string;
+  page: number;
+  top: number;
+} | null = null;
+
 export function GuestBookingsPage() {
   const { user } = useAuth();
+  const { state } = useLocation();
+  const returnToBookingId = state?.returnToBookingId;
   const [searchParams, setSearchParams] = useSearchParams();
   const showPastBookings = searchParams.get("period") === "past";
 
@@ -83,6 +91,34 @@ export function GuestBookingsPage() {
     pageCount,
     goToPage,
   } = usePagination(bookings);
+
+  useEffect(() => {
+    const saved = lastBookingPosition;
+
+    if (
+      isLoading ||
+      isError ||
+      !saved ||
+      saved.bookingId !== returnToBookingId
+    ) {
+      return;
+    }
+
+    const link = document.getElementById(
+      `guest-booking-link-${saved.bookingId}`,
+    );
+
+    if (link) {
+      link.focus({ preventScroll: true });
+      window.scrollBy({
+        top: link.getBoundingClientRect().top - saved.top,
+        behavior: "instant",
+      });
+      lastBookingPosition = null;
+    } else if (currentPage !== saved.page && saved.page <= pageCount) {
+      goToPage(saved.page);
+    }
+  }, [returnToBookingId, isLoading, isError, currentPage, pageCount, goToPage]);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -161,10 +197,19 @@ export function GuestBookingsPage() {
               image={booking.venue.media?.[0]}
               actions={
                 <Link
+                  id={`guest-booking-link-${booking.id}`}
                   to={`/venues/${booking.venue.id}`}
                   state={{
                     from: "guest-bookings",
                     period: showPastBookings ? "past" : "current",
+                    bookingId: booking.id,
+                  }}
+                  onClick={(event) => {
+                    lastBookingPosition = {
+                      bookingId: booking.id,
+                      page: currentPage,
+                      top: event.currentTarget.getBoundingClientRect().top,
+                    };
                   }}
                   className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
                 >

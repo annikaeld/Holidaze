@@ -44,6 +44,7 @@ export function VenueDetailsPage() {
                   ? "/my-venues/bookings?period=past"
                   : "/my-venues/bookings",
               label: "Back to guest bookings",
+              state: { returnToBookingId: state.bookingId },
             }
           : state?.from === "home"
             ? { to: "/", label: "Back to home" }
