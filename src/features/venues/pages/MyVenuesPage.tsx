@@ -162,7 +162,10 @@ export function MyVenuesPage() {
                 NOK {venue.price.toLocaleString("nb-NO")} / night
               </p>
 
-              <p className="text-sm">Up to {venue.maxGuests} guests</p>
+              <p className="text-sm">
+                Up to {venue.maxGuests}{" "}
+                {venue.maxGuests === 1 ? "guest" : "guests"}
+              </p>
             </OverviewCard>
           ))}
 
