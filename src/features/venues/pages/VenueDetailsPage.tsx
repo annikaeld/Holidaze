@@ -38,7 +38,13 @@ export function VenueDetailsPage() {
       : state?.from === "my-bookings"
         ? { to: "/my-bookings", label: "Back to my bookings" }
         : state?.from === "guest-bookings"
-          ? { to: "/my-venues/bookings", label: "Back to guest bookings" }
+          ? {
+              to:
+                state.period === "past"
+                  ? "/my-venues/bookings?period=past"
+                  : "/my-venues/bookings",
+              label: "Back to guest bookings",
+            }
           : state?.from === "home"
             ? { to: "/", label: "Back to home" }
             : {

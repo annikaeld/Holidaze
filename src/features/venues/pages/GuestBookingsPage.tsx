@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { format, isAfter, parseISO, startOfDay } from "date-fns";
 import { ArrowLeft } from "lucide-react";
@@ -14,7 +14,25 @@ import type { VenueBooking } from "../types/venue";
 
 export function GuestBookingsPage() {
   const { user } = useAuth();
-  const [showPastBookings, setShowPastBookings] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showPastBookings = searchParams.get("period") === "past";
+
+  function changeBookingPeriod(past: boolean) {
+    setSearchParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        if (past) {
+          next.set("period", "past");
+        } else {
+          next.delete("period");
+        }
+        return next;
+      },
+      { replace: true },
+    );
+
+    goToPage(1);
+  }
   const [selectedGuest, setSelectedGuest] =
     useState<VenueBooking["customer"]>(undefined);
   const guestDialogRef = useRef<HTMLDialogElement>(null);
@@ -105,10 +123,7 @@ export function GuestBookingsPage() {
         <button
           type="button"
           aria-pressed={!showPastBookings}
-          onClick={() => {
-            setShowPastBookings(false);
-            goToPage(1);
-          }}
+          onClick={() => changeBookingPeriod(false)}
           className="min-h-11 cursor-pointer rounded-full border border-border px-4 py-2 text-sm aria-pressed:bg-primary aria-pressed:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
         >
           Current &amp; upcoming
@@ -117,10 +132,7 @@ export function GuestBookingsPage() {
         <button
           type="button"
           aria-pressed={showPastBookings}
-          onClick={() => {
-            setShowPastBookings(true);
-            goToPage(1);
-          }}
+          onClick={() => changeBookingPeriod(true)}
           className="min-h-11 cursor-pointer rounded-full border border-border px-4 py-2 text-sm aria-pressed:bg-primary aria-pressed:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
         >
           Past bookings
@@ -150,7 +162,10 @@ export function GuestBookingsPage() {
               actions={
                 <Link
                   to={`/venues/${booking.venue.id}`}
-                  state={{ from: "guest-bookings" }}
+                  state={{
+                    from: "guest-bookings",
+                    period: showPastBookings ? "past" : "current",
+                  }}
                   className="text-sm font-semibold text-heading underline-offset-4 hover:underline"
                 >
                   View venue
