@@ -190,9 +190,12 @@ export function VenuesPage() {
     }
   });
 
-  const pageSize = 12;
+  const pageSize = 18;
   const pageCount = Math.ceil(venues.length / pageSize);
   const currentPage = Math.min(page, Math.max(1, pageCount));
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [currentPage]);
 
   const paginatedVenues = sortedVenues.slice(
     (currentPage - 1) * pageSize,
@@ -451,7 +454,7 @@ export function VenuesPage() {
             aria-hidden="true"
             className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
-            {Array.from({ length: 12 }, (_, index) => (
+            {Array.from({ length: pageSize }, (_, index) => (
               <VenueCardSkeleton key={index} />
             ))}
           </div>
@@ -481,11 +484,6 @@ export function VenuesPage() {
             setSearchParams((params) => {
               params.set("page", String(newPage));
               return params;
-            });
-
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
             });
           }}
         />
