@@ -445,20 +445,19 @@ export function VenuesPage() {
         </div>
       )}
 
+      <p role="status" className="sr-only">
+        {isLoading ? "Loading venues..." : ""}
+      </p>
+
       {isLoading ? (
-        <>
-          <p role="status" className="sr-only">
-            Loading venues...
-          </p>
-          <div
-            aria-hidden="true"
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {Array.from({ length: pageSize }, (_, index) => (
-              <VenueCardSkeleton key={index} />
-            ))}
-          </div>
-        </>
+        <div
+          aria-hidden="true"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {Array.from({ length: pageSize }, (_, index) => (
+            <VenueCardSkeleton key={index} />
+          ))}
+        </div>
       ) : error ? (
         <PageMessage isError>
           Unable to load venues. Please try again later.
