@@ -4,7 +4,7 @@ Holidaze is a responsive accommodation discovery and booking application develop
 
 The application allows travellers to discover accommodation, check availability and manage bookings. Registered venue managers can create, update and delete venues, as well as view upcoming guest bookings.
 
-**Project status:** All core booking and venue management functionality has been implemented. 
+**Project status:** All core booking and venue management functionality has been implemented.
 
 ## Description
 
@@ -144,6 +144,18 @@ Authenticated requests use:
 
 Authenticated operations include creating and cancelling bookings, updating user profiles, activating venue manager privileges and managing venues.
 
+Holidaze uses the Noroff API v2 to load venues and manage accounts,
+profiles, bookings, and venue listings. Venue managers can also view
+guest bookings for the venues they manage.
+
+I used the Holidaze booking documentation to check which fields the API
+expects when creating a booking. The Playwright booking test verifies
+that the app sends the venue ID, check-in and check-out dates, and guest
+count.
+
+[Noroff API v2 reference](https://v2.api.noroff.dev/docs) ·
+[Holidaze Bookings documentation](https://docs.noroff.dev/docs/v2/holidaze/bookings)
+
 Vite exposes environment variables prefixed with `VITE_` to client-side code. These variables must not contain confidential server-side secrets.
 
 For production deployments, configure the required environment variables in Vercel.
@@ -182,7 +194,7 @@ This account can be used to:
 - Preview venues before saving.
 - View upcoming guest bookings.
 - Manage personal bookings as a customer.
-- 
+-
 
 ### Available npm Scripts
 
@@ -264,7 +276,7 @@ The booking confirmation page receives the completed booking through React Route
 
 ### Authentication and Access Control
 
-Users can register, log in and log out.
+Users with a stud.noroff.no email address can register as customers or choose to register directly as venue managers. Registered users can log in and log out.
 
 Authenticated users can access their personal booking information and update their profile, including their avatar.
 
@@ -613,6 +625,40 @@ npx playwright test
 ```
 
 Playwright starts the Vite dev server automatically. The booking test uses a simulated sign-in and does not create a real booking.
+
+## Project Reflection
+
+### Accessibility
+
+WAVE and Lighthouse gave good accessibility results on the pages I checked.
+I also used Toptal’s color blindness simulator to see how the interface
+looks with different types of color vision deficiency.
+
+I tested the venue filters with a keyboard, using Tab to move between
+controls, Space to activate them, and Escape to close the dialog. I also
+adjusted the focus indicators so they were visible in both light and dark mode.
+
+### Technical Choices and Testing
+
+I used Vitest to test the date rules behind booking overlap. Playwright
+let me test the booking flow in a browser, including the total price and
+confirmation page. I mocked the booking API response so the test could run
+repeatedly without creating a real reservation.
+
+I used route-based lazy loading to reduce the size of the main JavaScript
+file from 1,041.84 kB to 479.33 kB before compression. I reran the unit
+and browser tests to check that the tested flows still worked.
+
+### Feedback and What I Would Change
+
+A fellow student found that opening a venue with an invalid ID triggered
+repeated API requests before the error appeared. I adjusted the venue
+details query and verified that both invalid and missing venues show
+their own message after the first API response.
+
+In a future project, I would test failure paths earlier, especially for
+actions such as confirming a booking or deleting a venue. Several of
+those issues only became visible when I deliberately tested offline.
 
 ## AI Usage
 
